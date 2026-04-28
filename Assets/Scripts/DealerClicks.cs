@@ -22,6 +22,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     private float feedbackDuration = 1.5f;
     private Coroutine feedbackRoutine;
 
+    private static DealerClicks activeDealer;
+
     private Dictionary<ItemInstance, InventoryItemUI> dealerItemUIMap = new Dictionary<ItemInstance, InventoryItemUI>();
     private readonly List<GameObject> dealerPool = new List<GameObject>();
     private readonly List<GameObject> playerPool = new List<GameObject>();
@@ -53,17 +55,22 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (dealerInfoPanel.activeSelf)
+        if (activeDealer == this)
         {
             dealerInfoPanel.SetActive(false);
             ReturnAllToPool();
+            activeDealer = null;
         }
         else
         {
+            if (activeDealer != null)
+                activeDealer.ReturnAllToPool();
+
+            activeDealer = this;
+
             if (dealer.RuntimeInventory == null || dealer.RuntimeInventory.Count == 0)
-            {
                 dealer.InitializeRuntimeInventory();
-            }
+
             PopulateDealerPanel();
             PopulatePlayerPanel();
             dealerInfoPanel.SetActive(true);
