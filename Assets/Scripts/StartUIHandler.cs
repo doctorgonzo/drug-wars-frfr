@@ -28,9 +28,11 @@ public class StartUIHandler : MonoBehaviour
         }
     }
 
+    [SerializeField] private string newGameSceneName = "Intro";
+
     public void HandleStart()
     {
-        SceneManager.LoadScene("CharCreation");
+        SceneManager.LoadScene(newGameSceneName);
     }
 
     public void HandleContinue()

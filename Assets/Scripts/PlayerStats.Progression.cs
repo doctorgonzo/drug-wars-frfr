@@ -20,6 +20,8 @@ public partial class PlayerStats
 
     public float CurrentHeat { get; set; }
     public int TimesCaughtByCops { get; set; }
+    public int TotalCopEncounters { get; set; }
+    public int CitiesVisited { get; set; }
     public int CurrentCash { get; set; }
     public int Level { get; set; }
 

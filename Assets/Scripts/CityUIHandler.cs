@@ -38,15 +38,15 @@ public class CityUIHandler : MonoBehaviour
 
         if (ps.CurrentTrench != null)
         {
-            trenchSlotsText.text = "Slots: " + ps.CurrentTrench.StorageSlots;
-            trenchArmorText.text = "Armor: " + ps.CurrentTrench.ArmorValue;
-            trenchImage.sprite = ps.CurrentTrench.Image;
+            if (trenchSlotsText != null) trenchSlotsText.text = "Slots: " + ps.CurrentTrench.StorageSlots;
+            if (trenchArmorText != null) trenchArmorText.text = "Armor: " + ps.CurrentTrench.ArmorValue;
+            if (trenchImage != null) trenchImage.sprite = ps.CurrentTrench.Image;
         }
 
         if (ps.CurrentWeapon != null)
         {
-            weaponDamageText.text = "Damage: " + ps.CurrentWeapon.Damage;
-            weaponImage.sprite = ps.CurrentWeapon.Image;
+            if (weaponDamageText != null) weaponDamageText.text = "Damage: " + ps.CurrentWeapon.Damage;
+            if (weaponImage != null) weaponImage.sprite = ps.CurrentWeapon.Image;
         }
 
         playerImage.sprite = ps.PlayerSprite;

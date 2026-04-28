@@ -6,8 +6,9 @@ public class FadeController : MonoBehaviour
 {
     public static FadeController Instance { get; private set; }
 
-    [SerializeField] private Image fadeImage;       // assign: FadePanel (Image)
-    [SerializeField] private CanvasGroup canvasGroup; // assign: FadePanel (CanvasGroup)
+    [SerializeField] private Image fadeImage;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private float fadeInDuration = 1f;
     private Coroutine fadeRoutine;
 
     private void Awake()
@@ -18,22 +19,26 @@ public class FadeController : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
-        if (!fadeImage) fadeImage = GetComponent<Image>();
-        if (!canvasGroup) canvasGroup = GetComponent<CanvasGroup>();
+        if (!fadeImage) fadeImage = GetComponentInChildren<Image>();
+        if (!canvasGroup) canvasGroup = GetComponentInChildren<CanvasGroup>();
 
-        // Ensure clean start
-        SetAlpha(0f);
-        SetBlocking(false);
+        // Start fully black so the fade-in plays on scene load
+        SetAlpha(1f);
+        SetBlocking(true);
     }
 
-    public void FadeOut(float duration = 1f)  // to black
+    private void Start()
+    {
+        FadeIn(fadeInDuration);
+    }
+
+    public void FadeOut(float duration = 1f)
     {
         StartFade(0f, 1f, duration);
     }
 
-    public void FadeIn(float duration = 1f)   // from black
+    public void FadeIn(float duration = 1f)
     {
         StartFade(1f, 0f, duration);
     }
@@ -46,28 +51,23 @@ public class FadeController : MonoBehaviour
 
     private IEnumerator FadeRoutine(float startA, float endA, float duration)
     {
-        // Make sure we block clicks when we’re going visible (toward black)
         SetBlocking(true);
 
         float t = 0f;
         while (t < duration)
         {
             t += Time.deltaTime;
-            float a = Mathf.Lerp(startA, endA, Mathf.Clamp01(t / duration));
-            SetAlpha(a);
+            SetAlpha(Mathf.Lerp(startA, endA, Mathf.Clamp01(t / duration)));
             yield return null;
         }
         SetAlpha(endA);
 
-        // Only unblock when fully transparent
         if (endA <= 0.001f) SetBlocking(false);
-
         fadeRoutine = null;
     }
 
     private void SetAlpha(float a)
     {
-        // Drive both the Image color and CanvasGroup for robustness
         if (fadeImage)
         {
             var c = fadeImage.color;
@@ -82,12 +82,8 @@ public class FadeController : MonoBehaviour
         if (canvasGroup)
         {
             canvasGroup.blocksRaycasts = block;
-            canvasGroup.interactable = false; // never interactable
+            canvasGroup.interactable = false;
         }
-        if (fadeImage)
-        {
-            // Extra belt-and-braces: let the graphic eat rays when blocking
-            fadeImage.raycastTarget = block;
-        }
+        if (fadeImage) fadeImage.raycastTarget = block;
     }
 }

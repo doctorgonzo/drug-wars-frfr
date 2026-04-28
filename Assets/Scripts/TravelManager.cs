@@ -127,23 +127,17 @@ public class TravelManager : MonoBehaviour
 
         // Update city
         PlayerStats.Instance.CurrentCity = destinationCity;
+        PlayerStats.Instance.CitiesVisited++;
 
         // Auto-save before loading
         if (GameSessionManager.Instance != null)
             GameSessionManager.Instance.SaveGame();
 
-        // Fade out
         if (FadeController.Instance != null)
             FadeController.Instance.FadeOut(fadeDuration);
         yield return new WaitForSeconds(fadeDuration + 0.1f);
 
-        // Load the destination scene
         SceneManager.LoadScene(destinationCity.SceneName);
-
-        // Fade back in (runs in the new scene via DontDestroyOnLoad FadeController)
-        if (FadeController.Instance != null)
-            FadeController.Instance.FadeIn(fadeDuration);
-
         isTraveling = false;
     }
 

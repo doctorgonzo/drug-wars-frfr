@@ -195,6 +195,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -352,6 +353,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -488,6 +490,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -624,6 +627,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -760,6 +764,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -896,6 +901,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1032,6 +1038,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1168,6 +1175,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1304,6 +1312,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1408,7 +1417,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -1416,6 +1424,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -2126,6 +2135,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2352,6 +2362,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653994626}
   m_CullTransparentMesh: 1
+--- !u!1 &842617312
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842617314}
+  - component: {fileID: 842617313}
+  m_Layer: 0
+  m_Name: FadeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &842617313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842617312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cae2ab6136aa0248a084ec4e649732f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeController
+  fadeImage: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  fadeInDuration: 1.55
+--- !u!4 &842617314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842617312}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &851111024
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,6 +2512,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2663,6 +2721,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2799,6 +2858,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3068,6 +3128,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3141,18 +3202,6 @@ MonoBehaviour:
   charCreationPanel: {fileID: 1788846271}
   continueButton: {fileID: 1786968138}
   charImage: {fileID: 550650612}
-  trenchImage: {fileID: 589569944}
-  weaponImage: {fileID: 1672361246}
-  trenchcoats:
-  - {fileID: 11400000, guid: 1301acb8047cac440b5263460839cc09, type: 2}
-  - {fileID: 11400000, guid: f00954b54663d89438903948d2456ca3, type: 2}
-  - {fileID: 11400000, guid: dff3e4efda4a84c4da14fbc55ff79e8c, type: 2}
-  - {fileID: 11400000, guid: 25c1bc1aa45ed3c409cec4f6f38489a2, type: 2}
-  - {fileID: 11400000, guid: 2ea5bbb2bed047c42896a1742f55f6a0, type: 2}
-  weapons:
-  - {fileID: 11400000, guid: e86a75663cb1e6b4eb94783eeab35527, type: 2}
-  - {fileID: 11400000, guid: 164b557298b60ee4391ed08725a12bea, type: 2}
-  - {fileID: 11400000, guid: 0365277b154caea42850d07305111145, type: 2}
   charSprites:
   - {fileID: 512506619223028387, guid: dc20e915d5d649a4c9db1a624a478ced, type: 3}
   - {fileID: 8812731307688354182, guid: 4653382c4973b294786463782d18508f, type: 3}
@@ -3160,16 +3209,28 @@ MonoBehaviour:
   - {fileID: 6833041306909522587, guid: 2e5481cb9bd278e4cbc27737901817e1, type: 3}
   - {fileID: -3777727041246650567, guid: 080a2737e3b2a7a4898b090e59f3a266, type: 3}
   nameInput: {fileID: 571135322}
-  walletText: {fileID: 2034201352}
+  trenchImage: {fileID: 589569944}
+  trenchcoats:
+  - {fileID: 11400000, guid: 1301acb8047cac440b5263460839cc09, type: 2}
+  - {fileID: 11400000, guid: f00954b54663d89438903948d2456ca3, type: 2}
+  - {fileID: 11400000, guid: dff3e4efda4a84c4da14fbc55ff79e8c, type: 2}
+  - {fileID: 11400000, guid: 25c1bc1aa45ed3c409cec4f6f38489a2, type: 2}
+  - {fileID: 11400000, guid: 2ea5bbb2bed047c42896a1742f55f6a0, type: 2}
   trenchName: {fileID: 851111027}
   trenchDescription: {fileID: 1408151300}
   trenchCost: {fileID: 47675858}
   trenchSlots: {fileID: 210431177}
   trenchArmor: {fileID: 423822853}
+  weaponImage: {fileID: 1672361246}
+  weapons:
+  - {fileID: 11400000, guid: e86a75663cb1e6b4eb94783eeab35527, type: 2}
+  - {fileID: 11400000, guid: 164b557298b60ee4391ed08725a12bea, type: 2}
+  - {fileID: 11400000, guid: 0365277b154caea42850d07305111145, type: 2}
   weaponName: {fileID: 1870010816}
   weaponDescription: {fileID: 649493851}
   weaponCost: {fileID: 508174869}
   weaponDamage: {fileID: 1503608658}
+  walletText: {fileID: 2034201352}
   startingCity: {fileID: 11400000, guid: 276519b5f09efa0499d1009cd4260a7a, type: 2}
 --- !u!4 &1315987572
 Transform:
@@ -3289,6 +3350,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3572,6 +3634,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3642,13 +3705,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ac4e2b3eb0b92418d3fad2a57654f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
-  playerSprite: {fileID: 0}
+  playerWallet: 10000
+  inventory: []
   currentTrench: {fileID: 0}
   currentWeapon: {fileID: 0}
-  playerWallet: 10000
+  playerName: 
+  playerSprite: {fileID: 0}
   currentCity: {fileID: 0}
-  inventory: []
+  weaponsAreContraband: 0
+  startingDebt: 50000
+  dayLimit: 30
+  dailyInterestRate: 0.05
+  borrowPremiumRate: 0.2
+  maxSingleBorrow: 20000
 --- !u!4 &1552708869
 Transform:
   m_ObjectHideFlags: 0
@@ -3857,6 +3926,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4191,6 +4261,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -4656,6 +4727,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4925,6 +4997,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4976,3 +5049,4 @@ SceneRoots:
   - {fileID: 1841444950}
   - {fileID: 1315987572}
   - {fileID: 1552708869}
+  - {fileID: 842617314}

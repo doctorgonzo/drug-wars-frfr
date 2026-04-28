@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -148,6 +149,11 @@ public class CharCreationUI : MonoBehaviour
 
     public void HandleContinue()
     {
+        StartCoroutine(ConfirmAndLoad());
+    }
+
+    private IEnumerator ConfirmAndLoad()
+    {
         PlayerStats.Instance.PlayerName = nameInput.text;
         PlayerStats.Instance.PlayerWallet -= (trenchcoats[curTrenchIndex].Cost + weapons[curWeaponIndex].Cost);
         PlayerStats.Instance.PlayerSprite = charSprites[curCharIndex];
@@ -155,7 +161,11 @@ public class CharCreationUI : MonoBehaviour
         PlayerStats.Instance.CurrentCity = startingCity;
         PlayerStats.Instance.CurrentWeapon = weapons[curWeaponIndex];
         PlayerStats.Instance.InitializeDebt();
-        FadeController.Instance.FadeIn(1f);
+
+        if (FadeController.Instance != null)
+            FadeController.Instance.FadeOut(1f);
+        yield return new WaitForSeconds(1.1f);
+
         SceneManager.LoadScene(startingCity.SceneName);
     }
 }

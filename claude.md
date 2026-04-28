@@ -82,20 +82,25 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 
 ## TODO — Remaining Improvements
 
-### Tier 2 (deferred)
-- [x] **Inventory risk/reward spread** — see "Risk/Reward System" entry below
+### Tutorial & Intro
+- **Intro sequence** — `IntroSequence.cs` drives a click-through narrative panel screen before CharCreation. 4 panels: "Three weeks ago / The Deal / Your Options / Get to Work." Crossfades between panels via `CanvasGroup` alpha. Last panel's Next button fades out and loads `CharCreation`. `nextSceneName` configurable in Inspector. `StartUIHandler` now loads `"Intro"` (configurable via `newGameSceneName` field) instead of `"CharCreation"` directly. **New scene required:** `Intro` — add `FadeController` + wire `IntroSequence` component. **New file:** `IntroSequence.cs`
+- **In-game tutorial** — `TutorialManager.cs` shows a 5-step dialog on first Milwaukee visit only. Steps: welcome/premise → dealers → heat → travel → debt. Fades in/out. Skip button available. Completion persisted via `PlayerPrefs` key `TutorialSeen_v1`. **New file:** `TutorialManager.cs` — add to Milwaukee (and optionally other city scenes).
+- **CharCreation → city fade** — `HandleContinue` is now a coroutine; calls `FadeController.FadeOut` before `SceneManager.LoadScene`. Removed the stale `FadeIn` call that did nothing. File: `CharCreationUI.cs`
 
 ### Tier 3 — Juice & Feel
+- **Run summary / high score** — `RunSummaryUI.cs` on GameOver and YouWin scenes. Shows: net worth, cash, debt, days, cops encountered/busted, cities visited. High score (best net worth on a win run) persisted via `PlayerPrefs`. `isVictory` bool in Inspector controls headline color/text. `TotalCopEncounters` and `CitiesVisited` added to `PlayerStats.Progression.cs`; encounter count incremented in `CopEncounterUIManager.StartEncounter()`, city count incremented in `TravelManager.TravelSequence()`. **New file:** `RunSummaryUI.cs`
 - [x] **Profit/loss feedback** — `ProfitLossPopup.cs` shows "+$X PROFIT" (green) / "-$X LOSS" (red) / "BREAK EVEN" (yellow) on every sale. Uses `AvgPurchasePrice` on `ItemInstance` for accurate tracking (weighted avg on stack buys). Animation: scale-overshoot snap-in → hold → float-up fade-out via coroutine. Singleton pattern, requires a UI GameObject with CanvasGroup + TMP_Text. Files: `ProfitLossPopup.cs` (new), `Item.cs`, `DealerClicks.cs`
 - [x] **Net worth tracker** — `NetWorth` computed property on `PlayerStats.Economy.cs` (wallet + inventory cost basis). Displayed via `netWorthText` in `CityUIHandler`, reactive to `OnWalletChanged` and `OnInventoryChanged`. Buying is net-zero; value changes on profitable/unprofitable sells.
 - [x] **City info before traveling** — floating preview card on travel dropdown, fades out after 3s. File: `TravelManager.cs`
 
 ### Other Known Issues / Tech Debt
 - `GameTime.cs` has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
-- New drug assets (Shrooms, Ecstasy, Heroin) need sprites assigned in Inspector
-- GameOver and YouWin scenes need to be created and added to Build Settings
+- ~~GameOver and YouWin scenes need to be created and added to Build Settings~~ ✓ Done
 - ~~Equipment shop right panel (40% of ShopPanel width) is empty — reserved for future text/info display~~ ✓ Done
-- ~~New drugs need to be added to dealer `Inventory` arrays on Dealer ScriptableObjects~~ ✓ Done (Shrooms/Ecstasy/Heroin added to Daryl's inventory assets with correct cost/supply/heat values)
+- ~~New drugs need to be added to dealer `Inventory` arrays on Dealer ScriptableObjects~~ ✓ Done
+- ~~New drug assets (Shrooms, Ecstasy, Heroin) need sprites assigned in Inspector~~ ✓ Done
+- ~~Inventory risk/reward spread~~ ✓ Done
+- ~~Loan shark mid-game borrowing~~ ✓ Done
 - **InventoryTabUI card positioning:** Fixed stale `offsetMin.x` pushing cards off-screen left (zero X offsets in `EnsureLayout`). Fixed cards clipping at top via `grid.padding` top = 34. File: `InventoryTabUI.cs`
 
 ---

@@ -134,6 +134,9 @@ public class CopEncounterUIManager : MonoBehaviour
         hostilityRunPenalty = 0f;
         rng = seededRng ?? new System.Random();
 
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.TotalCopEncounters++;
+
         // Dialogue: opening line
         copDialogueText.text = BuildOpeningLine(decision);
 

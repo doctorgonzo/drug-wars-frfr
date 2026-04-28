@@ -3089,6 +3089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeController
   fadeImage: {fileID: 0}
   canvasGroup: {fileID: 0}
+  fadeInDuration: 1.55
 --- !u!4 &1521244066
 Transform:
   m_ObjectHideFlags: 0
