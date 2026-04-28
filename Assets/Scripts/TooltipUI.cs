@@ -38,7 +38,7 @@ public class TooltipUI : MonoBehaviour
         Instance = this;
 
         tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
-        tooltipRectTransform.pivot = new Vector2(0f, 1f); // top-left anchors at cursor+offset
+        tooltipRectTransform.pivot = new Vector2(0.24f, 1f);
         canvas = canvasRectTransform.GetComponent<Canvas>();
         tooltipPanel.SetActive(false);
 
