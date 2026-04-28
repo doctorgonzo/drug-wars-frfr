@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1750ba644d6d7b1469dd29a2f1482f71, type: 3}
+  m_Name: Mr.Wong
+  m_EditorClassIdentifier: 
+  Name: Mr. Wong
+  Description: He'll deliver more than just chicken fried rice
+  Image: {fileID: 21300000, guid: 14ce39b9300154a46b431c6251d8ee09, type: 3}
+  Wallet: 7500
+  Inventory:
+  - {fileID: 11400000, guid: b6c0a101dacfe9b4f8f07bf76912173b, type: 2}
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1
+    sellPriceRatio: 0.5

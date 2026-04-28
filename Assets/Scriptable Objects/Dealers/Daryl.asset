@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1750ba644d6d7b1469dd29a2f1482f71, type: 3}
+  m_Name: Daryl
+  m_EditorClassIdentifier: 
+  Name: Daryl
+  Description: A crazy dude from Wisconsin
+  Image: {fileID: 21300000, guid: b569944df48678b4b81134bb59fa52c8, type: 3}
+  Wallet: 5000
+  Inventory:
+  - {fileID: 11400000, guid: e02937a928f04e94db1fff0f73fff63c, type: 2}
+  - {fileID: 11400000, guid: 0aa185629112bf140a61351c10f4da8e, type: 2}
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1
+    sellPriceRatio: 0.705

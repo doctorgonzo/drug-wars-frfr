@@ -1,0 +1,3081 @@
+fileFormatVersion: 2
+guid: 5739911b2d22d3c46836034b88dbd057
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2269072123310645018
+    second: tanTrench_0
+  - first:
+      213: -2082314917692413011
+    second: tanTrench_1
+  - first:
+      213: -6536073237601267441
+    second: tanTrench_2
+  - first:
+      213: 2760880427351328989
+    second: tanTrench_3
+  - first:
+      213: 566244975309998208
+    second: tanTrench_4
+  - first:
+      213: -9161370820838861471
+    second: tanTrench_5
+  - first:
+      213: -8920789573520092544
+    second: tanTrench_6
+  - first:
+      213: -9091780388748898140
+    second: tanTrench_7
+  - first:
+      213: -7811051367994853389
+    second: tanTrench_8
+  - first:
+      213: 1730261115558128492
+    second: tanTrench_9
+  - first:
+      213: 3742490957167554188
+    second: tanTrench_10
+  - first:
+      213: -8918202498184030381
+    second: tanTrench_11
+  - first:
+      213: 234805905236123149
+    second: tanTrench_12
+  - first:
+      213: -5065054741136280199
+    second: tanTrench_13
+  - first:
+      213: 1513105492681476689
+    second: tanTrench_14
+  - first:
+      213: -3196381293411546611
+    second: tanTrench_15
+  - first:
+      213: -2073706496614442125
+    second: tanTrench_16
+  - first:
+      213: 3978632695379638540
+    second: tanTrench_17
+  - first:
+      213: 1853453140044428101
+    second: tanTrench_18
+  - first:
+      213: -3776187734403227289
+    second: tanTrench_19
+  - first:
+      213: 2570821736204243633
+    second: tanTrench_20
+  - first:
+      213: -3635178126592707286
+    second: tanTrench_21
+  - first:
+      213: 8501659239546070083
+    second: tanTrench_22
+  - first:
+      213: -4332595796496684183
+    second: tanTrench_23
+  - first:
+      213: 2981835026547451597
+    second: tanTrench_24
+  - first:
+      213: 4875295242349369947
+    second: tanTrench_25
+  - first:
+      213: -8508496688509474659
+    second: tanTrench_26
+  - first:
+      213: 2955695373351676397
+    second: tanTrench_27
+  - first:
+      213: 4062204849840403651
+    second: tanTrench_28
+  - first:
+      213: 7742506318690274154
+    second: tanTrench_29
+  - first:
+      213: -4769862990975224758
+    second: tanTrench_30
+  - first:
+      213: -38240340794374069
+    second: tanTrench_31
+  - first:
+      213: 5214080821143429442
+    second: tanTrench_32
+  - first:
+      213: -4517796106371407617
+    second: tanTrench_33
+  - first:
+      213: 8461158708273132091
+    second: tanTrench_34
+  - first:
+      213: 5706157517771177323
+    second: tanTrench_35
+  - first:
+      213: -4890194882979308599
+    second: tanTrench_36
+  - first:
+      213: 685023537469292590
+    second: tanTrench_37
+  - first:
+      213: -7722718708567425277
+    second: tanTrench_38
+  - first:
+      213: 6322489840475497798
+    second: tanTrench_39
+  - first:
+      213: -8588679567377797565
+    second: tanTrench_40
+  - first:
+      213: -5020214386722807043
+    second: tanTrench_41
+  - first:
+      213: -776990113368306064
+    second: tanTrench_42
+  - first:
+      213: -1620327047630037887
+    second: tanTrench_43
+  - first:
+      213: 3669195964835711884
+    second: tanTrench_44
+  - first:
+      213: -1307815351940067429
+    second: tanTrench_45
+  - first:
+      213: 5651885417201877688
+    second: tanTrench_46
+  - first:
+      213: -6578539845673249321
+    second: tanTrench_47
+  - first:
+      213: 5227121035687697145
+    second: tanTrench_48
+  - first:
+      213: -5218326525888438986
+    second: tanTrench_49
+  - first:
+      213: 9188255179755792230
+    second: tanTrench_50
+  - first:
+      213: 8104341371143264542
+    second: tanTrench_51
+  - first:
+      213: 4676828141197457342
+    second: tanTrench_52
+  - first:
+      213: -2303800225684422967
+    second: tanTrench_53
+  - first:
+      213: 6526446913626699543
+    second: tanTrench_54
+  - first:
+      213: 736714936271059664
+    second: tanTrench_55
+  - first:
+      213: -4803834466279803730
+    second: tanTrench_56
+  - first:
+      213: 1497402847437433164
+    second: tanTrench_57
+  - first:
+      213: -5094777805122678314
+    second: tanTrench_58
+  - first:
+      213: 6584371786073171402
+    second: tanTrench_59
+  - first:
+      213: 2789369486275726976
+    second: tanTrench_60
+  - first:
+      213: 7227523310256059248
+    second: tanTrench_61
+  - first:
+      213: -3761094582089401649
+    second: tanTrench_62
+  - first:
+      213: 7037555978457857789
+    second: tanTrench_63
+  - first:
+      213: -2644043644943542166
+    second: tanTrench_64
+  - first:
+      213: -176183018941428631
+    second: tanTrench_65
+  - first:
+      213: 3459936204431083762
+    second: tanTrench_66
+  - first:
+      213: -3522781640935074440
+    second: tanTrench_67
+  - first:
+      213: 6357534330438317826
+    second: tanTrench_68
+  - first:
+      213: 2435165329452598980
+    second: tanTrench_69
+  - first:
+      213: 1359160818660805456
+    second: tanTrench_70
+  - first:
+      213: -654372897003128552
+    second: tanTrench_71
+  - first:
+      213: -2375204735291696334
+    second: tanTrench_72
+  - first:
+      213: -5960565064673201082
+    second: tanTrench_73
+  - first:
+      213: 4271706937870614034
+    second: tanTrench_74
+  - first:
+      213: 4406867136064756885
+    second: tanTrench_75
+  - first:
+      213: -422776957848503178
+    second: tanTrench_76
+  - first:
+      213: 8958999813248226971
+    second: tanTrench_77
+  - first:
+      213: 1458758472566018950
+    second: tanTrench_78
+  - first:
+      213: 4728377987161637980
+    second: tanTrench_79
+  - first:
+      213: -5755404418450733134
+    second: tanTrench_80
+  - first:
+      213: 7850891535489074841
+    second: tanTrench_81
+  - first:
+      213: 5194665344989775133
+    second: tanTrench_82
+  - first:
+      213: -6435514843610038823
+    second: tanTrench_83
+  - first:
+      213: 3595115709807852414
+    second: tanTrench_84
+  - first:
+      213: -6659868832399068215
+    second: tanTrench_85
+  - first:
+      213: -7024096479394237815
+    second: tanTrench_86
+  - first:
+      213: -3890188479373108333
+    second: tanTrench_87
+  - first:
+      213: -2488264851883178790
+    second: tanTrench_88
+  - first:
+      213: 1346147048068960717
+    second: tanTrench_89
+  - first:
+      213: -8894802360426484093
+    second: tanTrench_90
+  - first:
+      213: -7985222348971928760
+    second: tanTrench_91
+  - first:
+      213: 8188323733271863672
+    second: tanTrench_92
+  - first:
+      213: 7592883869447748285
+    second: tanTrench_93
+  - first:
+      213: -220521230417737160
+    second: tanTrench_94
+  - first:
+      213: -1580335662862872526
+    second: tanTrench_95
+  - first:
+      213: -4193169695821195189
+    second: tanTrench_96
+  - first:
+      213: 3344304656667675570
+    second: tanTrench_97
+  - first:
+      213: 5592691089292281265
+    second: tanTrench_98
+  - first:
+      213: -6192384279144621874
+    second: tanTrench_99
+  - first:
+      213: -5605016034783540025
+    second: tanTrench_100
+  - first:
+      213: 7480627665939173111
+    second: tanTrench_101
+  - first:
+      213: -2635154534024194249
+    second: tanTrench_102
+  - first:
+      213: 7475588411602219770
+    second: tanTrench_103
+  - first:
+      213: 3312321659261087715
+    second: tanTrench_104
+  - first:
+      213: -7065360915020771373
+    second: tanTrench_105
+  - first:
+      213: 6435010621409881791
+    second: tanTrench_106
+  - first:
+      213: 965176456952371237
+    second: tanTrench_107
+  - first:
+      213: 5596210630947640881
+    second: tanTrench_108
+  - first:
+      213: -2338199492014143841
+    second: tanTrench_109
+  - first:
+      213: -3769343999426760481
+    second: tanTrench_110
+  - first:
+      213: 1301149334525486359
+    second: tanTrench_111
+  - first:
+      213: -5023654431431458894
+    second: tanTrench_112
+  - first:
+      213: -964658353594588266
+    second: tanTrench_113
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1024
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: tanTrench_0
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 960
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e0e3580de2a280e0800000000000000
+      internalID: -2269072123310645018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_1
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 951
+        width: 29
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dab627c6d912a13e0800000000000000
+      internalID: -2082314917692413011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_2
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 965
+        width: 36
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f01d6de15043b45a0800000000000000
+      internalID: -6536073237601267441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_3
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 969
+        width: 92
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd8ca93fe1e905620800000000000000
+      internalID: 2760880427351328989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_4
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 985
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088c3311ec4bbd700800000000000000
+      internalID: 566244975309998208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_5
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 966
+        width: 325
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 165554807c54cd080800000000000000
+      internalID: -9161370820838861471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_6
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 979
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0829352b52df23480800000000000000
+      internalID: -8920789573520092544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_7
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 951
+        width: 31
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a052c028e183d180800000000000000
+      internalID: -9091780388748898140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_8
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 967
+        width: 26
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f776506a22999390800000000000000
+      internalID: -7811051367994853389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_9
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 956
+        width: 21
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6b6389315f130810800000000000000
+      internalID: 1730261115558128492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_10
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 952
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8e651d62bfffe330800000000000000
+      internalID: 3742490957167554188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_11
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 956
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3575dbc141e2c3480800000000000000
+      internalID: -8918202498184030381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_12
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 934
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0e53cc0ab2324300800000000000000
+      internalID: 234805905236123149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_13
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 938
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 975f9aa7c8f45b9b0800000000000000
+      internalID: -5065054741136280199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_14
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 947
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15ac8f6cd61aff410800000000000000
+      internalID: 1513105492681476689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_15
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 936
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0a4087162c24a3d0800000000000000
+      internalID: -3196381293411546611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_16
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 945
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37b50e4ade6b833e0800000000000000
+      internalID: -2073706496614442125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_17
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 942
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c09bbd35b51f63730800000000000000
+      internalID: 3978632695379638540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_18
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 824
+        width: 117
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5433e249fc9c8b910800000000000000
+      internalID: 1853453140044428101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_19
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 906
+        width: 31
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76165bd3349489bc0800000000000000
+      internalID: -3776187734403227289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_20
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 929
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b29e4f8fb46da320800000000000000
+      internalID: 2570821736204243633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_21
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 929
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a25fb2df0c04d8dc0800000000000000
+      internalID: -3635178126592707286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_22
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 927
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 344af8ed806fbf570800000000000000
+      internalID: 8501659239546070083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_23
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 920
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96be67204178fd3c0800000000000000
+      internalID: -4332595796496684183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_24
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 787
+        width: 147
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc6ad20882b916920800000000000000
+      internalID: 2981835026547451597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_25
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 784
+        width: 23
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5ad267413788a340800000000000000
+      internalID: 4875295242349369947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_26
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 813
+        width: 89
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d982ecc775fbbe980800000000000000
+      internalID: -8508496688509474659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_27
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 793
+        width: 25
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de964e8384db40920800000000000000
+      internalID: 2955695373351676397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_28
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 100
+        width: 549
+        height: 824
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c43b97d9c9df5830800000000000000
+      internalID: 4062204849840403651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_29
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 765
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6b40cca978e27b60800000000000000
+      internalID: 7742506318690274154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_30
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 777
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a44b3aba1ea0ecdb0800000000000000
+      internalID: -4769862990975224758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_31
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 768
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b488cd6dc94287ff0800000000000000
+      internalID: -38240340794374069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_32
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 761
+        width: 18
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2416e66a1e22c5840800000000000000
+      internalID: 5214080821143429442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_33
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 775
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff0e618a0609d41c0800000000000000
+      internalID: -4517796106371407617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_34
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 754
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b32b2da14031c6570800000000000000
+      internalID: 8461158708273132091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_35
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 761
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6dfc27a708503f40800000000000000
+      internalID: 5706157517771177323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_36
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 763
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cbd59dc9a9822cb0800000000000000
+      internalID: -4890194882979308599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_37
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 738
+        width: 15
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2083a52741b18900800000000000000
+      internalID: 685023537469292590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_38
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 732
+        width: 13
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30f3393504463d490800000000000000
+      internalID: -7722718708567425277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_39
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 735
+        width: 12
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 645ee8d030ffdb750800000000000000
+      internalID: 6322489840475497798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_40
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 754
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34e6ac03071eec880800000000000000
+      internalID: -8588679567377797565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_41
+      rect:
+        serializedVersion: 2
+        x: 945
+        y: 752
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df2e41f0d9d945ab0800000000000000
+      internalID: -5020214386722807043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_42
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 718
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e01bacb939735f0800000000000000
+      internalID: -776990113368306064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_43
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 735
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18cdd0292217389e0800000000000000
+      internalID: -1620327047630037887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_44
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 641
+        width: 37
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8b445f2a4a9be230800000000000000
+      internalID: 3669195964835711884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_45
+      rect:
+        serializedVersion: 2
+        x: 972
+        y: 723
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9f4fc3ddd4b9dde0800000000000000
+      internalID: -1307815351940067429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_46
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 702
+        width: 10
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b2478b87d78f6e40800000000000000
+      internalID: 5651885417201877688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_47
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 721
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d594ed6dd454b4a0800000000000000
+      internalID: -6578539845673249321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_48
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 709
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fa132233e67a8840800000000000000
+      internalID: 5227121035687697145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_49
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 549
+        width: 23
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63ddb6e2ca7c497b0800000000000000
+      internalID: -5218326525888438986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_50
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 659
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 667acfe876d338f70800000000000000
+      internalID: 9188255179755792230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_51
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 675
+        width: 19
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e191f75d987687070800000000000000
+      internalID: 8104341371143264542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_52
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 691
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb7ff9f5a6e67e040800000000000000
+      internalID: 4676828141197457342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_53
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 674
+        width: 8
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ce7d9a96e14700e0800000000000000
+      internalID: -2303800225684422967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_54
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 533
+        width: 21
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 717f92ca3e8929a50800000000000000
+      internalID: 6526446913626699543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_55
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 367
+        width: 34
+        height: 261
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0da392dc456593a00800000000000000
+      internalID: 736714936271059664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_56
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 627
+        width: 8
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea43d95310a555db0800000000000000
+      internalID: -4803834466279803730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_57
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 392
+        width: 6
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c49aa27c4f7d7c410800000000000000
+      internalID: 1497402847437433164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_58
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 362
+        width: 6
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d15e1c5496bb49b0800000000000000
+      internalID: -5094777805122678314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_59
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 351
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac5eef10143606b50800000000000000
+      internalID: 6584371786073171402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_60
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 337
+        width: 11
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08e47c0e4c4d5b620800000000000000
+      internalID: 2789369486275726976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_61
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 364
+        width: 35
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 073faa958225d4460800000000000000
+      internalID: 7227523310256059248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_62
+      rect:
+        serializedVersion: 2
+        x: 998
+        y: 349
+        width: 10
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fca3aeb9768edcbc0800000000000000
+      internalID: -3761094582089401649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_63
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 401
+        width: 8
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfe38e630eb6aa160800000000000000
+      internalID: 7037555978457857789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_64
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 343
+        width: 8
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a68d28c40587e4bd0800000000000000
+      internalID: -2644043644943542166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_65
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 329
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96c4a8c4a721e8df0800000000000000
+      internalID: -176183018941428631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_66
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 302
+        width: 20
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f8c0aa75a9240030800000000000000
+      internalID: 3459936204431083762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_67
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 319
+        width: 13
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8751cc613c09c1fc0800000000000000
+      internalID: -3522781640935074440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_68
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 309
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20770253acf7a3850800000000000000
+      internalID: 6357534330438317826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_69
+      rect:
+        serializedVersion: 2
+        x: 965
+        y: 301
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c68e5f07f17bc120800000000000000
+      internalID: 2435165329452598980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_70
+      rect:
+        serializedVersion: 2
+        x: 972
+        y: 317
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05b08ec3095bcd210800000000000000
+      internalID: 1359160818660805456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_71
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 300
+        width: 10
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8193c7331533be6f0800000000000000
+      internalID: -654372897003128552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_72
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 289
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23bdc1ca0e3990fd0800000000000000
+      internalID: -2375204735291696334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_73
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 271
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 644fc8377a1d74da0800000000000000
+      internalID: -5960565064673201082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_74
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 286
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21e7958d3d6284b30800000000000000
+      internalID: 4271706937870614034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_75
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 269
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59c9b79cf46582d30800000000000000
+      internalID: 4406867136064756885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_76
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 273
+        width: 16
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67c3838c89ef12af0800000000000000
+      internalID: -422776957848503178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_77
+      rect:
+        serializedVersion: 2
+        x: 970
+        y: 281
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9693730dd2c45c70800000000000000
+      internalID: 8958999813248226971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_78
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 260
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 683936a1a1d8e3410800000000000000
+      internalID: 1458758472566018950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_79
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 262
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c54cb803ab29e9140800000000000000
+      internalID: 4728377987161637980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_80
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 255
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b7c783cc22b020b0800000000000000
+      internalID: -5755404418450733134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_81
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 63
+        width: 209
+        height: 219
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99682f67148f3fc60800000000000000
+      internalID: 7850891535489074841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_82
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 253
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d15c527db98271840800000000000000
+      internalID: 5194665344989775133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_83
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 232
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ddbed7b85570b6a0800000000000000
+      internalID: -6435514843610038823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_84
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 247
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7bf589b0ba64e130800000000000000
+      internalID: 3595115709807852414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_85
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 223
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c3782a15946393a0800000000000000
+      internalID: -6659868832399068215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_86
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 230
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98272ad9775658e90800000000000000
+      internalID: -7024096479394237815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_87
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 220
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39b16a96036430ac0800000000000000
+      internalID: -3890188479373108333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_88
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 206
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad4c964fc48e77dd0800000000000000
+      internalID: -2488264851883178790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_89
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 90
+        width: 120
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc15797ab997ea210800000000000000
+      internalID: 1346147048068960717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_90
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 199
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38e297f31605f8480800000000000000
+      internalID: -8894802360426484093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_91
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 99
+        width: 34
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8439405c49ace2190800000000000000
+      internalID: -7985222348971928760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_92
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 91
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 871e1934d05c2a170800000000000000
+      internalID: 8188323733271863672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_93
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 76
+        width: 22
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbaf93386a75f5960800000000000000
+      internalID: 7592883869447748285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_94
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 64
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83ac48bfb1d80fcf0800000000000000
+      internalID: -220521230417737160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_95
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 74
+        width: 29
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2305d2d6615811ae0800000000000000
+      internalID: -1580335662862872526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_96
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 60
+        width: 28
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4815a5c06edec5c0800000000000000
+      internalID: -4193169695821195189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_97
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 61
+        width: 24
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bb8c59cd5b596e20800000000000000
+      internalID: 3344304656667675570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_98
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 73
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b542c31aea3d9d40800000000000000
+      internalID: 5592691089292281265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_99
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 77
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec81fd88e4b301aa0800000000000000
+      internalID: -6192384279144621874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_100
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 59
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cccb5eec9bf632b0800000000000000
+      internalID: -5605016034783540025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_101
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 47
+        width: 25
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fe83456a3780d760800000000000000
+      internalID: 7480627665939173111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_102
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 0
+        width: 256
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7375a37b9ec0e6bd0800000000000000
+      internalID: -2635154534024194249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_103
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 11
+        width: 195
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2b3909d00aeb760800000000000000
+      internalID: 7475588411602219770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_104
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 56
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3efe61aeffab7fd20800000000000000
+      internalID: 3312321659261087715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_105
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 42
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3df02428eabc2fd90800000000000000
+      internalID: -7065360915020771373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_106
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 42
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe6007e010cd4950800000000000000
+      internalID: 6435010621409881791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_107
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 49
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5285736bfdef46d00800000000000000
+      internalID: 965176456952371237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_108
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 36
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13616e93bebb9ad40800000000000000
+      internalID: 5596210630947640881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_109
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 31
+        width: 21
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f968f7843fb0d8fd0800000000000000
+      internalID: -2338199492014143841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_110
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 27
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd0fae57a9990bbc0800000000000000
+      internalID: -3769343999426760481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_111
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 27
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 715a02c0d6c9e0210800000000000000
+      internalID: 1301149334525486359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_112
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 11
+        width: 25
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bff53c39e4684ab0800000000000000
+      internalID: -5023654431431458894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tanTrench_113
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 0
+        width: 79
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 693a160a658dc92f0800000000000000
+      internalID: -964658353594588266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      tanTrench_0: -2269072123310645018
+      tanTrench_1: -2082314917692413011
+      tanTrench_10: 3742490957167554188
+      tanTrench_100: -5605016034783540025
+      tanTrench_101: 7480627665939173111
+      tanTrench_102: -2635154534024194249
+      tanTrench_103: 7475588411602219770
+      tanTrench_104: 3312321659261087715
+      tanTrench_105: -7065360915020771373
+      tanTrench_106: 6435010621409881791
+      tanTrench_107: 965176456952371237
+      tanTrench_108: 5596210630947640881
+      tanTrench_109: -2338199492014143841
+      tanTrench_11: -8918202498184030381
+      tanTrench_110: -3769343999426760481
+      tanTrench_111: 1301149334525486359
+      tanTrench_112: -5023654431431458894
+      tanTrench_113: -964658353594588266
+      tanTrench_12: 234805905236123149
+      tanTrench_13: -5065054741136280199
+      tanTrench_14: 1513105492681476689
+      tanTrench_15: -3196381293411546611
+      tanTrench_16: -2073706496614442125
+      tanTrench_17: 3978632695379638540
+      tanTrench_18: 1853453140044428101
+      tanTrench_19: -3776187734403227289
+      tanTrench_2: -6536073237601267441
+      tanTrench_20: 2570821736204243633
+      tanTrench_21: -3635178126592707286
+      tanTrench_22: 8501659239546070083
+      tanTrench_23: -4332595796496684183
+      tanTrench_24: 2981835026547451597
+      tanTrench_25: 4875295242349369947
+      tanTrench_26: -8508496688509474659
+      tanTrench_27: 2955695373351676397
+      tanTrench_28: 4062204849840403651
+      tanTrench_29: 7742506318690274154
+      tanTrench_3: 2760880427351328989
+      tanTrench_30: -4769862990975224758
+      tanTrench_31: -38240340794374069
+      tanTrench_32: 5214080821143429442
+      tanTrench_33: -4517796106371407617
+      tanTrench_34: 8461158708273132091
+      tanTrench_35: 5706157517771177323
+      tanTrench_36: -4890194882979308599
+      tanTrench_37: 685023537469292590
+      tanTrench_38: -7722718708567425277
+      tanTrench_39: 6322489840475497798
+      tanTrench_4: 566244975309998208
+      tanTrench_40: -8588679567377797565
+      tanTrench_41: -5020214386722807043
+      tanTrench_42: -776990113368306064
+      tanTrench_43: -1620327047630037887
+      tanTrench_44: 3669195964835711884
+      tanTrench_45: -1307815351940067429
+      tanTrench_46: 5651885417201877688
+      tanTrench_47: -6578539845673249321
+      tanTrench_48: 5227121035687697145
+      tanTrench_49: -5218326525888438986
+      tanTrench_5: -9161370820838861471
+      tanTrench_50: 9188255179755792230
+      tanTrench_51: 8104341371143264542
+      tanTrench_52: 4676828141197457342
+      tanTrench_53: -2303800225684422967
+      tanTrench_54: 6526446913626699543
+      tanTrench_55: 736714936271059664
+      tanTrench_56: -4803834466279803730
+      tanTrench_57: 1497402847437433164
+      tanTrench_58: -5094777805122678314
+      tanTrench_59: 6584371786073171402
+      tanTrench_6: -8920789573520092544
+      tanTrench_60: 2789369486275726976
+      tanTrench_61: 7227523310256059248
+      tanTrench_62: -3761094582089401649
+      tanTrench_63: 7037555978457857789
+      tanTrench_64: -2644043644943542166
+      tanTrench_65: -176183018941428631
+      tanTrench_66: 3459936204431083762
+      tanTrench_67: -3522781640935074440
+      tanTrench_68: 6357534330438317826
+      tanTrench_69: 2435165329452598980
+      tanTrench_7: -9091780388748898140
+      tanTrench_70: 1359160818660805456
+      tanTrench_71: -654372897003128552
+      tanTrench_72: -2375204735291696334
+      tanTrench_73: -5960565064673201082
+      tanTrench_74: 4271706937870614034
+      tanTrench_75: 4406867136064756885
+      tanTrench_76: -422776957848503178
+      tanTrench_77: 8958999813248226971
+      tanTrench_78: 1458758472566018950
+      tanTrench_79: 4728377987161637980
+      tanTrench_8: -7811051367994853389
+      tanTrench_80: -5755404418450733134
+      tanTrench_81: 7850891535489074841
+      tanTrench_82: 5194665344989775133
+      tanTrench_83: -6435514843610038823
+      tanTrench_84: 3595115709807852414
+      tanTrench_85: -6659868832399068215
+      tanTrench_86: -7024096479394237815
+      tanTrench_87: -3890188479373108333
+      tanTrench_88: -2488264851883178790
+      tanTrench_89: 1346147048068960717
+      tanTrench_9: 1730261115558128492
+      tanTrench_90: -8894802360426484093
+      tanTrench_91: -7985222348971928760
+      tanTrench_92: 8188323733271863672
+      tanTrench_93: 7592883869447748285
+      tanTrench_94: -220521230417737160
+      tanTrench_95: -1580335662862872526
+      tanTrench_96: -4193169695821195189
+      tanTrench_97: 3344304656667675570
+      tanTrench_98: 5592691089292281265
+      tanTrench_99: -6192384279144621874
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

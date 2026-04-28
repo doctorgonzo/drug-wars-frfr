@@ -1,0 +1,58 @@
+DRUG WARS FRFR — GAME IMPROVEMENTS ROADMAP
+=============================================
+
+Tier 1 — The "Why am I playing?" gap (highest impact)
+------------------------------------------------------
+- No win condition or goal.
+  There's a Level field on PlayerStats that's never used. Players need something
+  to aim for — a target net worth, a day limit, a loan shark breathing down their
+  neck. The classic Drug Wars formula is "you have 30 days to pay off a $50,000
+  debt." This single addition gives everything else meaning.
+
+- No time pressure.
+  GameTime ticks but nothing happens when days pass. Prices shift daily (good!)
+  but the player has no reason to care which day it is. If there's a deadline,
+  every day matters. Travel should advance time (e.g., +4 hours or +1 day per trip).
+
+- No random events / news ticker.
+  PriceService.DailyEvent already has boom/bust — but the player never sees why
+  prices changed. A simple news banner ("DRUG BUST IN MILWAUKEE — Weed prices
+  crash!") on city load would make the market feel alive and give players
+  information to act on.
+
+
+Tier 2 — The "one more turn" hooks
+------------------------------------------------------
+- No money sink / progression.
+  The player buys a trenchcoat and weapon at char creation and that's it forever.
+  Add an upgrade shop (better trenchcoats with more slots, better weapons with
+  more damage) in each city. This gives a reason to accumulate cash beyond the
+  win goal.
+
+- Inventory feels flat.
+  Every drug is mechanically identical — just a name and a price. Give drugs
+  distinct risk/reward profiles: cheap drugs = low profit, low heat. Expensive
+  drugs = huge margins, massive heat. The data is there (HeatValue exists on
+  items) but the spread needs to be dramatic enough to matter.
+
+- No loan shark.
+  Classic Drug Wars has a loan shark who charges daily interest. Borrow money
+  early to make bigger trades, but the debt snowballs. This creates tension and
+  interesting decisions.
+
+
+Tier 3 — Juice and feel
+------------------------------------------------------
+- No feedback on profit/loss.
+  When you sell, you should see "+$3,200 PROFIT" or "-$800 LOSS" compared to
+  what you paid. Without this, players can't tell if they're playing well.
+
+- No net worth tracker.
+  Show total assets (cash + inventory value) so players can see the number go up.
+
+- Market event notifications on city arrival.
+
+- Travel should have tradeoffs.
+  Different cities should feel meaningfully different (they already have
+  costOfLiving and favoriteDrug, but the player doesn't see this info before
+  traveling).

@@ -1,0 +1,2847 @@
+fileFormatVersion: 2
+guid: 60b6d7a5e51d0a94a8c0111575cb9d7c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6737242215558804428
+    second: blackTrench_0
+  - first:
+      213: 1337760768444903665
+    second: blackTrench_1
+  - first:
+      213: 5206246369465380513
+    second: blackTrench_2
+  - first:
+      213: -5024774491637418562
+    second: blackTrench_3
+  - first:
+      213: 630335483219164586
+    second: blackTrench_4
+  - first:
+      213: -1877160878440461753
+    second: blackTrench_5
+  - first:
+      213: 4082831897240915948
+    second: blackTrench_6
+  - first:
+      213: -7517937024939675657
+    second: blackTrench_7
+  - first:
+      213: 2911137815479773477
+    second: blackTrench_8
+  - first:
+      213: -15236344917246634
+    second: blackTrench_9
+  - first:
+      213: -6382712709181174341
+    second: blackTrench_10
+  - first:
+      213: -1010645008598484334
+    second: blackTrench_11
+  - first:
+      213: 8868204491344649369
+    second: blackTrench_12
+  - first:
+      213: -3990899176362355579
+    second: blackTrench_13
+  - first:
+      213: 1093552929485086201
+    second: blackTrench_14
+  - first:
+      213: -5340470098036681691
+    second: blackTrench_15
+  - first:
+      213: 5408863037778464644
+    second: blackTrench_16
+  - first:
+      213: 8052741691485884781
+    second: blackTrench_17
+  - first:
+      213: -8301453426538087342
+    second: blackTrench_18
+  - first:
+      213: 6454250037395674475
+    second: blackTrench_19
+  - first:
+      213: -8000440982188864276
+    second: blackTrench_20
+  - first:
+      213: 1362644998088382572
+    second: blackTrench_21
+  - first:
+      213: 8033530491918893274
+    second: blackTrench_22
+  - first:
+      213: -2092837692381949697
+    second: blackTrench_23
+  - first:
+      213: -931665500283079531
+    second: blackTrench_24
+  - first:
+      213: 1999301286943998735
+    second: blackTrench_25
+  - first:
+      213: 1835318739602984993
+    second: blackTrench_26
+  - first:
+      213: -8272390543096189399
+    second: blackTrench_27
+  - first:
+      213: 5417192743140305676
+    second: blackTrench_28
+  - first:
+      213: 8249548968833700711
+    second: blackTrench_29
+  - first:
+      213: -3414075028200298589
+    second: blackTrench_30
+  - first:
+      213: -1187619431739983000
+    second: blackTrench_31
+  - first:
+      213: 2450541464678113202
+    second: blackTrench_32
+  - first:
+      213: 8135102715384778664
+    second: blackTrench_33
+  - first:
+      213: 3402707791045361719
+    second: blackTrench_34
+  - first:
+      213: 5160470421101161809
+    second: blackTrench_35
+  - first:
+      213: 7827844480482134457
+    second: blackTrench_36
+  - first:
+      213: -5364423053052719007
+    second: blackTrench_37
+  - first:
+      213: -5245128513519110280
+    second: blackTrench_38
+  - first:
+      213: -3785218919565254341
+    second: blackTrench_39
+  - first:
+      213: -6031620046765811777
+    second: blackTrench_40
+  - first:
+      213: -8292248337810760376
+    second: blackTrench_41
+  - first:
+      213: -1496428125601384434
+    second: blackTrench_42
+  - first:
+      213: 5383103925017019387
+    second: blackTrench_43
+  - first:
+      213: -6866472388570995799
+    second: blackTrench_44
+  - first:
+      213: 590111823964715805
+    second: blackTrench_45
+  - first:
+      213: 7785657301951119480
+    second: blackTrench_46
+  - first:
+      213: 5601189385844809380
+    second: blackTrench_47
+  - first:
+      213: 7652142537054624717
+    second: blackTrench_48
+  - first:
+      213: -4768306284829024086
+    second: blackTrench_49
+  - first:
+      213: 2301628737768467759
+    second: blackTrench_50
+  - first:
+      213: -6433629952235040531
+    second: blackTrench_51
+  - first:
+      213: 2389714311152751330
+    second: blackTrench_52
+  - first:
+      213: -1863392507103997229
+    second: blackTrench_53
+  - first:
+      213: -4862553425353320316
+    second: blackTrench_54
+  - first:
+      213: 818330472017726453
+    second: blackTrench_55
+  - first:
+      213: 5458607878172868513
+    second: blackTrench_56
+  - first:
+      213: 3027339732480761950
+    second: blackTrench_57
+  - first:
+      213: 117231584720201077
+    second: blackTrench_58
+  - first:
+      213: -1484286978405261963
+    second: blackTrench_59
+  - first:
+      213: -8930181824470267995
+    second: blackTrench_60
+  - first:
+      213: 1565656274898413003
+    second: blackTrench_61
+  - first:
+      213: 2464201337577490919
+    second: blackTrench_62
+  - first:
+      213: -4154012389908024064
+    second: blackTrench_63
+  - first:
+      213: 3716723169594329889
+    second: blackTrench_64
+  - first:
+      213: -6197468529682864791
+    second: blackTrench_65
+  - first:
+      213: 751636038646492734
+    second: blackTrench_66
+  - first:
+      213: -6415555617080616017
+    second: blackTrench_67
+  - first:
+      213: 1475832702034860531
+    second: blackTrench_68
+  - first:
+      213: -2206130125552692100
+    second: blackTrench_69
+  - first:
+      213: -8776962585529373844
+    second: blackTrench_70
+  - first:
+      213: 7754519532976419409
+    second: blackTrench_71
+  - first:
+      213: 4268830136673575241
+    second: blackTrench_72
+  - first:
+      213: -7416191190596142650
+    second: blackTrench_73
+  - first:
+      213: -5587362959835973172
+    second: blackTrench_74
+  - first:
+      213: 2616167525303569973
+    second: blackTrench_75
+  - first:
+      213: 2069219419172807109
+    second: blackTrench_76
+  - first:
+      213: 9042974284307785304
+    second: blackTrench_77
+  - first:
+      213: -7859679962182008522
+    second: blackTrench_78
+  - first:
+      213: -344997505177261440
+    second: blackTrench_79
+  - first:
+      213: 8768945902944464880
+    second: blackTrench_80
+  - first:
+      213: -7560237919838212791
+    second: blackTrench_81
+  - first:
+      213: 2742614327319330038
+    second: blackTrench_82
+  - first:
+      213: -8370887815896630976
+    second: blackTrench_83
+  - first:
+      213: -7675144771487334492
+    second: blackTrench_84
+  - first:
+      213: -6544434942347001524
+    second: blackTrench_85
+  - first:
+      213: -7155728978300410485
+    second: blackTrench_86
+  - first:
+      213: -7637336413020858292
+    second: blackTrench_87
+  - first:
+      213: 5549504503175045035
+    second: blackTrench_88
+  - first:
+      213: 7562184100793541516
+    second: blackTrench_89
+  - first:
+      213: 387216087957032973
+    second: blackTrench_90
+  - first:
+      213: -2421069324150114640
+    second: blackTrench_91
+  - first:
+      213: 6533033774238845652
+    second: blackTrench_92
+  - first:
+      213: 6457633911386134307
+    second: blackTrench_93
+  - first:
+      213: 6179904408886186493
+    second: blackTrench_94
+  - first:
+      213: -4341137597354732633
+    second: blackTrench_95
+  - first:
+      213: 1840214554310901842
+    second: blackTrench_96
+  - first:
+      213: 1952430709497921043
+    second: blackTrench_97
+  - first:
+      213: 1631094351482922746
+    second: blackTrench_98
+  - first:
+      213: -7430943052889610881
+    second: blackTrench_99
+  - first:
+      213: -527230146200163845
+    second: blackTrench_100
+  - first:
+      213: 982466525851576520
+    second: blackTrench_101
+  - first:
+      213: 7740732514781939010
+    second: blackTrench_102
+  - first:
+      213: -2267856617106034742
+    second: blackTrench_103
+  - first:
+      213: 3098057740762841126
+    second: blackTrench_104
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1024
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: blackTrench_0
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 103
+        width: 496
+        height: 921
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc3f520891e7f7d50800000000000000
+      internalID: 6737242215558804428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_1
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 991
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f0bc95c45ea09210800000000000000
+      internalID: 1337760768444903665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_2
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 970
+        width: 20
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aea6293d7d404840800000000000000
+      internalID: 5206246369465380513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_3
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 955
+        width: 19
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb5f185e83a644ab0800000000000000
+      internalID: -5024774491637418562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_4
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 959
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aad3a9648c66fb800800000000000000
+      internalID: 630335483219164586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_5
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 960
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74acb4e602cf2f5e0800000000000000
+      internalID: -1877160878440461753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_6
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 960
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cefcda09af129a830800000000000000
+      internalID: 4082831897240915948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_7
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 952
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ffa6b88b1ceaa790800000000000000
+      internalID: -7517937024939675657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_8
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 938
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 529e0e75b60766820800000000000000
+      internalID: 2911137815479773477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_9
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 950
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65d388100aed9cff0800000000000000
+      internalID: -15236344917246634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_10
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 950
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbd82e9ab9c0c67a0800000000000000
+      internalID: -6382712709181174341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_11
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 925
+        width: 42
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29a377428b779f1f0800000000000000
+      internalID: -1010645008598484334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_12
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 940
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c1f16cff0321b70800000000000000
+      internalID: 8868204491344649369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_13
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 918
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 584d582085a7d98c0800000000000000
+      internalID: -3990899176362355579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_14
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 932
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fddb0178941d2f00800000000000000
+      internalID: 1093552929485086201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_15
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 925
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5249de8adb6d2e5b0800000000000000
+      internalID: -5340470098036681691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_16
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 931
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48f86858644201b40800000000000000
+      internalID: 5408863037778464644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_17
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 810
+        width: 136
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d619ef437e511cf60800000000000000
+      internalID: 8052741691485884781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_18
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 830
+        width: 91
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25c7fbf67105bcc80800000000000000
+      internalID: -8301453426538087342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_19
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 915
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b655582863a129950800000000000000
+      internalID: 6454250037395674475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_20
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 920
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cecc72a9059b8f090800000000000000
+      internalID: -8000440982188864276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_21
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 918
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c68550af76619e210800000000000000
+      internalID: 1362644998088382572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_22
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 806
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad0481f3b65dc7f60800000000000000
+      internalID: 8033530491918893274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_23
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 817
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff09605053fb4f2e0800000000000000
+      internalID: -2092837692381949697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_24
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 810
+        width: 108
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 594f326e92f0213f0800000000000000
+      internalID: -931665500283079531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_25
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 785
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f03474f7de1febb10800000000000000
+      internalID: 1999301286943998735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_26
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 796
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12057a37bac587910800000000000000
+      internalID: 1835318739602984993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_27
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 803
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92e637b41a0923d80800000000000000
+      internalID: -8272390543096189399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_28
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 799
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0ba3be291cbd2b40800000000000000
+      internalID: 5417192743140305676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_29
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 803
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 763d58444194c7270800000000000000
+      internalID: 8249548968833700711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_30
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 791
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a7e693b9d4ce90d0800000000000000
+      internalID: -3414075028200298589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_31
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 768
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86b79ca4b6ab48fe0800000000000000
+      internalID: -1187619431739983000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_32
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 789
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf11858a72120220800000000000000
+      internalID: 2450541464678113202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_33
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 754
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8af43d961d0b5e070800000000000000
+      internalID: 8135102715384778664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_34
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 775
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73086b725b8d83f20800000000000000
+      internalID: 3402707791045361719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_35
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 765
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15d25a3b18cad9740800000000000000
+      internalID: 5160470421101161809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_36
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 772
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b9c320d41712ac60800000000000000
+      internalID: 7827844480482134457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_37
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 763
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16050e9b7adbd85b0800000000000000
+      internalID: -5364423053052719007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_38
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 645
+        width: 46
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 877bb66286f8537b0800000000000000
+      internalID: -5245128513519110280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_39
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 754
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b31a9369273387bc0800000000000000
+      internalID: -3785218919565254341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_40
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 754
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb7166c36816b4ca0800000000000000
+      internalID: -6031620046765811777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_41
+      rect:
+        serializedVersion: 2
+        x: 949
+        y: 737
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84d577b22140cec80800000000000000
+      internalID: -8292248337810760376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_42
+      rect:
+        serializedVersion: 2
+        x: 958
+        y: 730
+        width: 20
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0830a55c8e9b3be0800000000000000
+      internalID: -1496428125601384434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_43
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 721
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf386a7bf70a4ba40800000000000000
+      internalID: 5383103925017019387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_44
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 734
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a3a2332eb365b0a0800000000000000
+      internalID: -6866472388570995799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_45
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 689
+        width: 11
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1bbc2dc39f703800800000000000000
+      internalID: 590111823964715805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_46
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 712
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87009b1e0163c0c60800000000000000
+      internalID: 7785657301951119480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_47
+      rect:
+        serializedVersion: 2
+        x: 961
+        y: 702
+        width: 15
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4aed7fee11c6bbd40800000000000000
+      internalID: 5601189385844809380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_48
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 689
+        width: 20
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcb1ccb381fd13a60800000000000000
+      internalID: 7652142537054624717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_49
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 303
+        width: 58
+        height: 387
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa0e08092b293ddb0800000000000000
+      internalID: -4768306284829024086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_50
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 307
+        width: 55
+        height: 341
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2d2587742701ff10800000000000000
+      internalID: 2301628737768467759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_51
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 652
+        width: 14
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de097b035a727b6a0800000000000000
+      internalID: -6433629952235040531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_52
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 601
+        width: 17
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e25de63188f92120800000000000000
+      internalID: 2389714311152751330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_53
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 373
+        width: 9
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d211f03366e326e0800000000000000
+      internalID: -1863392507103997229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_54
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 397
+        width: 7
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 488d47c2c6db48cb0800000000000000
+      internalID: -4862553425353320316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_55
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 338
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fb8e758a3b4b5b00800000000000000
+      internalID: 818330472017726453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_56
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 329
+        width: 13
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1af74aab1fed0cb40800000000000000
+      internalID: 5458607878172868513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_57
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 319
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5021f87275430a20800000000000000
+      internalID: 3027339732480761950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_58
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 298
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57524b3518d70a100800000000000000
+      internalID: 117231584720201077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_59
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 264
+        width: 19
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57d9a637bd0c66be0800000000000000
+      internalID: -1484286978405261963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_60
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 244
+        width: 34
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a7ccccd1fe911480800000000000000
+      internalID: -8930181824470267995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_61
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 273
+        width: 15
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc56ea936145ab510800000000000000
+      internalID: 1565656274898413003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_62
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 262
+        width: 24
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e949558f0a923220800000000000000
+      internalID: 2464201337577490919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_63
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 255
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 005f5f28dbbf956c0800000000000000
+      internalID: -4154012389908024064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_64
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 237
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12b422cd704749330800000000000000
+      internalID: 3716723169594329889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_65
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 233
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9652795353b2ef9a0800000000000000
+      internalID: -6197468529682864791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_66
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 70
+        width: 195
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ee7ebaef85e6a00800000000000000
+      internalID: 751636038646492734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_67
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 244
+        width: 19
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fabd527482e57f6a0800000000000000
+      internalID: -6415555617080616017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_68
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 240
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f951b0f5063b7410800000000000000
+      internalID: 1475832702034860531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_69
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 255
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c74d422e6504261e0800000000000000
+      internalID: -2206130125552692100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_70
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 219
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6ba0a2e707f13680800000000000000
+      internalID: -8776962585529373844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_71
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 192
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15233e61e669d9b60800000000000000
+      internalID: 7754519532976419409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_72
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 220
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94129ee546eed3b30800000000000000
+      internalID: 4268830136673575241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_73
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 199
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c9b222a765641990800000000000000
+      internalID: -7416191190596142650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_74
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 194
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc93dcbbdf2b572b0800000000000000
+      internalID: -5587362959835973172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_75
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 187
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53ec1a2d08e7e4420800000000000000
+      internalID: 2616167525303569973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_76
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 182
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c1a22a391857bc10800000000000000
+      internalID: 2069219419172807109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_77
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 188
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 856682923391f7d70800000000000000
+      internalID: 9042974284307785304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_78
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 180
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 631c2ed77becce290800000000000000
+      internalID: -7859679962182008522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_79
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 122
+        width: 60
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08a638fc892563bf0800000000000000
+      internalID: -344997505177261440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_80
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 135
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ff2f9fb6dd81b970800000000000000
+      internalID: 8768945902944464880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_81
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 123
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94dea92faa3a41790800000000000000
+      internalID: -7560237919838212791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_82
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 112
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fcf3cf1339bf0620800000000000000
+      internalID: 2742614327319330038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_83
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 119
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 049f5ded1e1a4db80800000000000000
+      internalID: -8370887815896630976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_84
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 112
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4affcc7be786c7590800000000000000
+      internalID: -7675144771487334492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_85
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 101
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c41c0c5081f7d25a0800000000000000
+      internalID: -6544434942347001524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_86
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 91
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b856f6b286eb1bc90800000000000000
+      internalID: -7155728978300410485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_87
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 74
+        width: 59
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c485cb72ffab20690800000000000000
+      internalID: -7637336413020858292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_88
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 86
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bafdd2f61fcc30d40800000000000000
+      internalID: 5549504503175045035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_89
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 75
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c83e7ed9f5642f860800000000000000
+      internalID: 7562184100793541516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_90
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 70
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d00defdfafaaf5500800000000000000
+      internalID: 387216087957032973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_91
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 62
+        width: 24
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b6ff6de642a66ed0800000000000000
+      internalID: -2421069324150114640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_92
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 0
+        width: 225
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4dac22baa9ff9aa50800000000000000
+      internalID: 6533033774238845652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_93
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 73
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 327dfa114df1e9950800000000000000
+      internalID: 6457633911386134307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_94
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 63
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df1188d315e63c550800000000000000
+      internalID: 6179904408886186493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_95
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 50
+        width: 26
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a314940b5e21c3c0800000000000000
+      internalID: -4341137597354732633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_96
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 0
+        width: 238
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25084342361c98910800000000000000
+      internalID: 1840214554310901842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_97
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 54
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31eff28c26d681b10800000000000000
+      internalID: 1952430709497921043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_98
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 63
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af62947bbafc2a610800000000000000
+      internalID: 1631094351482922746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_99
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 43
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f75ab5a0aacffd890800000000000000
+      internalID: -7430943052889610881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_100
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 39
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf9acd4b9f6eea8f0800000000000000
+      internalID: -527230146200163845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_101
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 43
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c86815991c62ad00800000000000000
+      internalID: 982466525851576520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_102
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 34
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 245c4e4c53b9c6b60800000000000000
+      internalID: 7740732514781939010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_103
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 26
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acf20ef1c64f680e0800000000000000
+      internalID: -2267856617106034742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blackTrench_104
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 25
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62081dbd9138efa20800000000000000
+      internalID: 3098057740762841126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      blackTrench_0: 6737242215558804428
+      blackTrench_1: 1337760768444903665
+      blackTrench_10: -6382712709181174341
+      blackTrench_100: -527230146200163845
+      blackTrench_101: 982466525851576520
+      blackTrench_102: 7740732514781939010
+      blackTrench_103: -2267856617106034742
+      blackTrench_104: 3098057740762841126
+      blackTrench_11: -1010645008598484334
+      blackTrench_12: 8868204491344649369
+      blackTrench_13: -3990899176362355579
+      blackTrench_14: 1093552929485086201
+      blackTrench_15: -5340470098036681691
+      blackTrench_16: 5408863037778464644
+      blackTrench_17: 8052741691485884781
+      blackTrench_18: -8301453426538087342
+      blackTrench_19: 6454250037395674475
+      blackTrench_2: 5206246369465380513
+      blackTrench_20: -8000440982188864276
+      blackTrench_21: 1362644998088382572
+      blackTrench_22: 8033530491918893274
+      blackTrench_23: -2092837692381949697
+      blackTrench_24: -931665500283079531
+      blackTrench_25: 1999301286943998735
+      blackTrench_26: 1835318739602984993
+      blackTrench_27: -8272390543096189399
+      blackTrench_28: 5417192743140305676
+      blackTrench_29: 8249548968833700711
+      blackTrench_3: -5024774491637418562
+      blackTrench_30: -3414075028200298589
+      blackTrench_31: -1187619431739983000
+      blackTrench_32: 2450541464678113202
+      blackTrench_33: 8135102715384778664
+      blackTrench_34: 3402707791045361719
+      blackTrench_35: 5160470421101161809
+      blackTrench_36: 7827844480482134457
+      blackTrench_37: -5364423053052719007
+      blackTrench_38: -5245128513519110280
+      blackTrench_39: -3785218919565254341
+      blackTrench_4: 630335483219164586
+      blackTrench_40: -6031620046765811777
+      blackTrench_41: -8292248337810760376
+      blackTrench_42: -1496428125601384434
+      blackTrench_43: 5383103925017019387
+      blackTrench_44: -6866472388570995799
+      blackTrench_45: 590111823964715805
+      blackTrench_46: 7785657301951119480
+      blackTrench_47: 5601189385844809380
+      blackTrench_48: 7652142537054624717
+      blackTrench_49: -4768306284829024086
+      blackTrench_5: -1877160878440461753
+      blackTrench_50: 2301628737768467759
+      blackTrench_51: -6433629952235040531
+      blackTrench_52: 2389714311152751330
+      blackTrench_53: -1863392507103997229
+      blackTrench_54: -4862553425353320316
+      blackTrench_55: 818330472017726453
+      blackTrench_56: 5458607878172868513
+      blackTrench_57: 3027339732480761950
+      blackTrench_58: 117231584720201077
+      blackTrench_59: -1484286978405261963
+      blackTrench_6: 4082831897240915948
+      blackTrench_60: -8930181824470267995
+      blackTrench_61: 1565656274898413003
+      blackTrench_62: 2464201337577490919
+      blackTrench_63: -4154012389908024064
+      blackTrench_64: 3716723169594329889
+      blackTrench_65: -6197468529682864791
+      blackTrench_66: 751636038646492734
+      blackTrench_67: -6415555617080616017
+      blackTrench_68: 1475832702034860531
+      blackTrench_69: -2206130125552692100
+      blackTrench_7: -7517937024939675657
+      blackTrench_70: -8776962585529373844
+      blackTrench_71: 7754519532976419409
+      blackTrench_72: 4268830136673575241
+      blackTrench_73: -7416191190596142650
+      blackTrench_74: -5587362959835973172
+      blackTrench_75: 2616167525303569973
+      blackTrench_76: 2069219419172807109
+      blackTrench_77: 9042974284307785304
+      blackTrench_78: -7859679962182008522
+      blackTrench_79: -344997505177261440
+      blackTrench_8: 2911137815479773477
+      blackTrench_80: 8768945902944464880
+      blackTrench_81: -7560237919838212791
+      blackTrench_82: 2742614327319330038
+      blackTrench_83: -8370887815896630976
+      blackTrench_84: -7675144771487334492
+      blackTrench_85: -6544434942347001524
+      blackTrench_86: -7155728978300410485
+      blackTrench_87: -7637336413020858292
+      blackTrench_88: 5549504503175045035
+      blackTrench_89: 7562184100793541516
+      blackTrench_9: -15236344917246634
+      blackTrench_90: 387216087957032973
+      blackTrench_91: -2421069324150114640
+      blackTrench_92: 6533033774238845652
+      blackTrench_93: 6457633911386134307
+      blackTrench_94: 6179904408886186493
+      blackTrench_95: -4341137597354732633
+      blackTrench_96: 1840214554310901842
+      blackTrench_97: 1952430709497921043
+      blackTrench_98: 1631094351482922746
+      blackTrench_99: -7430943052889610881
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

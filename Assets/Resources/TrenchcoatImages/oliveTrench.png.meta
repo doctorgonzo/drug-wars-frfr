@@ -1,0 +1,3237 @@
+fileFormatVersion: 2
+guid: 83706a4e3195aae47bd6ee6d38172e24
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4075591694817849401
+    second: oliveTrench_0
+  - first:
+      213: 6199074849151691988
+    second: oliveTrench_1
+  - first:
+      213: -5026478494858339952
+    second: oliveTrench_2
+  - first:
+      213: 7189478486281068011
+    second: oliveTrench_3
+  - first:
+      213: -1291338787668659045
+    second: oliveTrench_4
+  - first:
+      213: 3339052962391418916
+    second: oliveTrench_5
+  - first:
+      213: -5799982157962946672
+    second: oliveTrench_6
+  - first:
+      213: -8464979711610704497
+    second: oliveTrench_7
+  - first:
+      213: 3207567065223805369
+    second: oliveTrench_8
+  - first:
+      213: 1457154106052528783
+    second: oliveTrench_9
+  - first:
+      213: 1070419741130948801
+    second: oliveTrench_10
+  - first:
+      213: -2055463844100858833
+    second: oliveTrench_11
+  - first:
+      213: 4836840881823469600
+    second: oliveTrench_12
+  - first:
+      213: 4467180022611831688
+    second: oliveTrench_13
+  - first:
+      213: 3851874219565499489
+    second: oliveTrench_14
+  - first:
+      213: 2461082485333960158
+    second: oliveTrench_15
+  - first:
+      213: -4549229179862445430
+    second: oliveTrench_16
+  - first:
+      213: -8825509837869049966
+    second: oliveTrench_17
+  - first:
+      213: -5513250990448523408
+    second: oliveTrench_18
+  - first:
+      213: 1405758128185245212
+    second: oliveTrench_19
+  - first:
+      213: 6062588080570744871
+    second: oliveTrench_20
+  - first:
+      213: -1870299911715975408
+    second: oliveTrench_21
+  - first:
+      213: -2982222743128056140
+    second: oliveTrench_22
+  - first:
+      213: 6914677682886698969
+    second: oliveTrench_23
+  - first:
+      213: -8935456065193419531
+    second: oliveTrench_24
+  - first:
+      213: 3951386461056474809
+    second: oliveTrench_25
+  - first:
+      213: -2000022369087765852
+    second: oliveTrench_26
+  - first:
+      213: -6559245680325517597
+    second: oliveTrench_27
+  - first:
+      213: 8230472853848816831
+    second: oliveTrench_28
+  - first:
+      213: 4490535085302254396
+    second: oliveTrench_29
+  - first:
+      213: -3518458250248524540
+    second: oliveTrench_30
+  - first:
+      213: 3283598562637182567
+    second: oliveTrench_31
+  - first:
+      213: -6096734409640238793
+    second: oliveTrench_32
+  - first:
+      213: -835821329848693011
+    second: oliveTrench_33
+  - first:
+      213: -8341711404567382008
+    second: oliveTrench_34
+  - first:
+      213: 7925508542536124997
+    second: oliveTrench_35
+  - first:
+      213: -6858122131918104333
+    second: oliveTrench_36
+  - first:
+      213: -2470566357700778274
+    second: oliveTrench_37
+  - first:
+      213: 7953892594771136008
+    second: oliveTrench_38
+  - first:
+      213: 7084607138442809724
+    second: oliveTrench_39
+  - first:
+      213: 7593068051761765403
+    second: oliveTrench_40
+  - first:
+      213: -4275376928534331416
+    second: oliveTrench_41
+  - first:
+      213: -2436571033450769523
+    second: oliveTrench_42
+  - first:
+      213: -7350248764283091346
+    second: oliveTrench_43
+  - first:
+      213: -7127553502268420327
+    second: oliveTrench_44
+  - first:
+      213: 443657798123160978
+    second: oliveTrench_45
+  - first:
+      213: -9092122043356252899
+    second: oliveTrench_46
+  - first:
+      213: 2322511174450397489
+    second: oliveTrench_47
+  - first:
+      213: 5323465566177092420
+    second: oliveTrench_48
+  - first:
+      213: -605480398719497141
+    second: oliveTrench_49
+  - first:
+      213: -1948217743940144750
+    second: oliveTrench_50
+  - first:
+      213: -5258968310579082471
+    second: oliveTrench_51
+  - first:
+      213: 216641758261076617
+    second: oliveTrench_52
+  - first:
+      213: -8788386255802392884
+    second: oliveTrench_53
+  - first:
+      213: 8217610685888795770
+    second: oliveTrench_54
+  - first:
+      213: -8119092264933138342
+    second: oliveTrench_55
+  - first:
+      213: 6792456619204947562
+    second: oliveTrench_56
+  - first:
+      213: -2258180310344449957
+    second: oliveTrench_57
+  - first:
+      213: 8486908717652374825
+    second: oliveTrench_58
+  - first:
+      213: 9124153314379710801
+    second: oliveTrench_59
+  - first:
+      213: 649087196957182222
+    second: oliveTrench_60
+  - first:
+      213: 8542141388127412536
+    second: oliveTrench_61
+  - first:
+      213: 7741371291168935121
+    second: oliveTrench_62
+  - first:
+      213: 1612702032582638562
+    second: oliveTrench_63
+  - first:
+      213: -3933285871744479513
+    second: oliveTrench_64
+  - first:
+      213: -810643924547496711
+    second: oliveTrench_65
+  - first:
+      213: 6944637929331888451
+    second: oliveTrench_66
+  - first:
+      213: -8076166843592601443
+    second: oliveTrench_67
+  - first:
+      213: -1851452666514220442
+    second: oliveTrench_68
+  - first:
+      213: 3220401093841649307
+    second: oliveTrench_69
+  - first:
+      213: 4653780722208665670
+    second: oliveTrench_70
+  - first:
+      213: 3193086536310031944
+    second: oliveTrench_71
+  - first:
+      213: -968119689732766744
+    second: oliveTrench_72
+  - first:
+      213: -411740471008327031
+    second: oliveTrench_73
+  - first:
+      213: -2074420800904538575
+    second: oliveTrench_74
+  - first:
+      213: -3992989684073967720
+    second: oliveTrench_75
+  - first:
+      213: -5901675167814349925
+    second: oliveTrench_76
+  - first:
+      213: 697512120671320140
+    second: oliveTrench_77
+  - first:
+      213: 9150691815758296379
+    second: oliveTrench_78
+  - first:
+      213: -2499760643116374134
+    second: oliveTrench_79
+  - first:
+      213: -8404851946522871261
+    second: oliveTrench_80
+  - first:
+      213: -3617620992332838444
+    second: oliveTrench_81
+  - first:
+      213: -8484398002839593354
+    second: oliveTrench_82
+  - first:
+      213: 7340282583835491038
+    second: oliveTrench_83
+  - first:
+      213: -5668782149632883682
+    second: oliveTrench_84
+  - first:
+      213: 4232611374670283917
+    second: oliveTrench_85
+  - first:
+      213: 3730399476632724667
+    second: oliveTrench_86
+  - first:
+      213: -6815642800971917455
+    second: oliveTrench_87
+  - first:
+      213: -5825378232596597695
+    second: oliveTrench_88
+  - first:
+      213: -8770549032840813310
+    second: oliveTrench_89
+  - first:
+      213: 1014293328892386371
+    second: oliveTrench_90
+  - first:
+      213: 7908096615394164472
+    second: oliveTrench_91
+  - first:
+      213: -6883506702064939242
+    second: oliveTrench_92
+  - first:
+      213: -8858451873861131640
+    second: oliveTrench_93
+  - first:
+      213: -527865136321625652
+    second: oliveTrench_94
+  - first:
+      213: -7691876749954955311
+    second: oliveTrench_95
+  - first:
+      213: -1827803623074256482
+    second: oliveTrench_96
+  - first:
+      213: 6094982411777694581
+    second: oliveTrench_97
+  - first:
+      213: -3662974753467207610
+    second: oliveTrench_98
+  - first:
+      213: 7390955793969266553
+    second: oliveTrench_99
+  - first:
+      213: 6360946552374958909
+    second: oliveTrench_100
+  - first:
+      213: 6688284367700100352
+    second: oliveTrench_101
+  - first:
+      213: 7710937826559897010
+    second: oliveTrench_102
+  - first:
+      213: 6339719191297936176
+    second: oliveTrench_103
+  - first:
+      213: 182812802922948974
+    second: oliveTrench_104
+  - first:
+      213: 5874710285726476687
+    second: oliveTrench_105
+  - first:
+      213: -5423865200051006636
+    second: oliveTrench_106
+  - first:
+      213: 1281891653221186374
+    second: oliveTrench_107
+  - first:
+      213: -1503638078806220439
+    second: oliveTrench_108
+  - first:
+      213: 7453401044455033656
+    second: oliveTrench_109
+  - first:
+      213: -3857711252354985511
+    second: oliveTrench_110
+  - first:
+      213: -5009468743601470789
+    second: oliveTrench_111
+  - first:
+      213: 3370209185377556895
+    second: oliveTrench_112
+  - first:
+      213: 5305923254906277682
+    second: oliveTrench_113
+  - first:
+      213: -1923437520818349278
+    second: oliveTrench_114
+  - first:
+      213: -3776611757069943183
+    second: oliveTrench_115
+  - first:
+      213: -7792980439833448631
+    second: oliveTrench_116
+  - first:
+      213: 3878153407493886344
+    second: oliveTrench_117
+  - first:
+      213: -5362519565648470168
+    second: oliveTrench_118
+  - first:
+      213: 4524581875918011317
+    second: oliveTrench_119
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1024
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: oliveTrench_0
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 100
+        width: 545
+        height: 924
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93076239d096f8830800000000000000
+      internalID: 4075591694817849401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_1
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 991
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4dcaebf2bb9870650800000000000000
+      internalID: 6199074849151691988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_2
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 983
+        width: 21
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09914dab07c5e3ab0800000000000000
+      internalID: -5026478494858339952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_3
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 974
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bed981f779826c360800000000000000
+      internalID: 7189478486281068011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_4
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 979
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b947354e63e341ee0800000000000000
+      internalID: -1291338787668659045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_5
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 974
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4286e8d6af2b65e20800000000000000
+      internalID: 3339052962391418916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_6
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 959
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 097d30bf4f2528fa0800000000000000
+      internalID: -5799982157962946672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_7
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 951
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8d2e8a3dc9568a80800000000000000
+      internalID: -8464979711610704497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_8
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 959
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b938eb5041938c20800000000000000
+      internalID: 3207567065223805369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_9
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 951
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8a434a60f9d83410800000000000000
+      internalID: 1457154106052528783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_10
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 960
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c00dae4515eade00800000000000000
+      internalID: 1070419741130948801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_11
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 955
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2c95bb26868973e0800000000000000
+      internalID: -2055463844100858833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_12
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 940
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 020dc24c729ef1340800000000000000
+      internalID: 4836840881823469600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_13
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 945
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88bef7bff8c9efd30800000000000000
+      internalID: 4467180022611831688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_14
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 946
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 164cfa0d13b947530800000000000000
+      internalID: 3851874219565499489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_15
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 941
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed524452b75872220800000000000000
+      internalID: 2461082485333960158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_16
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 936
+        width: 21
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a82157ce924edd0c0800000000000000
+      internalID: -4549229179862445430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_17
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 927
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2979910ef8d758580800000000000000
+      internalID: -8825509837869049966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_18
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 934
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 077ceb44f6ffc73b0800000000000000
+      internalID: -5513250990448523408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_19
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 929
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1e799ec191428310800000000000000
+      internalID: 1405758128185245212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_20
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 927
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 720cfe10db3a22450800000000000000
+      internalID: 6062588080570744871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_21
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 921
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01f89bab32c5b06e0800000000000000
+      internalID: -1870299911715975408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_22
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 830
+        width: 91
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bed2c237340d96d0800000000000000
+      internalID: -2982222743128056140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_23
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 918
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d768c097bed5ff50800000000000000
+      internalID: 6914677682886698969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_24
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 915
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fc59000d02eef380800000000000000
+      internalID: -8935456065193419531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_25
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 920
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9be1f8d0d0526d630800000000000000
+      internalID: 3951386461056474809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_26
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 920
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a240bb704e7e34e0800000000000000
+      internalID: -2000022369087765852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_27
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 910
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ee9ead5ec0e8f4a0800000000000000
+      internalID: -6559245680325517597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_28
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 803
+        width: 115
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbc77232473883270800000000000000
+      internalID: 8230472853848816831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_29
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 803
+        width: 113
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3b8ed24ed5915e30800000000000000
+      internalID: 4490535085302254396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_30
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 903
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40de4ececdceb2fc0800000000000000
+      internalID: -3518458250248524540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_31
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 899
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 766f8f6de7fa19d20800000000000000
+      internalID: 3283598562637182567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_32
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 813
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7312e773b5c046ba0800000000000000
+      internalID: -6096734409640238793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_33
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 821
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dee8caacde09664f0800000000000000
+      internalID: -835821329848693011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_34
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 756
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 808bfef7ca94c3c80800000000000000
+      internalID: -8341711404567382008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_35
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 765
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54a803e37001dfd60800000000000000
+      internalID: 7925508542536124997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_36
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 777
+        width: 26
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f8d6c4c14e03d0a0800000000000000
+      internalID: -6858122131918104333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_37
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 761
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed6e63fbcf8c6bdd0800000000000000
+      internalID: -2470566357700778274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_38
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 773
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80e81f46c27e16e60800000000000000
+      internalID: 7953892594771136008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_39
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 784
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c71941418a4915260800000000000000
+      internalID: 7084607138442809724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_40
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 796
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1c90acc92fff5960800000000000000
+      internalID: 7593068051761765403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_41
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 763
+        width: 28
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ef7fcdd55fcaa4c0800000000000000
+      internalID: -4275376928534331416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_42
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 791
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d831929fd8f8f2ed0800000000000000
+      internalID: -2436571033450769523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_43
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 775
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e66072231bbaef990800000000000000
+      internalID: -7350248764283091346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_44
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 752
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91f03b36ad7d51d90800000000000000
+      internalID: -7127553502268420327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_45
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 763
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29586f2ba60382600800000000000000
+      internalID: 443657798123160978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_46
+      rect:
+        serializedVersion: 2
+        x: 958
+        y: 733
+        width: 18
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1570477c2b42d180800000000000000
+      internalID: -9092122043356252899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_47
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 716
+        width: 21
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 131cdf3ab973b3020800000000000000
+      internalID: 2322511174450397489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_48
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 754
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 443620e3abfb0e940800000000000000
+      internalID: 5323465566177092420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_49
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 732
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4cccdb09c6e897f0800000000000000
+      internalID: -605480398719497141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_50
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 737
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 291b553b84a86f4e0800000000000000
+      internalID: -1948217743940144750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_51
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 689
+        width: 15
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91bc5ea4f246407b0800000000000000
+      internalID: -5258968310579082471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_52
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 656
+        width: 24
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 982eaa4088aa10300800000000000000
+      internalID: 216641758261076617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_53
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 721
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cce19f16341690680800000000000000
+      internalID: -8788386255802392884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_54
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 709
+        width: 13
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a741bda4161da0270800000000000000
+      internalID: 8217610685888795770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_55
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 686
+        width: 23
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a50e9021a90335f80800000000000000
+      internalID: -8119092264933138342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 359
+        width: 35
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6e26f3ae47a34e50800000000000000
+      internalID: 6792456619204947562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_57
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 600
+        width: 16
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b50432bd8f459a0e0800000000000000
+      internalID: -2258180310344449957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_58
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 656
+        width: 12
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 925f5dc538e87c570800000000000000
+      internalID: 8486908717652374825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_59
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 337
+        width: 36
+        height: 311
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1514ecbf8118f9e70800000000000000
+      internalID: 9124153314379710801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_60
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 594
+        width: 18
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0903eadd55020900800000000000000
+      internalID: 649087196957182222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_61
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 397
+        width: 8
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8312f749558cb8670800000000000000
+      internalID: 8542141388127412536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_62
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 332
+        width: 11
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dc088c7c20ee6b60800000000000000
+      internalID: 7741371291168935121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_63
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 303
+        width: 28
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eb73a444f7716610800000000000000
+      internalID: 1612702032582638562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_64
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 298
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ee8b9ec6592a69c0800000000000000
+      internalID: -3933285871744479513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_65
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 279
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f4940645a300c4f0800000000000000
+      internalID: -810643924547496711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_66
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 271
+        width: 18
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3411887076f406060800000000000000
+      internalID: 6944637929331888451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_67
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 273
+        width: 15
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9010ec8b01bbef80800000000000000
+      internalID: -8076166843592601443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_68
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 299
+        width: 26
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66a58f5fb915e46e0800000000000000
+      internalID: -1851452666514220442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_69
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 283
+        width: 10
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9ef5b08bb921bc20800000000000000
+      internalID: 3220401093841649307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_70
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 300
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 640fec9f8ec859040800000000000000
+      internalID: 4653780722208665670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_71
+      rect:
+        serializedVersion: 2
+        x: 983
+        y: 309
+        width: 13
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84687dd794f105c20800000000000000
+      internalID: 3193086536310031944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_72
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 264
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e3ca61854c8092f0800000000000000
+      internalID: -968119689732766744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_73
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 255
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a85ed1934394af0800000000000000
+      internalID: -411740471008327031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_74
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 257
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1365767b54d2633e0800000000000000
+      internalID: -2074420800904538575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_75
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 244
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89fc8f0c90d0698c0800000000000000
+      internalID: -3992989684073967720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_76
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 244
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9b8eaa04b9091ea0800000000000000
+      internalID: -5901675167814349925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_77
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 257
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c48b423049f0ea900800000000000000
+      internalID: 697512120671320140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_78
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 255
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b35f85759b9cdfe70800000000000000
+      internalID: 9150691815758296379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_79
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 262
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a87eb8b70f01f4dd0800000000000000
+      internalID: -2499760643116374134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_80
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 245
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32af0c97fa7fb5b80800000000000000
+      internalID: -8404851946522871261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_81
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 237
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d9410cdfd0abcdc0800000000000000
+      internalID: -3617620992332838444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_82
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 233
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67e56bbf7fc514a80800000000000000
+      internalID: -8484398002839593354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_83
+      rect:
+        serializedVersion: 2
+        x: 922
+        y: 226
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eda30889e1cedd560800000000000000
+      internalID: 7340282583835491038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_84
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 240
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e148e0e5ba07451b0800000000000000
+      internalID: -5668782149632883682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_85
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 219
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d840083be914dba30800000000000000
+      internalID: 4232611374670283917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_86
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 223
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb42ffa3f8a05c330800000000000000
+      internalID: 3730399476632724667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_87
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 208
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 177de1cbbf8f961a0800000000000000
+      internalID: -6815642800971917455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_88
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 67
+        width: 195
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14479c39c59182fa0800000000000000
+      internalID: -5825378232596597695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_89
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 201
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 205a06c7f10c84680800000000000000
+      internalID: -8770549032840813310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_90
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 182
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34cddae986e731e00800000000000000
+      internalID: 1014293328892386371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_91
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 199
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8feb90a09f33fbd60800000000000000
+      internalID: 7908096615394164472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_92
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 194
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61f0666ff1fd870a0800000000000000
+      internalID: -6883506702064939242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_93
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 188
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8822d9e64f4701580800000000000000
+      internalID: -8858451873861131640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_94
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 129
+        width: 52
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc18c3c8475aca8f0800000000000000
+      internalID: -527865136321625652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_95
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 119
+        width: 72
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d749d669d6f04590800000000000000
+      internalID: -7691876749954955311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_96
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 112
+        width: 21
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e99ac77f94652a6e0800000000000000
+      internalID: -1827803623074256482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_97
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 101
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57b534ef53ab59450800000000000000
+      internalID: 6094982411777694581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_98
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 107
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 640fc567edf7a2dc0800000000000000
+      internalID: -3662974753467207610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_99
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 91
+        width: 24
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97f372ab223f19660800000000000000
+      internalID: 7390955793969266553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_100
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 93
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3b1e89003f964850800000000000000
+      internalID: 6360946552374958909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_101
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 82
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0050095423f81dc50800000000000000
+      internalID: 6688284367700100352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_102
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 74
+        width: 29
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bda9355911c20b60800000000000000
+      internalID: 7710937826559897010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_103
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 70
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03b4a05e3053bf750800000000000000
+      internalID: 6339719191297936176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_104
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 63
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e69ad92964b798200800000000000000
+      internalID: 182812802922948974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_105
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 62
+        width: 24
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f896f0b11e9278150800000000000000
+      internalID: 5874710285726476687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_106
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 64
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4535b51665f8ab4b0800000000000000
+      internalID: -5423865200051006636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_107
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 56
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64b79c6baa13ac110800000000000000
+      internalID: 1281891653221186374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_108
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 0
+        width: 240
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 961210a4221022be0800000000000000
+      internalID: -1503638078806220439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_109
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 0
+        width: 209
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83b844792cccf6760800000000000000
+      internalID: 7453401044455033656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_110
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 50
+        width: 26
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d19a551e08a67ac0800000000000000
+      internalID: -3857711252354985511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_111
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 63
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb2463018baca7ab0800000000000000
+      internalID: -5009468743601470789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_112
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 48
+        width: 17
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f991031e56365ce20800000000000000
+      internalID: 3370209185377556895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_113
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 43
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23f4c2e961d62a940800000000000000
+      internalID: 5305923254906277682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_114
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 43
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22bd6fff3c39e45e0800000000000000
+      internalID: -1923437520818349278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_115
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 34
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17e3845cd97c69bc0800000000000000
+      internalID: -3776611757069943183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_116
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 39
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94fe8263495c9d390800000000000000
+      internalID: -7792980439833448631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_117
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 20
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881d42e0af7f1d530800000000000000
+      internalID: 3878153407493886344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_118
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 25
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86fd07cedd08495b0800000000000000
+      internalID: -5362519565648470168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oliveTrench_119
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 12
+        width: 21
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bb734f6e3b8ace30800000000000000
+      internalID: 4524581875918011317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      oliveTrench_0: 4075591694817849401
+      oliveTrench_1: 6199074849151691988
+      oliveTrench_10: 1070419741130948801
+      oliveTrench_100: 6360946552374958909
+      oliveTrench_101: 6688284367700100352
+      oliveTrench_102: 7710937826559897010
+      oliveTrench_103: 6339719191297936176
+      oliveTrench_104: 182812802922948974
+      oliveTrench_105: 5874710285726476687
+      oliveTrench_106: -5423865200051006636
+      oliveTrench_107: 1281891653221186374
+      oliveTrench_108: -1503638078806220439
+      oliveTrench_109: 7453401044455033656
+      oliveTrench_11: -2055463844100858833
+      oliveTrench_110: -3857711252354985511
+      oliveTrench_111: -5009468743601470789
+      oliveTrench_112: 3370209185377556895
+      oliveTrench_113: 5305923254906277682
+      oliveTrench_114: -1923437520818349278
+      oliveTrench_115: -3776611757069943183
+      oliveTrench_116: -7792980439833448631
+      oliveTrench_117: 3878153407493886344
+      oliveTrench_118: -5362519565648470168
+      oliveTrench_119: 4524581875918011317
+      oliveTrench_12: 4836840881823469600
+      oliveTrench_13: 4467180022611831688
+      oliveTrench_14: 3851874219565499489
+      oliveTrench_15: 2461082485333960158
+      oliveTrench_16: -4549229179862445430
+      oliveTrench_17: -8825509837869049966
+      oliveTrench_18: -5513250990448523408
+      oliveTrench_19: 1405758128185245212
+      oliveTrench_2: -5026478494858339952
+      oliveTrench_20: 6062588080570744871
+      oliveTrench_21: -1870299911715975408
+      oliveTrench_22: -2982222743128056140
+      oliveTrench_23: 6914677682886698969
+      oliveTrench_24: -8935456065193419531
+      oliveTrench_25: 3951386461056474809
+      oliveTrench_26: -2000022369087765852
+      oliveTrench_27: -6559245680325517597
+      oliveTrench_28: 8230472853848816831
+      oliveTrench_29: 4490535085302254396
+      oliveTrench_3: 7189478486281068011
+      oliveTrench_30: -3518458250248524540
+      oliveTrench_31: 3283598562637182567
+      oliveTrench_32: -6096734409640238793
+      oliveTrench_33: -835821329848693011
+      oliveTrench_34: -8341711404567382008
+      oliveTrench_35: 7925508542536124997
+      oliveTrench_36: -6858122131918104333
+      oliveTrench_37: -2470566357700778274
+      oliveTrench_38: 7953892594771136008
+      oliveTrench_39: 7084607138442809724
+      oliveTrench_4: -1291338787668659045
+      oliveTrench_40: 7593068051761765403
+      oliveTrench_41: -4275376928534331416
+      oliveTrench_42: -2436571033450769523
+      oliveTrench_43: -7350248764283091346
+      oliveTrench_44: -7127553502268420327
+      oliveTrench_45: 443657798123160978
+      oliveTrench_46: -9092122043356252899
+      oliveTrench_47: 2322511174450397489
+      oliveTrench_48: 5323465566177092420
+      oliveTrench_49: -605480398719497141
+      oliveTrench_5: 3339052962391418916
+      oliveTrench_50: -1948217743940144750
+      oliveTrench_51: -5258968310579082471
+      oliveTrench_52: 216641758261076617
+      oliveTrench_53: -8788386255802392884
+      oliveTrench_54: 8217610685888795770
+      oliveTrench_55: -8119092264933138342
+      oliveTrench_56: 6792456619204947562
+      oliveTrench_57: -2258180310344449957
+      oliveTrench_58: 8486908717652374825
+      oliveTrench_59: 9124153314379710801
+      oliveTrench_6: -5799982157962946672
+      oliveTrench_60: 649087196957182222
+      oliveTrench_61: 8542141388127412536
+      oliveTrench_62: 7741371291168935121
+      oliveTrench_63: 1612702032582638562
+      oliveTrench_64: -3933285871744479513
+      oliveTrench_65: -810643924547496711
+      oliveTrench_66: 6944637929331888451
+      oliveTrench_67: -8076166843592601443
+      oliveTrench_68: -1851452666514220442
+      oliveTrench_69: 3220401093841649307
+      oliveTrench_7: -8464979711610704497
+      oliveTrench_70: 4653780722208665670
+      oliveTrench_71: 3193086536310031944
+      oliveTrench_72: -968119689732766744
+      oliveTrench_73: -411740471008327031
+      oliveTrench_74: -2074420800904538575
+      oliveTrench_75: -3992989684073967720
+      oliveTrench_76: -5901675167814349925
+      oliveTrench_77: 697512120671320140
+      oliveTrench_78: 9150691815758296379
+      oliveTrench_79: -2499760643116374134
+      oliveTrench_8: 3207567065223805369
+      oliveTrench_80: -8404851946522871261
+      oliveTrench_81: -3617620992332838444
+      oliveTrench_82: -8484398002839593354
+      oliveTrench_83: 7340282583835491038
+      oliveTrench_84: -5668782149632883682
+      oliveTrench_85: 4232611374670283917
+      oliveTrench_86: 3730399476632724667
+      oliveTrench_87: -6815642800971917455
+      oliveTrench_88: -5825378232596597695
+      oliveTrench_89: -8770549032840813310
+      oliveTrench_9: 1457154106052528783
+      oliveTrench_90: 1014293328892386371
+      oliveTrench_91: 7908096615394164472
+      oliveTrench_92: -6883506702064939242
+      oliveTrench_93: -8858451873861131640
+      oliveTrench_94: -527865136321625652
+      oliveTrench_95: -7691876749954955311
+      oliveTrench_96: -1827803623074256482
+      oliveTrench_97: 6094982411777694581
+      oliveTrench_98: -3662974753467207610
+      oliveTrench_99: 7390955793969266553
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
