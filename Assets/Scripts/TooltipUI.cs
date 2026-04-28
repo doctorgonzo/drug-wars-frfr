@@ -26,6 +26,7 @@ public class TooltipUI : MonoBehaviour
 
     private RectTransform tooltipRectTransform;
     private LayoutElement layoutElement;
+    private Canvas canvas;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class TooltipUI : MonoBehaviour
         Instance = this;
 
         tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
+        canvas = canvasRectTransform.GetComponent<Canvas>();
         tooltipPanel.SetActive(false);
 
         ConfigureLayout();
@@ -102,7 +104,8 @@ public class TooltipUI : MonoBehaviour
         if (!tooltipPanel.activeSelf) return;
 
         Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, Input.mousePosition, null, out localPoint);
+        Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, Input.mousePosition, cam, out localPoint);
         Vector2 desired = localPoint + offset;
 
         // --- Clamp to screen edges ---
@@ -139,7 +142,6 @@ public class TooltipUI : MonoBehaviour
 
         tooltipPanel.SetActive(true);
         LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRectTransform);
-        Cursor.visible = false;
     }
 
     public void HideTooltip()
@@ -148,7 +150,6 @@ public class TooltipUI : MonoBehaviour
         if (!tooltipPanel) return;
         try { tooltipPanel.SetActive(false); }
         catch (MissingReferenceException) { /* swallowed because it's being torn down */ }
-        Cursor.visible = true;
     }
 
     void OnDestroy()
