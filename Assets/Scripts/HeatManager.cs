@@ -29,6 +29,8 @@ public class HeatManager : MonoBehaviour
     [SerializeField] private Image heatFillImage;
     [Tooltip("Optional status text showing cooldown/decay state.")]
     [SerializeField] private TMP_Text heatStatusText;
+    [Tooltip("Optional text showing current contraband risk level.")]
+    [SerializeField] private TMP_Text riskLevelText;
     [SerializeField] private Color normalColor = new Color(1f, 0.3f, 0.1f, 1f);
     [SerializeField] private Color cooldownColor = new Color(1f, 0.6f, 0f, 1f);
     [SerializeField] private Color decayingColor = new Color(0.3f, 0.8f, 1f, 1f);
@@ -39,16 +41,101 @@ public class HeatManager : MonoBehaviour
     private HeatState currentState = HeatState.Idle;
     private Coroutine decayRoutine;
 
+    // Fill image idle colors — shift with risk tier of what you're carrying
+    private static readonly Color fillColor0 = new Color(1f, 0.3f, 0.1f, 1f);     // safe — orange-red
+    private static readonly Color fillColor1 = new Color(1f, 0.55f, 0f, 1f);      // medium — amber
+    private static readonly Color fillColor2 = new Color(0.9f, 0.05f, 0.05f, 1f); // hard — crimson
+
+    // Risk label text colors — separate from fill (CLEAN should look neutral, not alarming)
+    private static readonly Color labelColorClean  = new Color(0.55f, 0.85f, 0.55f, 1f); // soft green
+    private static readonly Color labelColorMed    = new Color(1f, 0.75f, 0.1f, 1f);     // amber
+    private static readonly Color labelColorHigh   = new Color(0.95f, 0.15f, 0.15f, 1f); // red
+
     private void Start()
     {
         if (heatSlider != null)
-        {
             heatSlider.maxValue = maxHeat;
-        }
+        ConfigureTextAutoSize();
         UpdateHeatDisplay();
-        // Start the cooldown timer so heat doesn't decay immediately
+        UpdateRiskDisplay();
         cooldownTimer = decayCooldown;
         EnsureDecayRunning();
+    }
+
+    private void ConfigureTextAutoSize()
+    {
+        SetAutoSize(heatText, 8f, 20f);
+        SetAutoSize(heatStatusText, 7f, 16f);
+        SetAutoSize(riskLevelText, 7f, 16f);
+    }
+
+    private static void SetAutoSize(TMP_Text label, float min, float max)
+    {
+        if (label == null) return;
+        label.enableAutoSizing = true;
+        label.fontSizeMin = min;
+        label.fontSizeMax = max;
+        label.enableWordWrapping = false;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+    }
+
+    private void OnEnable()
+    {
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.OnInventoryChanged += OnInventoryChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.OnInventoryChanged -= OnInventoryChanged;
+    }
+
+    private void OnInventoryChanged()
+    {
+        UpdateRiskDisplay();
+        normalColor = GetFillColor(GetInventoryRiskLevel());
+        if (currentState == HeatState.Idle && heatFillImage != null)
+            heatFillImage.color = normalColor;
+    }
+
+    private int GetInventoryRiskLevel()
+    {
+        var inv = PlayerStats.Instance?.inventory;
+        if (inv == null) return 0;
+        int max = 0;
+        foreach (var item in inv)
+        {
+            if (item.Type == ItemType.Drug && item.Amount > 0)
+                max = Mathf.Max(max, item.RiskTier);
+        }
+        return max;
+    }
+
+    private static Color GetFillColor(int level) => level switch
+    {
+        1 => fillColor1,
+        2 => fillColor2,
+        _ => fillColor0
+    };
+
+    private void UpdateRiskDisplay()
+    {
+        if (riskLevelText == null) return;
+        int level = GetInventoryRiskLevel();
+        riskLevelText.text = level switch
+        {
+            0 => "CLEAN",
+            1 => "MED RISK",
+            2 => "HIGH RISK",
+            _ => "CLEAN"
+        };
+        riskLevelText.color = level switch
+        {
+            1 => labelColorMed,
+            2 => labelColorHigh,
+            _ => labelColorClean
+        };
     }
 
     private IEnumerator DecayLoop()
@@ -168,13 +255,15 @@ public class HeatManager : MonoBehaviour
             PlayerStats.Instance.CurrentHeat = 0;
             CopEncounterData.ReturnSceneName = SceneManager.GetActiveScene().name;
             // Build the encounter seed from your current PlayerStats
+            int riskLevel = GetInventoryRiskLevel();
             var seed = new DrugWars.NPC.CopEncounterSeed
             {
                 priorCopEncounters = PlayerStats.Instance.TimesCaughtByCops,
-                playerCash = PlayerStats.Instance.PlayerWallet,     // <- use your real wallet
-                playerHasContraband = PlayerStats.Instance.HasContraband,    // <- the simple list check above
+                playerCash = PlayerStats.Instance.PlayerWallet,
+                playerHasContraband = PlayerStats.Instance.HasContraband,
                 playerLevel = PlayerStats.Instance.Level,
-                heatAtTrigger = maxHeat
+                heatAtTrigger = maxHeat,
+                contrabandRiskLevel = riskLevel
             };
 
             // Handoff to the cop scene

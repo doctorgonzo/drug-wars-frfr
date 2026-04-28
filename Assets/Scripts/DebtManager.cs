@@ -11,6 +11,9 @@ public class DebtManager : MonoBehaviour
     [SerializeField] private TMP_Text interestWarningText;
     [SerializeField] private Button payDebtButton;
     [SerializeField] private TMP_InputField payAmountInput;
+    [SerializeField] private Button borrowButton;
+    [SerializeField] private TMP_InputField borrowAmountInput;
+    [SerializeField] private TMP_Text borrowInfoText;
 
     [Header("Game Over")]
     [SerializeField] private string gameOverSceneName = "GameOver";
@@ -25,14 +28,16 @@ public class DebtManager : MonoBehaviour
         if (gameTime != null)
             gameTime.DayChanged += OnDayChanged;
 
-        if (payDebtButton != null && payAmountInput != null)
-        {
+        if (payDebtButton != null)
             payDebtButton.onClick.AddListener(OnPayDebtClicked);
-        }
+
+        if (borrowButton != null)
+            borrowButton.onClick.AddListener(OnBorrowClicked);
 
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnDebtChanged += _ => RefreshUI();
 
+        ConfigureTextAutoSize();
         RefreshUI();
     }
 
@@ -97,6 +102,48 @@ public class DebtManager : MonoBehaviour
         }
     }
 
+    private void ConfigureTextAutoSize()
+    {
+        SetAutoSize(debtText, 10f, 28f);
+        SetAutoSize(dayText, 8f, 20f);
+        SetAutoSize(interestWarningText, 8f, 16f);
+        SetAutoSize(borrowInfoText, 7f, 14f);
+    }
+
+    private static void SetAutoSize(TMP_Text label, float min, float max)
+    {
+        if (label == null) return;
+        label.enableAutoSizing = true;
+        label.fontSizeMin = min;
+        label.fontSizeMax = max;
+        label.enableWordWrapping = true;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+    }
+
+    private void OnBorrowClicked()
+    {
+        var ps = PlayerStats.Instance;
+        if (ps == null) return;
+
+        int requested = ps.MaxSingleBorrow;
+        if (borrowAmountInput != null && int.TryParse(borrowAmountInput.text, out var parsed))
+            requested = parsed;
+
+        int actual = ps.BorrowFromShark(requested);
+        if (actual <= 0) return;
+
+        int debtAdded = Mathf.RoundToInt(actual * (1f + ps.BorrowPremiumRate));
+        if (interestWarningText != null)
+        {
+            interestWarningText.text = $"Borrowed ${actual:N0} — debt increased by ${debtAdded:N0}!";
+            interestWarningText.gameObject.SetActive(true);
+            CancelInvoke(nameof(HideInterestWarning));
+            Invoke(nameof(HideInterestWarning), 4f);
+        }
+
+        RefreshUI();
+    }
+
     private void OnPayDebtClicked()
     {
         var ps = PlayerStats.Instance;
@@ -142,5 +189,14 @@ public class DebtManager : MonoBehaviour
 
         if (payDebtButton != null)
             payDebtButton.interactable = !ps.IsDebtPaidOff && ps.PlayerWallet > 0;
+
+        if (borrowButton != null)
+            borrowButton.interactable = !ps.IsDebtPaidOff;
+
+        if (borrowInfoText != null)
+        {
+            int premium = Mathf.RoundToInt(ps.MaxSingleBorrow * ps.BorrowPremiumRate);
+            borrowInfoText.text = $"Max ${ps.MaxSingleBorrow:N0} — shark takes {ps.BorrowPremiumRate * 100:F0}% cut (costs ${ps.MaxSingleBorrow + premium:N0} in debt)";
+        }
     }
 }

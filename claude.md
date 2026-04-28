@@ -30,6 +30,16 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Debt & day display:** `debtText` and `dayText` added to `CityUIHandler` with reactive updates via `OnDebtChanged`. File: `CityUIHandler.cs`
 - **Tabbed panel system:** Generic `TabbedPanel.cs` for switching between content panels (Stats / Inventory / Debt tabs in PlayerInfoPanel). Color tinting on active/inactive tabs. **New file:** `TabbedPanel.cs`
 
+### Tier 2 — "One More Turn" Hooks (continued)
+- **City info before traveling** — Floating preview card near the travel dropdown. Shows destination city's population, cost of living (Low/Moderate/High/Very High), and hot drug + demand multiplier. Appears when the dropdown closes (including re-selecting the same city), holds for 3s then fades out over 0.5s. `CanvasGroup` alpha fade, cancels+restarts on rapid switching. Durations tunable in Inspector. Requires `CityPreviewCard` panel wired up in scene. File: `TravelManager.cs`
+- **Loan shark mid-game borrowing** — `BorrowFromShark(int amount)` on `PlayerStats.Progression.cs`. Adds requested cash to wallet; adds `amount × (1 + borrowPremiumRate)` to debt (default 20% cut). Capped at `maxSingleBorrow` (default $20,000) per transaction. Both values tunable in Inspector under Loan Shark. `DebtManager.cs` gains `borrowButton`, `borrowAmountInput`, and `borrowInfoText` slots; borrow info text auto-populates with current terms. Reuses `interestWarningText` for borrow feedback. Files: `PlayerStats.Progression.cs`, `DebtManager.cs`
+- **Risk/reward system** — Three-tier drug risk model driving cop encounter difficulty:
+  - `Drug.RiskTier` (Safe/Medium/Hard) + `Drug.BuyHeatMultiplier` (0.4× default — buying quieter than selling). Both propagated to `ItemInstance`. Files: `Drug.cs`, `Item.cs`
+  - `CopEncounterSeed.contrabandRiskLevel` (int 0–2) replaces the old bool — calculated from worst drug in inventory at heat-max. File: `Cop.cs`
+  - Cop behavior scales by risk: bribe ×1.0/×1.5/×2.0, run chance −0/−15%/−30%, combat loss 25%/35%/45% of wallet. Hard drugs always arrest on search (no steal/escape). Files: `CopEncounterUIManager.cs`, `Cop.cs`
+  - `HeatManager` calculates risk level from inventory; passes it to seed; `riskLevelText` (optional TMP_Text slot) shows CLEAN (green) / MED RISK (amber) / HIGH RISK (red). Heat fill bar idle color shifts from orange → amber → crimson based on what you're carrying. File: `HeatManager.cs`
+  - Buy heat uses `BuyHeatMultiplier`; sell heat stays full. File: `DealerClicks.cs`
+
 ### Tier 2 — "One More Turn" Hooks
 - **Equipment shop:** `EquipmentShop.cs` — buy better trenchcoats/weapons in-game. Trade-in system (50% of current gear cost). Per-city inventory via Inspector arrays. Brings panel to front on open (`SetAsLastSibling`). **New file:** `EquipmentShop.cs`
 - **Gear rebalanced** for meaningful progression:
@@ -48,44 +58,44 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
   | Handgun | $5,000 | 18 |
   | Shotgun | $18,000 | 35 |
 
-- **Drug risk/reward profiles** — rebalanced existing drugs and added 3 new ones:
+- **Drug risk/reward profiles** — rebalanced existing drugs and added 3 new ones. All values set in `.asset` files:
 
-  | Drug | Base Cost | Supply | Heat/Unit | Risk |
-  |---|---|---|---|---|
-  | Marijuana | $30–50 | 40–60 | 1 | Safe |
-  | Shrooms | $60 | 45 | 2 | Low |
-  | LSD | $120 | 30 | 3 | Medium |
-  | Ecstasy | $250 | 20 | 6 | Medium-High |
-  | Crack | $600 | 12 | 12 | High |
-  | Heroin | $1,200 | 6 | 18 | Extreme |
+  | Drug | Base Cost | Supply | Sell Heat | Buy Heat | RiskTier |
+  |---|---|---|---|---|---|
+  | Marijuana | $30–50 | 40–60 | 1 | 0.4 | Safe (0) |
+  | Shrooms | $60 | 45 | 2 | 0.8 | Safe (0) |
+  | LSD | $120 | 30 | 3 | 1.2 | Medium (1) |
+  | Ecstasy | $250 | 20 | 6 | 2.4 | Medium (1) |
+  | Crack | $600 | 12 | 12 | 4.8 | Hard (2) |
+  | Heroin | $1,200 | 6 | 18 | 7.2 | Hard (2) |
 
-  New drug assets (need sprites assigned): `Assets/Scriptable Objects/Drugs/Shrooms.asset`, `Ecstasy.asset`, `Heroin.asset`
+  New drug assets (need sprites assigned in Inspector): `Assets/Scriptable Objects/Drugs/Shrooms.asset`, `Ecstasy.asset`, `Heroin.asset`
 
 ### Bug Fixes
 - **Dealer panel drug bleed-through:** Fixed `DealerClicks.ReturnDealerItems()` and `ReturnAllToPool()` to clear ALL `InventoryItemUI` children from the shared `dealerInfoPanel`, not just items tracked in the current dealer's map. Previously, switching dealers would show both dealers' drugs mixed together. File: `DealerClicks.cs`
 - **Equipment shop empty when skipping startup:** `EquipmentShop.PopulateShop()` crashed with NRE when `PlayerStats.Instance` was null (direct scene load). Added null guards to `isOwned` checks and buy methods. File: `EquipmentShop.cs`
 - **Equipment shop layout completely rebuilt:** `ShopItemPrefab` had a nested Canvas (Screen Space - Overlay) causing all items to render at the same absolute position. After multiple attempts to fix the prefab at runtime (stripping Canvas, repositioning children by anchor), replaced with fully code-built UI cards. Each card uses `HorizontalLayoutGroup` (Icon | Info column | Buy button) with a nested `VerticalLayoutGroup` for text labels (name, stats, cost). Added `ScrollRect` + `RectMask2D` on ShopPanel for scrolling. `ItemListContent` anchored to left 60% of panel, leaving right side free for additional text. Font sourced from prefab via `GetFont()`. File: `EquipmentShop.cs`
 - **Stale RuntimeInventory YAML data:** Removed orphaned serialized `RuntimeInventory` data from all dealer `.asset` files (Daryl, Mr.Wong, TJ). This was leftover from when RuntimeInventory was a field; now it's a computed property.
+- **Dealer panel not switching:** Clicking Dealer B while Dealer A's panel was open just closed it instead of showing Dealer B. Root cause: `OnPointerClick` checked `dealerInfoPanel.activeSelf` (shared panel), so any active dealer looked like a toggle-off. Fixed by adding a `static DealerClicks activeDealer` field — only the exact instance that opened the panel can close it; clicking a different dealer immediately repopulates and shows the new one. File: `DealerClicks.cs`
 
 ---
 
 ## TODO — Remaining Improvements
 
 ### Tier 2 (deferred)
-- [ ] **Loan shark mid-game borrowing** — borrow money, debt compounds (user will do later)
-- [ ] **Inventory risk/reward spread** — heat values exist on drugs but spread needs to be dramatic enough to create meaningful risk/reward tradeoffs
+- [x] **Inventory risk/reward spread** — see "Risk/Reward System" entry below
 
 ### Tier 3 — Juice & Feel
 - [x] **Profit/loss feedback** — `ProfitLossPopup.cs` shows "+$X PROFIT" (green) / "-$X LOSS" (red) / "BREAK EVEN" (yellow) on every sale. Uses `AvgPurchasePrice` on `ItemInstance` for accurate tracking (weighted avg on stack buys). Animation: scale-overshoot snap-in → hold → float-up fade-out via coroutine. Singleton pattern, requires a UI GameObject with CanvasGroup + TMP_Text. Files: `ProfitLossPopup.cs` (new), `Item.cs`, `DealerClicks.cs`
 - [x] **Net worth tracker** — `NetWorth` computed property on `PlayerStats.Economy.cs` (wallet + inventory cost basis). Displayed via `netWorthText` in `CityUIHandler`, reactive to `OnWalletChanged` and `OnInventoryChanged`. Buying is net-zero; value changes on profitable/unprofitable sells.
-- [ ] **City info before traveling** — show economy info (cost of living, favorite drug, active events) in the travel panel so players make informed decisions
+- [x] **City info before traveling** — floating preview card on travel dropdown, fades out after 3s. File: `TravelManager.cs`
 
 ### Other Known Issues / Tech Debt
 - `GameTime.cs` has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
 - New drug assets (Shrooms, Ecstasy, Heroin) need sprites assigned in Inspector
-- New drugs need to be added to dealer `Inventory` arrays on Dealer ScriptableObjects
 - GameOver and YouWin scenes need to be created and added to Build Settings
 - ~~Equipment shop right panel (40% of ShopPanel width) is empty — reserved for future text/info display~~ ✓ Done
+- ~~New drugs need to be added to dealer `Inventory` arrays on Dealer ScriptableObjects~~ ✓ Done (Shrooms/Ecstasy/Heroin added to Daryl's inventory assets with correct cost/supply/heat values)
 - **InventoryTabUI card positioning:** Fixed stale `offsetMin.x` pushing cards off-screen left (zero X offsets in `EnsureLayout`). Fixed cards clipping at top via `grid.padding` top = 34. File: `InventoryTabUI.cs`
 
 ---

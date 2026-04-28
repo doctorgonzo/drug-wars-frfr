@@ -25,7 +25,19 @@ public class TravelManager : MonoBehaviour
     [Tooltip("Optional text showing the travel fare.")]
     [SerializeField] private TMP_Text travelCostText;
 
+    [Header("City Preview")]
+    [SerializeField] private GameObject cityPreviewPanel;
+    [SerializeField] private TMP_Text previewCityName;
+    [SerializeField] private TMP_Text previewPopulation;
+    [SerializeField] private TMP_Text previewCOL;
+    [SerializeField] private TMP_Text previewFavDrug;
+    [SerializeField] private float previewHoldSeconds = 3f;
+    [SerializeField] private float previewFadeSeconds = 0.5f;
+
+    private CanvasGroup previewCanvasGroup;
+    private Coroutine previewFadeCoroutine;
     private bool isTraveling;
+    private bool dropdownWasExpanded;
 
     private void Start()
     {
@@ -34,6 +46,15 @@ public class TravelManager : MonoBehaviour
         travelButton.onClick.AddListener(OnTravelButtonClicked);
         PopulateCityDropdown();
         CheckTravelStatus();
+        cityDropdown.onValueChanged.AddListener(OnCityDropdownChanged);
+        if (cityPreviewPanel != null)
+        {
+            previewCanvasGroup = cityPreviewPanel.GetComponent<CanvasGroup>();
+            if (previewCanvasGroup == null)
+                previewCanvasGroup = cityPreviewPanel.AddComponent<CanvasGroup>();
+            cityPreviewPanel.SetActive(false);
+        }
+        ConfigurePreviewText();
     }
 
     private void OnTravelButtonClicked()
@@ -126,6 +147,102 @@ public class TravelManager : MonoBehaviour
         isTraveling = false;
     }
 
+    private void ConfigurePreviewText()
+    {
+        ConfigureAutoSize(previewCityName, 10f, 22f, FontStyles.Bold);
+        ConfigureAutoSize(previewPopulation, 8f, 16f, FontStyles.Normal);
+        ConfigureAutoSize(previewCOL, 8f, 16f, FontStyles.Normal);
+        ConfigureAutoSize(previewFavDrug, 8f, 16f, FontStyles.Normal);
+    }
+
+    private static void ConfigureAutoSize(TMP_Text label, float min, float max, FontStyles style)
+    {
+        if (label == null) return;
+        label.enableAutoSizing = true;
+        label.fontSizeMin = min;
+        label.fontSizeMax = max;
+        label.fontStyle = style;
+        label.enableWordWrapping = true;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+    }
+
+    private void Update()
+    {
+        bool isExpanded = cityDropdown.IsExpanded;
+        if (dropdownWasExpanded && !isExpanded)
+            ShowCityPreview(cityDropdown.value);
+        dropdownWasExpanded = isExpanded;
+    }
+
+    private void OnCityDropdownChanged(int index) => ShowCityPreview(index);
+
+    private void ShowCityPreview(int index)
+    {
+        if (cityPreviewPanel == null) return;
+
+        if (cityDropdown.options.Count == 0)
+        {
+            cityPreviewPanel.SetActive(false);
+            return;
+        }
+
+        string raw = cityDropdown.options[index].text;
+        string cityName = raw.Contains("\u2014")
+            ? raw.Substring(0, raw.IndexOf("\u2014")).Trim()
+            : raw.Trim();
+        City city = allCities.FirstOrDefault(c => c.Name == cityName);
+
+        if (city == null)
+        {
+            cityPreviewPanel.SetActive(false);
+            return;
+        }
+
+        if (previewCityName != null)
+            previewCityName.text = city.Name;
+
+        if (previewPopulation != null)
+            previewPopulation.text = $"Pop: {city.Population:N0}";
+
+        if (previewCOL != null)
+        {
+            string colLabel = city.costOfLiving < 0.75f ? "Low"
+                : city.costOfLiving < 1.25f ? "Moderate"
+                : city.costOfLiving < 1.75f ? "High"
+                : "Very High";
+            previewCOL.text = $"Cost of Living: {colLabel}";
+        }
+
+        if (previewFavDrug != null)
+        {
+            string drugName = city.FavoriteDrug != null ? city.FavoriteDrug.Name : "—";
+            previewFavDrug.text = $"Hot Drug: {drugName} ({city.favoriteDrugDemandMultiplier:F1}x demand)";
+        }
+
+        if (previewCanvasGroup != null)
+        {
+            cityPreviewPanel.SetActive(true);
+            previewCanvasGroup.alpha = 1f;
+            if (previewFadeCoroutine != null) StopCoroutine(previewFadeCoroutine);
+            previewFadeCoroutine = StartCoroutine(FadeOutPreview());
+        }
+    }
+
+    private IEnumerator FadeOutPreview()
+    {
+        yield return new WaitForSeconds(previewHoldSeconds);
+
+        float elapsed = 0f;
+        while (elapsed < previewFadeSeconds)
+        {
+            elapsed += Time.deltaTime;
+            previewCanvasGroup.alpha = 1f - (elapsed / previewFadeSeconds);
+            yield return null;
+        }
+
+        cityPreviewPanel.SetActive(false);
+    }
+
     private void OnEnable()
     {
         if (PlayerStats.Instance != null)
@@ -142,6 +259,7 @@ public class TravelManager : MonoBehaviour
     {
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnWalletChanged -= HandleWalletChanged;
+        cityDropdown.onValueChanged.RemoveListener(OnCityDropdownChanged);
     }
 
     private void HandleWalletChanged(int _)

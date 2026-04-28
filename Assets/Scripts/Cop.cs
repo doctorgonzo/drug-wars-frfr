@@ -15,6 +15,8 @@ namespace DrugWars.NPC
         public bool playerHasContraband;
         public int playerLevel;
         public int heatAtTrigger; // usually 100
+        // 0 = clean/safe, 1 = medium drugs (LSD/Ecstasy), 2 = hard drugs (Crack/Heroin)
+        public int contrabandRiskLevel;
     }
 
     [Serializable]
@@ -172,10 +174,22 @@ namespace DrugWars.NPC
         public void ResolveSearch(in CopEncounterSeed seed, System.Random rng, out SearchOutcome outcome, out int stealAmount)
         {
             stealAmount = 0;
+
+            // Hard drugs: if found, it's always an arrest — no buying your way out of heroin
+            if (seed.playerHasContraband && seed.contrabandRiskLevel >= 2)
+            {
+                outcome = SearchOutcome.Arrest;
+                return;
+            }
+
             float pSteal = stealChanceByCorruption.Evaluate(corruption);
 
             if (!seed.playerHasContraband)
                 pSteal *= stealEvenWithoutContrabandBias;
+
+            // Medium drugs bump steal/arrest chance significantly
+            if (seed.contrabandRiskLevel == 1)
+                pSteal = Mathf.Min(1f, pSteal * 1.5f);
 
             double roll = rng.NextDouble();
 

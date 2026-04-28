@@ -266,7 +266,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         if (item.Type == ItemType.Drug && heatManager != null)
         {
-            heatManager.AddHeat(item.HeatValue * amountToBuy);
+            int buyHeat = Mathf.Max(1, Mathf.RoundToInt(item.HeatValue * item.BuyHeatMultiplier * amountToBuy));
+            heatManager.AddHeat(buyHeat);
         }
 
         ItemInstance existing = PlayerStats.Instance.inventory.FirstOrDefault(i => i.Name == item.Name);

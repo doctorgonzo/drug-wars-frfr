@@ -17,5 +17,5 @@ MonoBehaviour:
   Cost: 60
   Amount: 45
   Type: 0
-  Image: {fileID: 0}
+  Image: {fileID: 6705067628321220605, guid: 59eccde95de3e4918bcbc87f92e5b9f4, type: 3}
   HeatValue: 2

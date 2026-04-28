@@ -166,7 +166,10 @@ public class CopEncounterUIManager : MonoBehaviour
         bribePanel.SetActive(true);
 
         int playerCash = SafeGetCash();
-        askAmount = opening.bribeDemand > 0 ? opening.bribeDemand : currentCop.ComputeBribeDemand(playerCash);
+        int rawAsk = opening.bribeDemand > 0 ? opening.bribeDemand : currentCop.ComputeBribeDemand(playerCash);
+        // Hard drugs = 2x bribe, medium drugs = 1.5x — carrying heroin costs you
+        float riskBribeMult = 1f + currentSeed.contrabandRiskLevel * 0.5f;
+        askAmount = Mathf.RoundToInt(rawAsk * riskBribeMult);
 
         bribeAskText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"That heat isn’t cheap to forget. {Money(askAmount)} and you walk.")}\"";
         bribeHintText.text = $"You have {Money(playerCash)}.";
@@ -328,6 +331,9 @@ public class CopEncounterUIManager : MonoBehaviour
 
         // Base chance from the cop (by stance & prior encounters)
         float chance = currentCop.GetRunSuccessChance(activeStance, currentSeed.priorCopEncounters);
+
+        // Hard drugs make it much harder to run — cop isn't letting a heroin dealer walk
+        chance -= currentSeed.contrabandRiskLevel * 0.15f;
 
         // Apply hostility penalty from previous failures
         chance = Mathf.Clamp01(chance - hostilityRunPenalty);
@@ -512,8 +518,9 @@ public class CopEncounterUIManager : MonoBehaviour
             copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "Should've cooperated.")}\"";
             inCombat = false;
 
-            // Lose a percentage of cash as penalty
-            int cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.25f);
+            // Harder drugs = bigger penalty when you lose — 25% / 35% / 45%
+            float lossPct = 0.25f + currentSeed.contrabandRiskLevel * 0.10f;
+            int cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
             SpendPlayerCash?.Invoke(cashLoss);
 
             if (combatLogText != null)

@@ -34,8 +34,9 @@ public class ItemInstance
     public ItemType Type;
     public Sprite Image;
 
-    // This will hold the heat value for this specific instance.
     public int HeatValue;
+    public float BuyHeatMultiplier = 1f;
+    public int RiskTier; // DrugRiskTier cast to int; 0 for non-drugs
 
     // Tracks the average price per unit the player paid (for profit/loss feedback).
     public int AvgPurchasePrice;
@@ -57,6 +58,8 @@ public class ItemInstance
         if (item is Drug drugItem)
         {
             this.HeatValue = drugItem.HeatValue;
+            this.BuyHeatMultiplier = drugItem.BuyHeatMultiplier;
+            this.RiskTier = (int)drugItem.RiskTier;
         }
     }
 
@@ -70,6 +73,8 @@ public class ItemInstance
         Type = other.Type;
         Image = other.Image;
         HeatValue = other.HeatValue;
+        BuyHeatMultiplier = other.BuyHeatMultiplier;
+        RiskTier = other.RiskTier;
         AvgPurchasePrice = other.AvgPurchasePrice;
     }
 

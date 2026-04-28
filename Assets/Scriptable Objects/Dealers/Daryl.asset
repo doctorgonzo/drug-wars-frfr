@@ -19,6 +19,9 @@ MonoBehaviour:
   Inventory:
   - {fileID: 11400000, guid: e02937a928f04e94db1fff0f73fff63c, type: 2}
   - {fileID: 11400000, guid: 0aa185629112bf140a61351c10f4da8e, type: 2}
+  - {fileID: 11400000, guid: 474abc45be3f24cbfa7d0b479e2cf16a, type: 2}
+  - {fileID: 11400000, guid: 92fb262e667dd4028a571d8427ff77b0, type: 2}
+  - {fileID: 11400000, guid: 382d6d8fa10da40d6a7de6062c133077, type: 2}
   priceModifiers:
   - itemType: 0
     buyPriceMultiplier: 1

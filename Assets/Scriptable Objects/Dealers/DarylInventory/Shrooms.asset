@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a7446fe489ac3d438639dacd21bd11e, type: 3}
-  m_Name: Crack
-  m_EditorClassIdentifier: 
-  Name: Crack
-  Description: Cocaine + baking soda = a fun night
-  Cost: 600
-  Amount: 12
+  m_Name: Shrooms
+  m_EditorClassIdentifier: Assembly-CSharp::Drug
+  Name: Shrooms
+  Description: You see some wild colors
+  Cost: 60
+  Amount: 45
   Type: 0
-  Image: {fileID: 21300000, guid: ba9e9c6b32706d04ab7bc8c7d387d8a5, type: 3}
-  HeatValue: 12
+  Image: {fileID: 6705067628321220605, guid: 59eccde95de3e4918bcbc87f92e5b9f4, type: 3}
+  HeatValue: 2
   BuyHeatMultiplier: 0.4
-  RiskTier: 2
+  RiskTier: 0
