@@ -70,9 +70,13 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
             activeDealer = this;
 
+            // Stable within a day, different per dealer and day.
+            int priceSeed = ((dealer.Name ?? "").GetHashCode() & 0x7FFFFFFF)
+                            ^ (GameTime.Instance != null ? GameTime.Instance.Day : 0);
+            dealer.VisitMultiplier = 0.80f + (float)(new System.Random(priceSeed).NextDouble() * 0.40f);
+
             if (dealer.RuntimeInventory == null || dealer.RuntimeInventory.Count == 0)
             {
-                dealer.VisitMultiplier = Random.Range(0.80f, 1.20f);
                 dealer.InitializeRuntimeInventory();
             }
 
