@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fec0aeeb1d8c5a4aa135da57a4daf34, type: 3}
+  m_Name: Tokyo
+  m_EditorClassIdentifier:
+  Name: Tokyo
+  Description: The neon jungle
+  Image: {fileID: 0}
+  Population: 13960000
+  FavoriteDrug: {fileID: 11400000, guid: 6a159418fc6f2497fbc4d4ed7fdb87b1, type: 2}
+  SceneName: Tokyo
+  Dealers:
+  - {fileID: 11400000, guid: ab0ae3f19bd3e0e4289b481f4bf5bfae, type: 2}
+  - {fileID: 11400000, guid: 54352667b914b58448db08e6f504ab8c, type: 2}
+  - {fileID: 11400000, guid: 885c89175be9e4a9eb14e9af8b6c726b, type: 2}
+  costOfLiving: 1.55
+  favoriteDrugDemandMultiplier: 2.2
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1.7
+    sellPriceRatio: 0.6
+    dailyVolatility: 0.3
+    boomChance: 0.15
+    boomMultiplier: 1.8
+    bustChance: 0.05
+    bustMultiplier: 0.3
+  drugBonuses:
+  - drugName: Heroin
+    sellMultiplier: 2.2
+  - drugName: Ecstasy
+    sellMultiplier: 1.8
+  - drugName: Crack
+    sellMultiplier: 1.5

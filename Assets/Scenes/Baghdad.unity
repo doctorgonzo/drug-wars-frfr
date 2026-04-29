@@ -771,6 +771,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c762f3912da4cb40a5afaf5e7f59e8e, type: 2}
   - {fileID: 11400000, guid: b24c1ae1f8c90af45948e42a562589a0, type: 2}
   - {fileID: 11400000, guid: 276519b5f09efa0499d1009cd4260a7a, type: 2}
+  - {fileID: 11400000, guid: 773d88c0e7b414099aed207fc0226dfd, type: 2}
+  - {fileID: 11400000, guid: c369100493e654277b91ceceb38bf36e, type: 2}
+  - {fileID: 11400000, guid: a008153bd7f274d4cb65ce3ab554b1fe, type: 2}
+  - {fileID: 11400000, guid: f0b06cf47f70842d6b0d71a5611334b1, type: 2}
   allTrenchcoats: []
   allWeapons: []
   playerSprites: []
@@ -864,6 +868,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 276519b5f09efa0499d1009cd4260a7a, type: 2}
   - {fileID: 11400000, guid: b24c1ae1f8c90af45948e42a562589a0, type: 2}
   - {fileID: 11400000, guid: 3c762f3912da4cb40a5afaf5e7f59e8e, type: 2}
+  - {fileID: 11400000, guid: 773d88c0e7b414099aed207fc0226dfd, type: 2}
+  - {fileID: 11400000, guid: c369100493e654277b91ceceb38bf36e, type: 2}
+  - {fileID: 11400000, guid: a008153bd7f274d4cb65ce3ab554b1fe, type: 2}
+  - {fileID: 11400000, guid: f0b06cf47f70842d6b0d71a5611334b1, type: 2}
   travelTimeHours: 6
   fadeDuration: 1
   travelUIParent: {fileID: 1234313082}
