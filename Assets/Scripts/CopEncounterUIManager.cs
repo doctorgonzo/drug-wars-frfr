@@ -1,6 +1,7 @@
 ﻿using DrugWars.NPC; // <- the Cop ScriptableObject we wrote earlier
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -76,6 +77,17 @@ public class CopEncounterUIManager : MonoBehaviour
     private int copMaxHP;
     private int copDamage;
     private bool inCombat;
+    private bool copStunned;
+    private int copEmpoweredTurns;
+    private int copPowerCooldown;
+    private readonly List<string> _combatLog = new List<string>();
+    private const int CombatLogMaxLines = 6;
+    private GameObject _combatActionsContainer;
+    private Button _strikeBtn, _specialBtn, _fleeBtn, _bribeBtn;
+    private bool _inPlayerTurn;
+
+    private enum CombatPlayerAction { Strike, Special, Flee, Bribe }
+    private enum CopCombatAction    { Strike, PowerStrike, Shakedown, CallBackup, StandDown }
 
     private void Start()
     {
@@ -455,6 +467,7 @@ public class CopEncounterUIManager : MonoBehaviour
     }
 
     // ---------------- Attack / Combat ----------------
+
     private void OnAttackClicked()
     {
         if (inCombat) return;
@@ -463,139 +476,389 @@ public class CopEncounterUIManager : MonoBehaviour
 
     private void StartCombat()
     {
-        inCombat = true;
+        inCombat            = true;
+        copStunned          = false;
+        copEmpoweredTurns   = 0;
+        copPowerCooldown    = 0;
+        _combatLog.Clear();
 
-        // Disable non-combat buttons
-        runButton.interactable = false;
+        attackButton.gameObject.SetActive(false);
+        runButton.interactable   = false;
         bribeButton.interactable = false;
         bribePanel.SetActive(false);
 
-        // Player stats
         int armor = PlayerStats.Instance.CurrentTrench != null ? PlayerStats.Instance.CurrentTrench.ArmorValue : 0;
         playerMaxHP = 50 + armor * 5;
-        playerHP = playerMaxHP;
+        playerHP    = playerMaxHP;
 
-        // Cop stats scale with violence and stance
         float stanceMult = activeStance switch
         {
             CopStance.Friendly => 0.7f,
-            CopStance.Neutral => 1.0f,
-            CopStance.Hostile => 1.4f,
-            _ => 1f
+            CopStance.Neutral  => 1.0f,
+            CopStance.Hostile  => 1.4f,
+            _                  => 1f
         };
-        copMaxHP = Mathf.RoundToInt((40 + currentCop.violence * 60f) * stanceMult);
-        copHP = copMaxHP;
-        copDamage = Mathf.RoundToInt((5 + currentCop.violence * 15f) * stanceMult);
+        copMaxHP  = Mathf.RoundToInt((40 + currentCop.violence * 60f) * stanceMult);
+        copHP     = copMaxHP;
+        copDamage = Mathf.RoundToInt((5  + currentCop.violence * 15f) * stanceMult);
 
-        // Show combat panel
         if (combatPanel != null) combatPanel.SetActive(true);
         if (combatLogText != null)
         {
-            combatLogText.enableAutoSizing = true;
-            combatLogText.text = "";
+            combatLogText.enableAutoSizing = false;
+            combatLogText.fontSize         = 13f;
+            combatLogText.text             = "";
         }
         UpdateCombatUI();
 
         copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesAttack, "You picked the wrong day.")}\"";
 
-        // Re-wire attack button for combat hits
-        attackButton.onClick.RemoveAllListeners();
-        attackButton.onClick.AddListener(OnCombatAttack);
-
-        var attackLabel = attackButton.GetComponentInChildren<TMP_Text>();
-        if (attackLabel != null) attackLabel.text = "Strike";
+        BuildCombatActionUI();
+        AppendLog($"Combat! {currentCop.displayName} — {copMaxHP} HP");
+        StartPlayerTurn();
     }
 
-    private void OnCombatAttack()
+    private void BuildCombatActionUI()
     {
-        if (!inCombat) return;
-        StartCoroutine(CombatTurn());
+        if (_combatActionsContainer != null) Destroy(_combatActionsContainer);
+
+        _combatActionsContainer = new GameObject("CombatActions");
+        _combatActionsContainer.transform.SetParent(combatPanel.transform, false);
+
+        var rt = _combatActionsContainer.AddComponent<RectTransform>();
+        rt.anchorMin       = new Vector2(0f, 0f);
+        rt.anchorMax       = new Vector2(1f, 0f);
+        rt.pivot           = new Vector2(0.5f, 0f);
+        rt.sizeDelta       = new Vector2(0f, 120f);
+        rt.anchoredPosition = new Vector2(0f, 8f);
+
+        var grid = _combatActionsContainer.AddComponent<GridLayoutGroup>();
+        grid.cellSize        = new Vector2(140f, 50f);
+        grid.spacing         = new Vector2(8f, 8f);
+        grid.constraint      = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = 2;
+        grid.childAlignment  = TextAnchor.LowerCenter;
+        grid.padding         = new RectOffset(8, 8, 8, 8);
+
+        string wName       = (PlayerStats.Instance.CurrentWeapon?.itemName ?? "").ToLower();
+        string specialLabel = wName.Contains("shotgun")                           ? "Buckshot"  :
+                              wName.Contains("handgun") || wName.Contains("gun") ? "Aimed Shot" :
+                                                                                    "Improvise";
+
+        _strikeBtn  = MakeCombatButton(_combatActionsContainer, "Strike",      new Color(0.25f, 0.45f, 0.75f));
+        _specialBtn = MakeCombatButton(_combatActionsContainer, specialLabel,  new Color(0.65f, 0.50f, 0.05f));
+        _fleeBtn    = MakeCombatButton(_combatActionsContainer, "Flee",        new Color(0.55f, 0.30f, 0.05f));
+        _bribeBtn   = MakeCombatButton(_combatActionsContainer, "Bribe",       new Color(0.15f, 0.45f, 0.20f));
+
+        _strikeBtn.onClick.AddListener(() => TryPlayerAction(CombatPlayerAction.Strike));
+        _specialBtn.onClick.AddListener(() => TryPlayerAction(CombatPlayerAction.Special));
+        _fleeBtn.onClick.AddListener(() => TryPlayerAction(CombatPlayerAction.Flee));
+        _bribeBtn.onClick.AddListener(() => TryPlayerAction(CombatPlayerAction.Bribe));
+
+        _bribeBtn.interactable = currentCop.corruption >= 0.3f;
     }
 
-    private IEnumerator CombatTurn()
+    private Button MakeCombatButton(GameObject parent, string label, Color bg)
     {
-        attackButton.interactable = false;
+        var go  = new GameObject(label + "Btn");
+        go.transform.SetParent(parent.transform, false);
 
-        // Player attacks cop
-        int playerDmg = PlayerStats.Instance.CurrentWeapon != null ? PlayerStats.Instance.CurrentWeapon.Damage : 5;
-        int variance = Mathf.Max(1, playerDmg / 4);
-        int actualPlayerDmg = playerDmg + UnityEngine.Random.Range(-variance, variance + 1);
-        actualPlayerDmg = Mathf.Max(1, actualPlayerDmg);
-        copHP = Mathf.Max(0, copHP - actualPlayerDmg);
+        var img = go.AddComponent<Image>();
+        img.color = bg;
 
-        if (combatLogText != null)
-            combatLogText.text = $"You deal {actualPlayerDmg} damage!";
-        UpdateCombatUI();
+        var btn    = go.AddComponent<Button>();
+        var colors = btn.colors;
+        colors.normalColor      = bg;
+        colors.highlightedColor = bg * 1.25f;
+        colors.pressedColor     = bg * 0.75f;
+        colors.disabledColor    = new Color(0.25f, 0.25f, 0.25f, 0.5f);
+        btn.colors       = colors;
+        btn.targetGraphic = img;
 
-        if (copHP <= 0)
+        var txtGo = new GameObject("Label");
+        txtGo.transform.SetParent(go.transform, false);
+        var txt       = txtGo.AddComponent<TextMeshProUGUI>();
+        txt.text      = label;
+        txt.fontSize  = 15f;
+        txt.fontStyle = FontStyles.Bold;
+        txt.color     = Color.white;
+        txt.alignment = TextAlignmentOptions.Center;
+
+        var txtRt              = txtGo.GetComponent<RectTransform>();
+        txtRt.anchorMin        = Vector2.zero;
+        txtRt.anchorMax        = Vector2.one;
+        txtRt.sizeDelta        = Vector2.zero;
+        txtRt.anchoredPosition = Vector2.zero;
+
+        return btn;
+    }
+
+    private void SetCombatActionsActive(bool active)
+    {
+        if (_strikeBtn  != null) _strikeBtn.interactable  = active;
+        if (_specialBtn != null) _specialBtn.interactable = active;
+        if (_fleeBtn    != null) _fleeBtn.interactable    = active;
+        if (_bribeBtn   != null) _bribeBtn.interactable   = active && currentCop.corruption >= 0.3f;
+    }
+
+    private void TryPlayerAction(CombatPlayerAction action)
+    {
+        if (!_inPlayerTurn || !inCombat) return;
+        _inPlayerTurn = false;
+        SetCombatActionsActive(false);
+        StartCoroutine(DoPlayerAction(action));
+    }
+
+    private IEnumerator DoPlayerAction(CombatPlayerAction action)
+    {
+        int weaponDmg = PlayerStats.Instance.CurrentWeapon != null ? PlayerStats.Instance.CurrentWeapon.Damage : 5;
+        int armor     = PlayerStats.Instance.CurrentTrench != null ? PlayerStats.Instance.CurrentTrench.ArmorValue : 0;
+        string wName  = (PlayerStats.Instance.CurrentWeapon?.itemName ?? "").ToLower();
+
+        switch (action)
         {
-            copDialogueText.text = $"{currentCop.displayName} is down! You escaped.";
-            if (combatLogText != null)
-                combatLogText.text = $"{currentCop.displayName} defeated! You got away.";
-            inCombat = false;
+            case CombatPlayerAction.Strike:
+            {
+                int v   = Mathf.Max(1, weaponDmg / 4);
+                int dmg = Mathf.Max(1, weaponDmg + UnityEngine.Random.Range(-v, v + 1));
+                copHP   = Mathf.Max(0, copHP - dmg);
+                AppendLog($"You strike for {dmg} damage.");
+                break;
+            }
 
-            // Beating a cop leaves you at 50% heat
-            var heatManager = FindObjectOfType<HeatManager>();
-            float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
-            PlayerStats.Instance.CurrentHeat = halfMax;
+            case CombatPlayerAction.Special:
+            {
+                if (wName.Contains("shotgun"))
+                {
+                    int h1 = Mathf.Max(1, Mathf.RoundToInt(weaponDmg * 0.80f));
+                    int h2 = Mathf.Max(1, Mathf.RoundToInt(weaponDmg * 0.60f));
+                    copHP  = Mathf.Max(0, copHP - h1 - h2);
+                    AppendLog($"BUCKSHOT — {h1} + {h2} = {h1 + h2} damage!");
+                    if (UnityEngine.Random.value < 0.40f)
+                    {
+                        copStunned = true;
+                        AppendLog($"{currentCop.displayName} is STUNNED!");
+                    }
+                }
+                else if (wName.Contains("handgun") || wName.Contains("gun") || wName.Contains("pistol"))
+                {
+                    int dmg = weaponDmg * 2;
+                    copHP   = Mathf.Max(0, copHP - dmg);
+                    AppendLog($"AIMED SHOT — {dmg} damage!");
+                }
+                else
+                {
+                    int dmg = Mathf.Max(1, Mathf.RoundToInt(weaponDmg * 0.60f));
+                    copHP   = Mathf.Max(0, copHP - dmg);
+                    AppendLog($"You improvise for {dmg} damage.");
+                    if (UnityEngine.Random.value < 0.65f)
+                    {
+                        copStunned = true;
+                        AppendLog($"{currentCop.displayName} is WINDED!");
+                    }
+                }
+                break;
+            }
 
-            OnEscaped?.Invoke();
-            EndEncounter(success: true);
+            case CombatPlayerAction.Flee:
+            {
+                float chance = Mathf.Clamp01(0.35f - currentCop.violence * 0.20f);
+                if (UnityEngine.Random.value < chance)
+                {
+                    AppendLog("You break away and escape!");
+                    UpdateCombatUI();
+                    yield return new WaitForSeconds(0.8f);
+                    HandleCombatEscape();
+                    yield break;
+                }
+                int freeHit = Mathf.Max(1, Mathf.RoundToInt(copDamage * 1.5f) - Mathf.RoundToInt(armor * 0.5f));
+                playerHP    = Mathf.Max(0, playerHP - freeHit);
+                AppendLog($"Escape failed! {currentCop.displayName} hits you for {freeHit}.");
+                UpdateCombatUI();
+                if (playerHP <= 0) { yield return new WaitForSeconds(0.6f); HandleCombatLoss(); yield break; }
+                break;
+            }
+
+            case CombatPlayerAction.Bribe:
+            {
+                int offer = Mathf.Max(50, Mathf.RoundToInt(askAmount * 0.5f));
+                offer     = Mathf.Min(offer, SafeGetCash());
+                if (offer <= 0) { AppendLog("You're broke — nothing to offer."); break; }
+
+                SpendPlayerCash?.Invoke(offer);
+                if (UnityEngine.Random.value < Mathf.Clamp01(currentCop.corruption * 1.4f))
+                {
+                    AppendLog($"You slip ${offer:N0} to {currentCop.displayName}. They back off.");
+                    UpdateCombatUI();
+                    yield return new WaitForSeconds(0.8f);
+                    HandleCombatEscape();
+                    yield break;
+                }
+                copEmpoweredTurns += 2;
+                AppendLog($"${offer:N0} rejected! {currentCop.displayName} is ENRAGED (+50% dmg).");
+                break;
+            }
+        }
+
+        UpdateCombatUI();
+        yield return new WaitForSeconds(0.5f);
+
+        if (copHP <= 0) { HandleCombatWin(); yield break; }
+
+        yield return StartCoroutine(DoCopTurn());
+    }
+
+    private IEnumerator DoCopTurn()
+    {
+        AppendLog($"— {currentCop.displayName}'s turn —");
+        yield return new WaitForSeconds(0.7f);
+
+        if (copStunned)
+        {
+            AppendLog($"{currentCop.displayName} is stunned — skips turn.");
+            copStunned = false;
+            yield return new WaitForSeconds(0.5f);
+            StartPlayerTurn();
             yield break;
         }
 
-        yield return new WaitForSeconds(0.6f);
+        int   armor   = PlayerStats.Instance.CurrentTrench != null ? PlayerStats.Instance.CurrentTrench.ArmorValue : 0;
+        float empMult = copEmpoweredTurns > 0 ? 1.5f : 1.0f;
+        if (copEmpoweredTurns  > 0) copEmpoweredTurns--;
+        if (copPowerCooldown   > 0) copPowerCooldown--;
 
-        // Cop attacks player
-        int armor = PlayerStats.Instance.CurrentTrench != null ? PlayerStats.Instance.CurrentTrench.ArmorValue : 0;
-        int copVariance = Mathf.Max(1, copDamage / 4);
-        int actualCopDmg = copDamage + UnityEngine.Random.Range(-copVariance, copVariance + 1);
-        int reduction = Mathf.RoundToInt(armor * 0.5f);
-        actualCopDmg = Mathf.Max(1, actualCopDmg - reduction);
-        playerHP = Mathf.Max(0, playerHP - actualCopDmg);
-
-        if (combatLogText != null)
-            combatLogText.text = $"{currentCop.displayName} deals {actualCopDmg} damage!";
-        copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesAttack, "Is that all you got?")}\"";
-        UpdateCombatUI();
-
-        if (playerHP <= 0)
+        switch (PickCopAction())
         {
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "Should've cooperated.")}\"";
-            inCombat = false;
-
-            // Harder drugs = bigger penalty when you lose — 25% / 35% / 45%
-            float lossPct = 0.25f + currentSeed.contrabandRiskLevel * 0.10f;
-            int cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
-            SpendPlayerCash?.Invoke(cashLoss);
-
-            if (combatLogText != null)
-                combatLogText.text = $"You were beaten. Lost ${cashLoss:N0}.";
-
-            OnPlayerArrested?.Invoke();
-            EndEncounter(success: false);
-            yield break;
+            case CopCombatAction.Strike:
+            {
+                int v   = Mathf.Max(1, copDamage / 4);
+                int dmg = Mathf.Max(1, Mathf.RoundToInt((copDamage + UnityEngine.Random.Range(-v, v + 1)) * empMult) - Mathf.RoundToInt(armor * 0.5f));
+                playerHP = Mathf.Max(0, playerHP - dmg);
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesAttack, "Take that!")}\"";
+                AppendLog($"{currentCop.displayName} strikes for {dmg} damage.");
+                break;
+            }
+            case CopCombatAction.PowerStrike:
+            {
+                copPowerCooldown = 3;
+                int dmg = Mathf.Max(1, Mathf.RoundToInt(copDamage * 2f * empMult) - Mathf.RoundToInt(armor * 0.5f));
+                playerHP = Mathf.Max(0, playerHP - dmg);
+                copDialogueText.text = $"{currentCop.displayName}: \"DOWN!\"";
+                AppendLog($"POWER STRIKE — {dmg} damage!");
+                break;
+            }
+            case CopCombatAction.Shakedown:
+            {
+                int taken = Mathf.RoundToInt(SafeGetCash() * 0.20f);
+                if (taken > 0) { SpendPlayerCash?.Invoke(taken); AppendLog($"{currentCop.displayName} SHAKES YOU DOWN — ${taken:N0} taken!"); }
+                else AppendLog($"{currentCop.displayName} tries to shake you down... you're broke.");
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, "Pay up.")}\"";
+                break;
+            }
+            case CopCombatAction.CallBackup:
+            {
+                copEmpoweredTurns += 2;
+                AppendLog($"{currentCop.displayName} calls for backup! (+50% dmg, 2 turns)");
+                copDialogueText.text = $"{currentCop.displayName}: \"All units, need assistance!\"";
+                break;
+            }
+            case CopCombatAction.StandDown:
+            {
+                AppendLog($"{currentCop.displayName} hesitates and lowers their guard.");
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "...Just walk away.")}\"";
+                break;
+            }
         }
 
-        attackButton.interactable = true;
+        UpdateCombatUI();
+        yield return new WaitForSeconds(0.5f);
+
+        if (playerHP <= 0) { HandleCombatLoss(); yield break; }
+
+        StartPlayerTurn();
+    }
+
+    private CopCombatAction PickCopAction()
+    {
+        var opts = new List<(CopCombatAction a, float w)> { (CopCombatAction.Strike, 1.0f) };
+
+        if (currentCop.violence > 0.6f && copPowerCooldown <= 0)
+            opts.Add((CopCombatAction.PowerStrike, currentCop.violence * 0.5f));
+
+        if (currentCop.corruption > 0.5f && currentCop.greed > 0.6f && SafeGetCash() > 100)
+            opts.Add((CopCombatAction.Shakedown, currentCop.corruption * 0.4f));
+
+        if (currentCop.diligence > 0.7f)
+            opts.Add((CopCombatAction.CallBackup, currentCop.diligence * 0.25f));
+
+        if (currentCop.wFriendly > 0.4f && activeStance == CopStance.Friendly)
+            opts.Add((CopCombatAction.StandDown, 0.15f));
+
+        float total = 0f;
+        foreach (var (_, w) in opts) total += w;
+        float roll = (float)rng.NextDouble() * total;
+        float acc  = 0f;
+        foreach (var (a, w) in opts) { acc += w; if (roll < acc) return a; }
+        return CopCombatAction.Strike;
+    }
+
+    private void StartPlayerTurn()
+    {
+        _inPlayerTurn = true;
+        SetCombatActionsActive(true);
+        AppendLog("Your turn.");
+    }
+
+    private void AppendLog(string line)
+    {
+        _combatLog.Add(line);
+        while (_combatLog.Count > CombatLogMaxLines) _combatLog.RemoveAt(0);
+        if (combatLogText != null) combatLogText.text = string.Join("\n", _combatLog);
+    }
+
+    private void HandleCombatWin()
+    {
+        inCombat = false;
+        AppendLog($"Victory! {currentCop.displayName} is down.");
+        copDialogueText.text = $"{currentCop.displayName} is down! You got away.";
+        UpdateCombatUI();
+
+        var heatManager = FindObjectOfType<HeatManager>();
+        float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
+        PlayerStats.Instance.CurrentHeat = halfMax;
+
+        EndEncounter(success: true);
+    }
+
+    private void HandleCombatLoss()
+    {
+        inCombat = false;
+        float lossPct  = 0.25f + currentSeed.contrabandRiskLevel * 0.10f;
+        int   cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
+        SpendPlayerCash?.Invoke(cashLoss);
+        AppendLog($"You were beaten. Lost ${cashLoss:N0}.");
+        copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "Should've cooperated.")}\"";
+        UpdateCombatUI();
+
+        OnPlayerArrested?.Invoke();
+        EndEncounter(success: false);
+    }
+
+    private void HandleCombatEscape()
+    {
+        inCombat = false;
+        var heatManager = FindObjectOfType<HeatManager>();
+        float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
+        PlayerStats.Instance.CurrentHeat = halfMax;
+        EndEncounter(success: true);
     }
 
     private void UpdateCombatUI()
     {
-        if (playerHPBar != null)
-        {
-            playerHPBar.maxValue = playerMaxHP;
-            playerHPBar.value = playerHP;
-        }
-        if (copHPBar != null)
-        {
-            copHPBar.maxValue = copMaxHP;
-            copHPBar.value = copHP;
-        }
-        if (playerHPText != null)
-            playerHPText.text = $"HP: {playerHP}/{playerMaxHP}";
-        if (copHPText != null)
-            copHPText.text = $"HP: {copHP}/{copMaxHP}";
+        if (playerHPBar  != null) { playerHPBar.maxValue  = playerMaxHP; playerHPBar.value  = playerHP; }
+        if (copHPBar     != null) { copHPBar.maxValue     = copMaxHP;    copHPBar.value     = copHP;    }
+        if (playerHPText != null) playerHPText.text = $"HP: {playerHP}/{playerMaxHP}";
+        if (copHPText    != null) copHPText.text    = $"HP: {copHP}/{copMaxHP}";
     }
 
     private void EscalateHostility()
@@ -631,12 +894,13 @@ public class CopEncounterUIManager : MonoBehaviour
             runCooldownRoutine = null;
             if (cachedRunLabel != null) cachedRunLabel.text = "Try to Run";
         }
-        runButton.interactable = false;
-        attackButton.interactable = false;
-        bribeButton.interactable = false;
-        bribePayButton.interactable = false;
+        runButton.interactable         = false;
+        attackButton.interactable      = false;
+        bribeButton.interactable       = false;
+        bribePayButton.interactable    = false;
         bribeHaggleButton.interactable = false;
         bribeRefuseButton.interactable = false;
+        SetCombatActionsActive(false);
 
         StartCoroutine(FadeAndExit(success));
     }
