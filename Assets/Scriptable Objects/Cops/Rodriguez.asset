@@ -1,0 +1,200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb86fea369bd0a4f906bb97e3b0ee61, type: 3}
+  m_Name: Rodriguez
+  m_EditorClassIdentifier:
+  displayName: Officer Rodriguez
+  description: The Shakedown. High corruption and greed — wants cash, not justice. Steals even when you're clean.
+  corruption: 0.82
+  violence: 0.12
+  greed: 0.88
+  diligence: 0.18
+  wFriendly: 0.45
+  wNeutral: 0.40
+  wHostile: 0.15
+  cashToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.00007
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0.35
+      inSlope: 0.00007
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cashToFriendly:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.03
+      inSlope: 0
+      outSlope: -0.000006
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0
+      inSlope: -0.000006
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  repeatsToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.015
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 20
+      value: 0.30
+      inSlope: 0.015
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  friendlyDemandsBribe: 0.78
+  friendlySearch: 0.18
+  neutralDemandsBribe: 0.68
+  neutralSearch: 0.25
+  hostileDemandsBribe: 0.50
+  hostileSearch: 0.38
+  bribeBase: 200
+  bribeByCash:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.8
+      inSlope: 0
+      outSlope: 0.00074
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 4.5
+      inSlope: 0.00074
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  bribeByGreed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9
+      inSlope: 0
+      outSlope: 1.30000007
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2.2
+      inSlope: 1.30000007
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minBribeFraction: 0.72
+  bribeAcceptanceJitter: 0.22
+  stealChanceByCorruption:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.15
+      inSlope: 0
+      outSlope: 0.70000005
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.85
+      inSlope: 0.70000005
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  stealPctMin: 0.2
+  stealPctMax: 0.55
+  stealEvenWithoutContrabandBias: 0.45
+  linesWarn:
+  - You look like someone who doesn't want trouble.
+  - Nice. How about we have a little talk?
+  linesDemandBribe:
+  - Let's make this simple. Cash changes hands, I walk away.
+  - I got bills. You got bills. Let's settle up.
+  - We can do this the easy way or the expensive way.
+  linesAcceptBribe:
+  - Pleasure doing business.
+  - Smart. Real smart.
+  - Now was that so hard?
+  linesRejectBribe:
+  - That's an insult. Don't insult me.
+  - You think I'm cheap? Try again.
+  - Come back with real money.
+  linesArrest:
+  - Should've paid up. Now it costs way more.
+  - Cuffs it is. Shame.
+  linesAttack:
+  - You broke the deal.
+  - Big mistake.

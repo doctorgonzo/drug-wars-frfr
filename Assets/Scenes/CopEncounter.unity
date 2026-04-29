@@ -4305,6 +4305,10 @@ MonoBehaviour:
   fadeDuration: 0.35
   availableCops:
   - {fileID: 11400000, guid: 1150b3078d7b4f74a9af3b1d530d3260, type: 2}
+  - {fileID: 11400000, guid: 6fd4d8d43c4c54d85af3cc82ddc4ad8d, type: 2}
+  - {fileID: 11400000, guid: 227264892f8a94cf88de980ed1da765b, type: 2}
+  - {fileID: 11400000, guid: b446888ace9d743efb4bf3ac0d8d2053, type: 2}
+  - {fileID: 11400000, guid: 38a36a02bf2242a3ab7b6c51309a9bc6, type: 2}
   runCooldown: 3
   hostilityPenaltyPerFail: 0.12
   hostilityPenaltyMax: 0.36

@@ -1,0 +1,200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb86fea369bd0a4f906bb97e3b0ee61, type: 3}
+  m_Name: Morrison
+  m_EditorClassIdentifier:
+  displayName: Detective Morrison
+  description: The Enforcer. Maximum violence, hostile-heavy — escalates straight to combat. High HP and damage. The one you don't want to fight.
+  corruption: 0.28
+  violence: 0.90
+  greed: 0.38
+  diligence: 0.68
+  wFriendly: 0.08
+  wNeutral: 0.32
+  wHostile: 0.60
+  cashToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.00008
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0.40
+      inSlope: 0.00008
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cashToFriendly:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.02
+      inSlope: 0
+      outSlope: -0.000004
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0
+      inSlope: -0.000004
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  repeatsToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.03
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 20
+      value: 0.60
+      inSlope: 0.03
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  friendlyDemandsBribe: 0.16
+  friendlySearch: 0.52
+  neutralDemandsBribe: 0.10
+  neutralSearch: 0.40
+  hostileDemandsBribe: 0.04
+  hostileSearch: 0.20
+  bribeBase: 250
+  bribeByCash:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.8
+      inSlope: 0
+      outSlope: 0.00038
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 2.7
+      inSlope: 0.00038
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  bribeByGreed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9
+      inSlope: 0
+      outSlope: 0.60000002
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1.5
+      inSlope: 0.60000002
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minBribeFraction: 0.88
+  bribeAcceptanceJitter: 0.10
+  stealChanceByCorruption:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.15
+      inSlope: 0
+      outSlope: 0.70000005
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.85
+      inSlope: 0.70000005
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  stealPctMin: 0.10
+  stealPctMax: 0.35
+  stealEvenWithoutContrabandBias: 0.10
+  linesWarn:
+  - Don't even think about it.
+  - Hands. Now.
+  - I've seen your type before.
+  linesDemandBribe:
+  - Maybe we can work something out. Maybe.
+  - You've got ten seconds to make it worth my while.
+  linesAcceptBribe:
+  - This conversation never happened.
+  - Get out of my sight.
+  linesRejectBribe:
+  - Wrong answer.
+  - You had your chance.
+  - I was hoping you'd say that.
+  linesArrest:
+  - You're done.
+  - Face down. Don't make me ask twice.
+  linesAttack:
+  - I've been waiting for this.
+  - Wrong move.
+  - You just made my day.

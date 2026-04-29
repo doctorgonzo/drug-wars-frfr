@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb86fea369bd0a4f906bb97e3b0ee61, type: 3}
+  m_Name: Kowalski
+  m_EditorClassIdentifier:
+  displayName: Sergeant Kowalski
+  description: The Boy Scout. Low corruption, maximum diligence — always searches, almost never takes bribes. Escalates fast on repeat encounters.
+  corruption: 0.04
+  violence: 0.18
+  greed: 0.10
+  diligence: 0.92
+  wFriendly: 0.12
+  wNeutral: 0.58
+  wHostile: 0.30
+  cashToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.000016
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0.08
+      inSlope: 0.000016
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cashToFriendly:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.01
+      inSlope: 0
+      outSlope: -0.000002
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 0
+      inSlope: -0.000002
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  repeatsToHostile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.025
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 20
+      value: 0.50
+      inSlope: 0.025
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  friendlyDemandsBribe: 0.10
+  friendlySearch: 0.82
+  neutralDemandsBribe: 0.05
+  neutralSearch: 0.88
+  hostileDemandsBribe: 0.02
+  hostileSearch: 0.90
+  bribeBase: 50
+  bribeByCash:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.8
+      inSlope: 0
+      outSlope: 0.00008
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5000
+      value: 1.2
+      inSlope: 0.00008
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  bribeByGreed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9
+      inSlope: 0
+      outSlope: 0.20000002
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1.1
+      inSlope: 0.20000002
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minBribeFraction: 0.98
+  bribeAcceptanceJitter: 0.05
+  stealChanceByCorruption:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0.25
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.30
+      inSlope: 0.25
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  stealPctMin: 0.05
+  stealPctMax: 0.15
+  stealEvenWithoutContrabandBias: 0.02
+  linesWarn:
+  - Step over here. Routine check.
+  - License and ID, please.
+  - I'm going to need you to stop right there.
+  linesDemandBribe:
+  - Are you... are you trying to bribe an officer?
+  - I don't take money. You should know better than this.
+  linesAcceptBribe:
+  - I'll let it go this time. Don't make me regret it.
+  linesRejectBribe:
+  - Absolutely not. Keep your money.
+  - That is a criminal offense, son.
+  - Put that away before I add charges.
+  linesArrest:
+  - You have the right to remain silent.
+  - Don't make this harder than it has to be.
+  - By the book. Every time.
+  linesAttack:
+  - Resisting arrest! Do not run!
+  - Stop or I will use force!
