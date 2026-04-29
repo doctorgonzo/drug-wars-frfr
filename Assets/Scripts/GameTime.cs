@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.Events;
 using System;
@@ -55,8 +56,16 @@ public class GameTime : MonoBehaviour
     private bool isPaused = false;
 
     // ==== Lifecycle ====
+    public static GameTime Instance { get; private set; }
+
     private void Awake()
     {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        if (timeText == null) timeText = GameObject.Find("TimeText")?.GetComponent<TMPro.TMP_Text>();
+        if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
         SetTime(new GameDateTime(startDay, startHour, startMinute, startSecond), invokeEvents: false);
         PriceService.InGameDay = Day;
     }
@@ -73,7 +82,7 @@ public class GameTime : MonoBehaviour
         }
 
         if (timeText != null)
-            timeText.text = $"{DayLabel()}, {Hour:D2}:{Minute:D2}:{Second:D2}";
+            timeText.text = $"{DayLabel()}  {Hour:D2}:{Minute:D2}";
     }
 
     // ==== Public API ====
@@ -190,6 +199,17 @@ public class GameTime : MonoBehaviour
     }
 
     // ==== Internals ====
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        timeText = GameObject.Find("TimeText")?.GetComponent<TMPro.TMP_Text>();
+        if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
+    }
 
     private void AdvanceSecond()
     {

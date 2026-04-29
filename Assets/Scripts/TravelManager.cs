@@ -121,7 +121,7 @@ public class TravelManager : MonoBehaviour
         PlayerStats.Instance.PlayerWallet -= travelCost;
 
         // Advance in-game time
-        var gameTime = FindObjectOfType<GameTime>();
+        var gameTime = GameTime.Instance ?? FindObjectOfType<GameTime>();
         if (gameTime != null)
             gameTime.AddHours(travelTimeHours);
 

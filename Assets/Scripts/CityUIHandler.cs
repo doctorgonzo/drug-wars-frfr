@@ -116,7 +116,7 @@ public class CityUIHandler : MonoBehaviour
         }
     }
 
-    private void OnWalletChangedHandler(int _) => UpdateNetWorthDisplay();
+    private void OnWalletChangedHandler(int _) { UpdateWalletDisplay(); UpdateNetWorthDisplay(); }
 
     public void UpdateNetWorthDisplay()
     {

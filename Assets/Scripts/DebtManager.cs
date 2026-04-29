@@ -23,7 +23,7 @@ public class DebtManager : MonoBehaviour
 
     private void Start()
     {
-        gameTime = FindObjectOfType<GameTime>();
+        gameTime = GameTime.Instance ?? FindObjectOfType<GameTime>();
 
         if (gameTime != null)
             gameTime.DayChanged += OnDayChanged;
@@ -69,6 +69,9 @@ public class DebtManager : MonoBehaviour
                 CancelInvoke(nameof(HideInterestWarning));
                 Invoke(nameof(HideInterestWarning), 4f);
             }
+
+            if (ToastUI.Instance != null)
+                ToastUI.Instance.Show($"+${interest:N0} INTEREST\nDebt: ${ps.Debt:N0}", new Color(1f, 0.35f, 0.2f));
         }
 
         RefreshUI();

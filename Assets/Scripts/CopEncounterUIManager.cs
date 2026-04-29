@@ -58,6 +58,9 @@ public class CopEncounterUIManager : MonoBehaviour
     private bool isRunOnCooldown = false;
     [SerializeField] private float runCooldown = 3f; // seconds between attempts
     private Coroutine runCooldownRoutine;
+    private bool _searchPrerolled;  // true when RollOpening pre-computed a search result we haven't used yet
+    private int _haggleCount;
+    [SerializeField] private int maxHaggles = 3;
     private CopStance activeStance;        // starts as opening.stance, escalates on fail
     private float hostilityRunPenalty = 0f; // reduces run chance after each failed try
     [SerializeField] private float hostilityPenaltyPerFail = 0.12f; // 12% per fail feels punchy
@@ -92,6 +95,7 @@ public class CopEncounterUIManager : MonoBehaviour
         };
         OnEscaped = ReturnToLastCity;
         OnEncounterResolved = ReturnToLastCity;
+        OnPlayerArrested = HandleArrest;
         StartEncounter(cop, decision, seed);
     }
 
@@ -130,8 +134,10 @@ public class CopEncounterUIManager : MonoBehaviour
         currentCop = cop;
         currentSeed = seed;
         opening = decision;
-        activeStance = opening.stance; // track stance that can escalate during the encounter
+        activeStance = opening.stance;
         hostilityRunPenalty = 0f;
+        _haggleCount = 0;
+        _searchPrerolled = opening.opening == CopOpeningAction.Search;
         rng = seededRng ?? new System.Random();
 
         if (PlayerStats.Instance != null)
@@ -262,18 +268,33 @@ public class CopEncounterUIManager : MonoBehaviour
 
     private void OnBribeHaggleClicked()
     {
-        // Lower ask a bit if cop is corrupt or friendly; otherwise maybe raise!
-        float haggle = Mathf.Lerp(0.85f, 0.60f, currentCop.corruption); // more corrupt => lower quicker
+        _haggleCount++;
+
+        // Out of haggle attempts — cop loses patience and goes straight to search/attack
+        if (_haggleCount > maxHaggles)
+        {
+            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "Enough stalling.")}\"";
+            bribeHaggleButton.interactable = false;
+            bool goesViolent = rng.NextDouble() < (0.3 + currentCop.violence * 0.4);
+            if (goesViolent) StartCombat();
+            else PerformSearch();
+            return;
+        }
+
+        // Lower ask if cop is corrupt/friendly; raise if honest/hostile
+        float haggle = Mathf.Lerp(0.85f, 0.60f, currentCop.corruption);
         int playerCash = SafeGetCash();
         int newAsk = Mathf.Clamp(Mathf.RoundToInt(askAmount * haggle), 10, playerCash);
         if (newAsk < askAmount)
         {
             askAmount = newAsk;
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"Fine. {Money(newAsk)}. Last chance.")}\"";
+            string lastChance = _haggleCount >= maxHaggles ? " Last chance." : "";
+            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"Fine. {Money(newAsk)}.{lastChance}")}\"";
+            if (_haggleCount >= maxHaggles)
+                bribeHaggleButton.interactable = false;
         }
         else
         {
-            // backfire slightly for honest/hostile types
             askAmount = Mathf.Min(playerCash, askAmount + Mathf.RoundToInt(askAmount * 0.10f));
             copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "You’re wasting my time. Price just went up.")}\"";
         }
@@ -301,7 +322,18 @@ public class CopEncounterUIManager : MonoBehaviour
 
     private void PerformSearch()
     {
-        currentCop.ResolveSearch(currentSeed, rng, out var outcome, out var steal);
+        SearchOutcome outcome;
+        int steal;
+        if (_searchPrerolled)
+        {
+            outcome = opening.searchResult;
+            steal = opening.stealAmount;
+            _searchPrerolled = false;
+        }
+        else
+        {
+            currentCop.ResolveSearch(currentSeed, rng, out outcome, out steal);
+        }
 
         switch (outcome)
         {
@@ -313,7 +345,10 @@ public class CopEncounterUIManager : MonoBehaviour
                 break;
 
             case SearchOutcome.Arrest:
+                int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f);
+                SpendPlayerCash?.Invoke(arrestFine);
                 copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You’re under arrest.")}\"";
+                if (combatLogText != null) combatLogText.text = $"Arrested! Lost ${arrestFine:N0} and all drugs confiscated.";
                 OnPlayerArrested?.Invoke();
                 EndEncounter(success: false);
                 break;
@@ -382,9 +417,17 @@ public class CopEncounterUIManager : MonoBehaviour
                 bool arrestsNow = UnityEngine.Random.value < 0.35f;
                 if (arrestsNow)
                 {
-                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That’s it—you're under arrest.")}\"";
+                    int runArrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.15f);
+                    SpendPlayerCash?.Invoke(runArrestFine);
+                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That’s it—you’re under arrest.")}\"";
                     OnPlayerArrested?.Invoke();
                     EndEncounter(success: false);
+                }
+                else
+                {
+                    // Cop lets it go — player escapes with a warning
+                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Get out of here. Don’t let me see you again.")}\"";
+                    EndEncounter(success: true);
                 }
             }
         }
@@ -494,7 +537,9 @@ public class CopEncounterUIManager : MonoBehaviour
             inCombat = false;
 
             // Beating a cop leaves you at 50% heat
-            PlayerStats.Instance.CurrentHeat = 50f;
+            var heatManager = FindObjectOfType<HeatManager>();
+            float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
+            PlayerStats.Instance.CurrentHeat = halfMax;
 
             OnEscaped?.Invoke();
             EndEncounter(success: true);
@@ -571,9 +616,23 @@ public class CopEncounterUIManager : MonoBehaviour
         }
     }
 
+    private void HandleArrest()
+    {
+        PlayerStats.Instance.TimesCaughtByCops++;
+
+        // Confiscate all drugs
+        PlayerStats.Instance.inventory.RemoveAll(i => i.Type == ItemType.Drug && i.Amount > 0);
+        PlayerStats.Instance.NotifyInventoryChanged();
+    }
+
     private void EndEncounter(bool success)
     {
-        // Disable interaction
+        if (runCooldownRoutine != null)
+        {
+            StopCoroutine(runCooldownRoutine);
+            runCooldownRoutine = null;
+            if (cachedRunLabel != null) cachedRunLabel.text = "Try to Run";
+        }
         runButton.interactable = false;
         attackButton.interactable = false;
         bribeButton.interactable = false;
@@ -581,10 +640,10 @@ public class CopEncounterUIManager : MonoBehaviour
         bribeHaggleButton.interactable = false;
         bribeRefuseButton.interactable = false;
 
-        StartCoroutine(FadeAndExit());
+        StartCoroutine(FadeAndExit(success));
     }
 
-    private IEnumerator FadeAndExit()
+    private IEnumerator FadeAndExit(bool success)
     {
         if (fadeGroup != null)
         {
@@ -596,7 +655,11 @@ public class CopEncounterUIManager : MonoBehaviour
                 yield return null;
             }
         }
-        OnEncounterResolved?.Invoke();
+
+        if (success)
+            OnEscaped?.Invoke();
+        else
+            OnEncounterResolved?.Invoke();
     }
 
     private string RandomLine(string[] pool, string fallback)

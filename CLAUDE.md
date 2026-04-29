@@ -73,6 +73,46 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **In-game tutorial** — `TutorialManager.cs` shows a 5-step dialog on first play only (PlayerPrefs flag `TutorialSeen_v1`). Skip button available. **New file:** `TutorialManager.cs`
 - **CharCreation → city fade** — `HandleContinue` is now a coroutine with `FadeController.FadeOut` before `SceneManager.LoadScene`. File: `CharCreationUI.cs`
 
+### WebGL & Save System
+- **WebGL-safe save/load:** Replaced all `System.IO` in `SaveLoadHelper.cs` with `PlayerPrefs` (JSON string under key `"DrugWarsSave"`). Works identically on WebGL, desktop, and mobile.
+- **Save data fixed:** `SaveData.cs` now includes `debt` and `avgPurchasePrice` fields that were missing.
+- **GameSessionManager save/load overhauled:**
+  - Added `allTrenchcoats[]`, `allWeapons[]`, `playerSprites[]` Inspector arrays — used to resolve equipment and player portrait on load (previously only searched dealer inventories, missing starter gear).
+  - `SaveGame()` writes player sprite index, debt, and all inventory `avgPurchasePrice`.
+  - `LoadGame()` dynamically creates a `PlayerStats` GameObject if `Instance` is null (fixes NRE on main menu Continue).
+  - `RestoreDayAfterSceneLoad` callback via `SceneManager.sceneLoaded` fixes `GameTime.Awake()` overwriting the loaded day back to 1.
+  - Item SO registry: `SavedToItem()` now looks up the original Item SO by name to reconstruct `ItemInstance` with correct sprite, heat values, risk tier etc.
+- **SaveGameButton.cs:** New MonoBehaviour — attach to any Button, wire `onClick` → `SaveGame()`. Optional `TMP_Text` feedback slot shows "SAVED!" for 1.5s. **New file:** `SaveGameButton.cs`
+- **Inspector setup required:** `GameSessionManager` needs `allTrenchcoats`, `allWeapons`, and `playerSprites` filled in — same SOs/sprites as CharCreationUI and EquipmentShop.
+
+### Economy Rebalance
+- **Per-visit price randomization:** `Dealer.VisitMultiplier` (`[NonSerialized]`) is re-rolled ±20% each time a dealer panel opens in `DealerClicks.OnPointerClick`. Applied at the end of `GetModifiedBuyPrice` so both buy and sell prices fluctuate together. Files: `Dealer.cs`, `DealerClicks.cs`
+- **Dealer sell ratios rebalanced:**
+  - TJ: `sellPriceRatio` 0.337 → **0.55** (TJ's $50 Pot base now pays $27.50 in Baghdad vs $20 Milwaukee buy — weed trade is viable)
+  - Mr. Wong: `sellPriceRatio` 0.50 → **0.65** (Crack: buy $322 Milwaukee, sell $487 Baghdad — 51% profit, worth Hard-tier heat)
+- **Baghdad price modifiers added:** Daily volatility ±20%, 10% boom (×1.4), 8% bust (×0.6). Baghdad prices now fluctuate — good/bad days to sell. File: `Baghdad.asset`
+- **Core trade loop (Milwaukee → Baghdad):**
+
+  | Drug | Buy (MKE) | Best sell (BGD) | Profit |
+  |---|---|---|---|
+  | Marijuana | $20 | $27.50 (TJ) | 37% |
+  | Shrooms | $32 | $42 (Daryl) | 31% |
+  | LSD | $64 | $85 (Daryl) | 33% |
+  | Ecstasy | $134 | $176 (Daryl) | 31% |
+  | Crack | $322 | $487 (Mr. Wong, fav bonus) | 51% |
+  | Heroin | $643 | $846 (Daryl) | 32% |
+
+  Milwaukee has 0.44× drug buy multiplier (cheap source). Baghdad has no modifier (full base prices) + Crack favorite (+25%). Reverse route (BGD→MKE) is always a loss.
+
+### Cop Encounter Fixes
+- **`OnPlayerArrested` wired:** `HandleArrest()` now fires on every arrest. It increments `TimesCaughtByCops` (so `repeatsToHostile` escalation in `Cop.cs` actually works) and confiscates all drugs from player inventory. File: `CopEncounterUIManager.cs`
+- **Arrest cash penalties:** Search arrest takes 20% cash before calling `HandleArrest`. Run-failure arrest takes 15%. Combat loss already took 25–45% before calling it — no double penalty.
+- **`EndEncounter(bool success)` fixed:** Parameter now used — `success: true` fires `OnEscaped`, `success: false` fires `OnEncounterResolved`. File: `CopEncounterUIManager.cs`
+- **Stuck state fixed:** Non-hostile run failure that doesn't search AND doesn't arrest (was 65% of that branch, did nothing) now calls `EndEncounter(success: true)` with a warning line — cop lets you off. File: `CopEncounterUIManager.cs`
+- **Pre-rolled search outcome consumed:** `_searchPrerolled` flag set in `StartEncounter` when opening is Search. `PerformSearch()` uses `opening.searchResult`/`stealAmount` on first call instead of re-rolling; subsequent searches roll fresh. File: `CopEncounterUIManager.cs`
+- **Haggle capped:** `_haggleCount` tracked against `maxHaggles` (default 3, Inspector-configurable). On the final haggle the button disables and dialogue says "Last chance." If exceeded, cop immediately escalates to search or combat. File: `CopEncounterUIManager.cs`
+- **Run cooldown coroutine stopped in `EndEncounter`:** Prevents the coroutine re-enabling the Run button during the post-encounter fade window. File: `CopEncounterUIManager.cs`
+
 ### Bug Fixes
 - **Dealer panel drug bleed-through:** Fixed pool clearing to wipe ALL children from `dealerInfoPanel`, not just the current dealer's tracked items. File: `DealerClicks.cs`
 - **Equipment shop NRE on direct scene load:** Added null guards to `isOwned` checks and buy methods. File: `EquipmentShop.cs`
@@ -83,12 +123,31 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 
 ---
 
+## Known Issues / To Do
+
+### Editor work required (cannot fix via code)
+- **Belgrade has no dealers:** `Belgrade.asset` has null dealer slots. Need to assign Daryl + Mr. Wong in the Inspector, then add a `DealerManager` with spawn points to the Belgrade scene (copy from Milwaukee). Once done, add a drug `CityPriceModifier` with `buyPriceMultiplier: 1.1`, `dailyVolatility: 0.18` — Ecstasy favorite will then give ~80% profit on MKE→BGR route.
+
+### Minor code issues
+- **Hardcoded 50f heat after combat win** — `CopEncounterUIManager.cs` sets `PlayerStats.Instance.CurrentHeat = 50f` after the player wins a fight. Should be `maxHeat * 0.5f` so it respects the `HeatManager.maxHeat` Inspector value if ever changed.
+
+### WebGL build readiness
+- Save/load: ✅ WebGL-safe (PlayerPrefs)
+- Threading: ✅ None used
+- Native plugins: ✅ None
+- Async/await: ✅ None
+- Resources.Load fonts: ⚠️ Verify font assets exist at `Assets/Resources/Fonts/`
+- Belgrade: ⚠️ Scene needs editor setup before shipping
+
+---
+
 ## Architecture Notes
 - **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs`, `.Identity.cs`, `.Equipment.cs`, `.Economy.cs`, `.Progression.cs`
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
-- **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) initialized at game start
-- **Price system:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city type mult × favorite drug mult × daily volatility × market event
-- **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown.
+- **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime
+- **Price system:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × favorite drug mult × daily volatility × market event × visit multiplier (±20%)
+- **Save system:** JSON serialized via `JsonUtility`, stored in `PlayerPrefs["DrugWarsSave"]`. Equipment resolved by name from `GameSessionManager.allTrenchcoats/allWeapons`. Item images reconstructed from SO registry on load.
+- **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown. Cop encounters use `CopEncounterSeed` built from current `PlayerStats` state.
 - **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices
 - **GameTime.cs** has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
 - **FadeController** must exist in every scene including CharCreation, Intro, GameOver, YouWin

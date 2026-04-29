@@ -69,7 +69,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             activeDealer = this;
 
             if (dealer.RuntimeInventory == null || dealer.RuntimeInventory.Count == 0)
+            {
+                dealer.VisitMultiplier = Random.Range(0.80f, 1.20f);
                 dealer.InitializeRuntimeInventory();
+            }
 
             PopulateDealerPanel();
             PopulatePlayerPanel();

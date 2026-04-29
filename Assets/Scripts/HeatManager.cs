@@ -9,6 +9,7 @@ public class HeatManager : MonoBehaviour
     [Header("Heat Settings")]
     [Tooltip("The heat level that will trigger a cop encounter.")]
     [SerializeField] private int maxHeat = 100;
+    public int MaxHeat => maxHeat;
     [Tooltip("The name of the scene to load when max heat is reached.")]
     [SerializeField] private string copSceneName = "CopEncounter";
 
