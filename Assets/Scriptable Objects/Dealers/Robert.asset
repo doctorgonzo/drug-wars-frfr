@@ -20,4 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 941aa9287c15e4492b217a94b5dedbed, type: 2}
   - {fileID: 11400000, guid: 148f57f0d651c4536864fa5f2380ab44, type: 2}
   - {fileID: 11400000, guid: 3e0c18b25ebbb480f9135ed328344c0d, type: 2}
-  priceModifiers: []
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1.05
+    sellPriceRatio: 0.60
