@@ -187,7 +187,7 @@ public class DebtManager : MonoBehaviour
         if (dayText != null && gameTime != null)
         {
             int daysLeft = Mathf.Max(0, ps.DayLimit - gameTime.Day);
-            dayText.text = $"Day {gameTime.Day} / {ps.DayLimit}  ({daysLeft} left)";
+            dayText.text = $"Day {gameTime.Day} / {ps.DayLimit}  ({daysLeft} left)\n{gameTime.Hour:D2}:{gameTime.Minute:D2}";
         }
 
         if (payDebtButton != null)

@@ -24,4 +24,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab0ae3f19bd3e0e4289b481f4bf5bfae, type: 2}
   costOfLiving: 1
   favoriteDrugDemandMultiplier: 1.25
-  priceModifiers: []
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1
+    sellPriceRatio: 0.5
+    dailyVolatility: 0.2
+    boomChance: 0.1
+    boomMultiplier: 1.4
+    bustChance: 0.08
+    bustMultiplier: 0.6

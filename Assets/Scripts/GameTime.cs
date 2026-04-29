@@ -10,7 +10,7 @@ public class GameTime : MonoBehaviour
     [Header("Time Settings")]
     [Tooltip("How many real-time seconds equal one in-game second. 1 = real-time, 0.5 = twice as fast.")]
     [Min(0.0001f)]
-    public float timeScale = 1f;
+    public float timeScale = 0.0167f;
 
     [Tooltip("Start on this day/hour/minute/second.")]
     public int startDay = 1;
@@ -64,10 +64,13 @@ public class GameTime : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        if (timeText == null) timeText = GameObject.Find("TimeText")?.GetComponent<TMPro.TMP_Text>();
-        if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
         SetTime(new GameDateTime(startDay, startHour, startMinute, startSecond), invokeEvents: false);
         PriceService.InGameDay = Day;
+    }
+
+    private void Start()
+    {
+        AssignTimeText();
     }
 
     private void Update()
@@ -139,7 +142,7 @@ public class GameTime : MonoBehaviour
         int carryMinutes = FloorDiv(total, 60);
 
         if (carryMinutes != 0) AddMinutes(carryMinutes);
-        // We’ve already emitted events in AddMinutes / AddHours / AddDays
+        // Weï¿½ve already emitted events in AddMinutes / AddHours / AddDays
         SecondChanged?.Invoke(Current);
         OnSecondChanged?.Invoke();
     }
@@ -207,7 +210,12 @@ public class GameTime : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        timeText = GameObject.Find("TimeText")?.GetComponent<TMPro.TMP_Text>();
+        AssignTimeText();
+    }
+
+    private void AssignTimeText()
+    {
+        timeText = GameObject.Find("TimeText")?.GetComponent<TMP_Text>();
         if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
     }
 

@@ -62,3 +62,6 @@ Desktop.ini
 Build.7z
 *.slnx
 .plastic
+.claude
+WebBuild
+WebBuild.zip

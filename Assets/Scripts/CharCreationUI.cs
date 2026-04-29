@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,9 +45,16 @@ public class CharCreationUI : MonoBehaviour
         curCharIndex = 0;
         curTrenchIndex = 0;
         curWeaponIndex = 0;
+
+        int startingCash = PlayerStats.Instance.PlayerWallet;
+        trenchcoats = trenchcoats.Where(t => t != null && t.Cost <= startingCash).ToArray();
+        weapons = weapons.Where(w => w != null && w.Cost <= startingCash).ToArray();
+
         charImage.sprite = charSprites[0];
         nameInput.onEndEdit.AddListener(delegate { OnEndEdit(); });
         nameInput.onValueChanged.AddListener(OnNameInputChanged);
+        nameInput.Select();
+        nameInput.ActivateInputField();
         continueButton.gameObject.SetActive(false);
         RefreshTrenchDisplay();
         RefreshWeaponDisplay();
@@ -77,12 +85,24 @@ public class CharCreationUI : MonoBehaviour
     private void RefreshWalletDisplay()
     {
         int remaining = PlayerStats.Instance.PlayerWallet - trenchcoats[curTrenchIndex].Cost - weapons[curWeaponIndex].Cost;
-        walletText.text = $"Starting Cash: ${remaining:N0}";
+        bool overBudget = remaining < 0;
+        walletText.text = overBudget
+            ? $"<color=#FF5555>Starting Cash: -${Mathf.Abs(remaining):N0}</color>"
+            : $"Starting Cash: ${remaining:N0}";
+        UpdateContinueInteractable(overBudget);
+    }
+
+    private void UpdateContinueInteractable(bool overBudget)
+    {
+        if (continueButton == null) return;
+        bool hasName = nameInput != null && nameInput.text.Length > 0;
+        continueButton.interactable = hasName && !overBudget;
     }
 
     private void OnNameInputChanged(string value)
     {
         continueButton.gameObject.SetActive(value.Length > 0);
+        RefreshWalletDisplay();
     }
 
     private void OnEndEdit()

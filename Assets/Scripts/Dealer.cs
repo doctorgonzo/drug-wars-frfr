@@ -22,6 +22,9 @@ public class Dealer : ScriptableObject
     public Item[] Inventory;
     public List<ItemPriceModifier> priceModifiers;
 
+    // Re-rolled each visit; applies a ±20% swing on top of all other price factors.
+    [System.NonSerialized] public float VisitMultiplier = 1f;
+
     // Runtime inventory now lives in GameSessionManager to avoid mutating this ScriptableObject.
     // This property provides backward-compatible access.
     public List<ItemInstance> RuntimeInventory =>
@@ -80,9 +83,19 @@ public class Dealer : ScriptableObject
             eventMult = cityMod != null ? cityMod.bustMultiplier : 0.6f;
 
         // 6) Combine
-        float final = basePrice * cityCOL * cityBuyMult * faveMult * dailyMult * eventMult;
+        float final = basePrice * cityCOL * cityBuyMult * faveMult * dailyMult * eventMult * VisitMultiplier;
 
-        // 7) Clamp & round to int dollars
+        // 7) City event modifier (drugs only)
+        if (item.Type == ItemType.Drug)
+        {
+            var cityEvt = CityEventManager.GetEventForCity(city?.Name ?? "");
+            if (cityEvt == CityEventManager.CityEvent.Lockdown)
+                final *= CityEventManager.LockdownPriceMult;
+            else if (cityEvt == CityEventManager.CityEvent.Shortage)
+                final *= CityEventManager.ShortagePriceMult;
+        }
+
+        // 8) Clamp & round to int dollars
         final = Mathf.Clamp(final, 1f, 999_999f);
         return Mathf.RoundToInt(final);
     }
@@ -92,19 +105,22 @@ public class Dealer : ScriptableObject
         // Start from your computed buy price for this dealer+city+day
         int modifiedBuy = GetModifiedBuyPrice(item);
 
-        // Dealer per-type sell ratio (your existing logic)
+        // Dealer per-type sell ratio only (city factors already baked into modifiedBuy)
         ItemPriceModifier dealerMod = priceModifiers.FirstOrDefault(m => m.itemType == item.Type);
         float dealerSellRatio = dealerMod != null ? dealerMod.sellPriceRatio : 0.5f;
 
-        // City per-type sell ratio
-        City city = PlayerStats.Instance.CurrentCity;
-        CityPriceModifier cityMod = FindCityMod(city, item.Type);
-        float citySellRatio = cityMod != null ? cityMod.sellPriceRatio : 0.5f;
+        int sellPrice = Mathf.RoundToInt(modifiedBuy * dealerSellRatio);
 
-        // Combine ratios multiplicatively (dealer terms + city terms)
-        float combinedSellRatio = dealerSellRatio * citySellRatio;
+        // Festival: 2× sell on city's favorite drug
+        City sellCity = PlayerStats.Instance?.CurrentCity;
+        if (item.Type == ItemType.Drug
+            && CityEventManager.GetEventForCity(sellCity?.Name ?? "") == CityEventManager.CityEvent.Festival
+            && sellCity?.FavoriteDrug != null
+            && string.Equals(item.Name, sellCity.FavoriteDrug.Name, System.StringComparison.Ordinal))
+        {
+            sellPrice = Mathf.RoundToInt(sellPrice * CityEventManager.FestivalSellMult);
+        }
 
-        int sellPrice = Mathf.RoundToInt(modifiedBuy * combinedSellRatio);
         // Guard rails
         sellPrice = Mathf.Clamp(sellPrice, 1, 999_999);
         return sellPrice;

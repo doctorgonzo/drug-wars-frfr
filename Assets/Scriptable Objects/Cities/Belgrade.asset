@@ -19,5 +19,9 @@ MonoBehaviour:
   FavoriteDrug: {fileID: 11400000, guid: 0aa185629112bf140a61351c10f4da8e, type: 2}
   SceneName: Belgrade
   Dealers:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 54352667b914b58448db08e6f504ab8c, type: 2}
+  - {fileID: 11400000, guid: ab0ae3f19bd3e0e4289b481f4bf5bfae, type: 2}
+  - {fileID: 11400000, guid: b28d081c55161f5429f002b5f497fd5a, type: 2}
+  costOfLiving: 1
+  favoriteDrugDemandMultiplier: 1.25
+  priceModifiers: []

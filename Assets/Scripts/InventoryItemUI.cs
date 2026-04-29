@@ -26,6 +26,7 @@ public class InventoryItemUI : MonoBehaviour
     private InventoryContext context;
     public ItemInstance BoundItem => boundItem;
     private Dealer dealerReference;
+    private int cachedAvgPurchasePrice;
 
     // --- MODIFIED: Setup now correctly accepts an ItemInstance ---
     public void Setup(ItemInstance item, InventoryContext context, Dealer dealer)
@@ -33,13 +34,21 @@ public class InventoryItemUI : MonoBehaviour
         boundItem = item;
         this.context = context;
         this.dealerReference = dealer;
+        this.cachedAvgPurchasePrice = item.AvgPurchasePrice;
         iconImage.sprite = item.Image;
-        itemAmountText.text = "Available: " + item.Amount;
         boundItem.OnAmountChanged += HandleAmountChanged;
+
+        itemPriceText.enableAutoSizing = true;
+        itemPriceText.fontSizeMin = 5f;
+        itemPriceText.fontSizeMax = 14f;
+        itemAmountText.enableAutoSizing = true;
+        itemAmountText.fontSizeMin = 5f;
+        itemAmountText.fontSizeMax = 14f;
 
         if (dealer == null)
         {
             itemPriceText.text = "Price: N/A";
+            itemAmountText.text = "Available: " + item.Amount;
             return;
         }
 
@@ -47,7 +56,8 @@ public class InventoryItemUI : MonoBehaviour
         {
             case InventoryContext.Dealer:
                 int buyPrice = dealer.GetModifiedBuyPrice(boundItem);
-                itemPriceText.text = $"Buy: ${buyPrice:N0}";
+                itemPriceText.text = BuildDealerPriceText(buyPrice, boundItem.Name);
+                itemAmountText.text = "Stock: " + item.Amount;
                 buttonPlus.gameObject.SetActive(true);
                 buttonMinus.gameObject.SetActive(true);
                 buttonPlus.onClick.RemoveAllListeners();
@@ -57,9 +67,10 @@ public class InventoryItemUI : MonoBehaviour
                 break;
             case InventoryContext.Player:
                 int sellPrice = dealer.GetModifiedSellPrice(boundItem);
-                itemPriceText.text = $"Sell: ${sellPrice:N0}";
+                itemPriceText.text = BuildPlayerPriceText(sellPrice, cachedAvgPurchasePrice);
+                itemAmountText.text = "Qty: " + item.Amount;
                 buttonPlus.gameObject.SetActive(false);
-                RefreshButtonState(); // Call this to set the minus button's visibility
+                RefreshButtonState();
                 buttonMinus.onClick.RemoveAllListeners();
                 buttonMinus.onClick.AddListener(() => OnMinusClicked.Invoke(boundItem));
                 break;
@@ -72,24 +83,49 @@ public class InventoryItemUI : MonoBehaviour
         buttonMinus.gameObject.SetActive(boundItem != null && boundItem.Amount > 0);
     }
 
-    // Recalculate the displayed price (call when reopening the panel or after day changes)
     public void RefreshPrice()
     {
         if (boundItem == null || dealerReference == null) return;
         switch (context)
         {
             case InventoryContext.Dealer:
-                itemPriceText.text = $"Buy: ${dealerReference.GetModifiedBuyPrice(boundItem):N0}";
+                int buy = dealerReference.GetModifiedBuyPrice(boundItem);
+                itemPriceText.text = BuildDealerPriceText(buy, boundItem.Name);
                 break;
             case InventoryContext.Player:
-                itemPriceText.text = $"Sell: ${dealerReference.GetModifiedSellPrice(boundItem):N0}";
+                int sell = dealerReference.GetModifiedSellPrice(boundItem);
+                itemPriceText.text = BuildPlayerPriceText(sell, cachedAvgPurchasePrice);
                 break;
         }
     }
 
     private void HandleAmountChanged(int newAmount)
     {
-        itemAmountText.text = "Available: " + newAmount;
+        itemAmountText.text = context == InventoryContext.Player
+            ? $"Qty: {newAmount}"
+            : $"Stock: {newAmount}";
+    }
+
+    private string BuildPlayerPriceText(int sellPrice, int avgPaid)
+    {
+        if (avgPaid <= 0) return $"Sell: ${sellPrice:N0}";
+        int profit = sellPrice - avgPaid;
+        string profitStr = profit >= 0
+            ? $"<color=#55FF55>+${profit:N0}</color>"
+            : $"<color=#FF5555>-${Mathf.Abs(profit):N0}</color>";
+        return $"Sell: ${sellPrice:N0}  {profitStr}/unit\n<size=70%>Paid avg: ${avgPaid:N0}</size>";
+    }
+
+    private string BuildDealerPriceText(int buyPrice, string drugName)
+    {
+        if (PlayerStats.Instance != null &&
+            PlayerStats.Instance.LastSeenBuyPrice.TryGetValue(drugName, out int lastPrice) &&
+            lastPrice != buyPrice)
+        {
+            string dir = buyPrice < lastPrice ? "<color=#55FF55>▼</color>" : "<color=#FF5555>▲</color>";
+            return $"Buy: ${buyPrice:N0} {dir}<size=70%> was ${lastPrice:N0}</size>";
+        }
+        return $"Buy: ${buyPrice:N0}";
     }
 
     public void Teardown()

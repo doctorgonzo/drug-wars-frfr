@@ -9,20 +9,28 @@ EditorBuildSettings:
     path: Assets/Scenes/Startup.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: fe96cba752869479ebb062a1177f5965
+  - enabled: 1
     path: Assets/Scenes/CharCreation.unity
     guid: 1cc0c05d776fe40418d98ea23d38d0fc
   - enabled: 1
     path: Assets/Scenes/Milwaukee.unity
-    guid: c9e6e3a45df39114bb6495d149cf5b3b
+    guid: 28dd54ade8d381d4b9c1965e87a5e3a0
   - enabled: 1
     path: Assets/Scenes/Belgrade.unity
-    guid: 8ec90930ff3d94e48bea76eddcf08772
+    guid: 49a74581fe99e884cadba2f2a0dccfbf
   - enabled: 1
     path: Assets/Scenes/Baghdad.unity
-    guid: d9c62c818a0883046abdbe2a1d183232
+    guid: 511c07e3290424cceaa6ee0b0e9e97bb
   - enabled: 1
     path: Assets/Scenes/CopEncounter.unity
     guid: 2184304241eceee408b6de9bf6cd9f06
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: d8b667d71199949ebb1cd4703426bde9
+  - enabled: 1
+    path: Assets/Scenes/YouWin.unity
+    guid: 9e5c36f2ae54a4adda88a575b57f403e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  m_UseUCBPForAssetBundles: 0

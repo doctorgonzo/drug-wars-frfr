@@ -235,25 +235,23 @@ public class CopEncounterUIManager : MonoBehaviour
             return;
         }
 
-        // Not accepted → either demand more or escalate based on stance/greed
+        // Not accepted — handle based on adequacy
         if (adequate)
         {
-            // still rejected (low corruption): escalate to Search or Attack depending on violence/diligence
-            bool goesViolent = rng.NextDouble() < (0.35 + currentCop.violence * 0.4);
-            if (goesViolent)
-            {
-                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesAttack, "Enough. Hands where I can see 'em!")}\"";
-                StartCombat();
-            }
-            else
-            {
-                // Search
-                PerformSearch();
-            }
+            // Adequate offer but cop refused (low corruption/bad luck): ask for a bit more instead of escalating
+            int playerCash = SafeGetCash();
+            int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), Mathf.Max(askAmount, offer + Mathf.RoundToInt((askAmount - offer) * 0.5f)));
+            askAmount = newAsk;
+
+            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, $"I need a little more to forget this. {Money(newAsk)}.")}\"";
+            bribeHintText.text = $"You have {Money(playerCash)}.";
+            bribeSlider.maxValue = Mathf.Max(newAsk, playerCash);
+            bribeSlider.value = Mathf.Min(newAsk, playerCash);
+            bribeInput.text = bribeSlider.value.ToString();
         }
         else
         {
-            // Demand more (counter-offer)
+            // Inadequate offer — demand more (counter-offer)
             int playerCash = SafeGetCash();
             int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), Mathf.Max(askAmount, offer + Mathf.RoundToInt((askAmount - offer) * 0.7f)));
             askAmount = newAsk;

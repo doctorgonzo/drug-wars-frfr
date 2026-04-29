@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 // Partial class: economy-related state (wallet, inventory, slots)
 public partial class PlayerStats
 {
     [SerializeField] private int playerWallet = 10000;
+
+    // Session-only: last buy price seen for each drug (cleared on new game, not saved)
+    [NonSerialized] public Dictionary<string, int> LastSeenBuyPrice = new Dictionary<string, int>();
 
     public event Action<int> OnWalletChanged;
     public event Action OnInventoryChanged;

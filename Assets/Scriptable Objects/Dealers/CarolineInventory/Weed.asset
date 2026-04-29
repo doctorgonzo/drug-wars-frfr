@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7446fe489ac3d438639dacd21bd11e, type: 3}
+  m_Name: Weed
+  m_EditorClassIdentifier: Assembly-CSharp::Drug
+  Name: Weed
+  Description: 420 blaze it!
+  Cost: 25
+  Amount: 500
+  Type: 0
+  Image: {fileID: 21300000, guid: 1f57958e62b3dc249b257bdd3c4be0a1, type: 3}
+  HeatValue: 5
+  BuyHeatMultiplier: 0.4
+  RiskTier: 0

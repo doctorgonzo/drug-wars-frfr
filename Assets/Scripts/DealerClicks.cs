@@ -28,6 +28,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     private readonly List<GameObject> dealerPool = new List<GameObject>();
     private readonly List<GameObject> playerPool = new List<GameObject>();
 
+    private GameObject _sellAllButton;
+
     private int GetShiftClickAmount() =>
         (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? shiftClickAmount : 1;
 
@@ -136,6 +138,9 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             var capturedItem = item;
             itemUI.OnPlusClicked.AddListener((_) => OnPlusClicked(capturedItem, itemUI));
             itemUI.OnMinusClicked.AddListener((_) => OnMinusClicked(capturedItem, itemUI));
+
+            if (item.Type == ItemType.Drug)
+                PlayerStats.Instance.LastSeenBuyPrice[item.Name] = dealer.GetModifiedBuyPrice(item);
         }
     }
 
@@ -167,6 +172,15 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     private void PopulatePlayerPanel()
     {
         ReturnPlayerItems();
+
+        bool hasDrugs = PlayerStats.Instance.inventory.Any(i => i.Type == ItemType.Drug && i.Amount > 0);
+        if (hasDrugs)
+        {
+            EnsureSellAllButton();
+            _sellAllButton.SetActive(true);
+            _sellAllButton.transform.SetAsFirstSibling();
+        }
+
         foreach (var playerItem in PlayerStats.Instance.inventory)
         {
             GameObject newPlayerItemPrefab = GetPooledItem(playerPool, playerInventoryContent);
@@ -177,6 +191,85 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             var capturedItem = playerItem;
             playerItemUI.OnMinusClicked.AddListener((_) => OnPlayerSellClicked(capturedItem, playerItemUI));
         }
+    }
+
+    private void EnsureSellAllButton()
+    {
+        if (_sellAllButton != null) return;
+
+        _sellAllButton = new GameObject("SellAllButton");
+        _sellAllButton.transform.SetParent(playerInventoryContent, false);
+
+        var rect = _sellAllButton.AddComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(0, 18);
+
+        var img = _sellAllButton.AddComponent<Image>();
+        img.color = new Color(0.75f, 0.15f, 0.15f, 1f);
+
+        var btn = _sellAllButton.AddComponent<Button>();
+        var colors = btn.colors;
+        colors.highlightedColor = new Color(0.9f, 0.25f, 0.25f, 1f);
+        colors.pressedColor = new Color(0.5f, 0.1f, 0.1f, 1f);
+        btn.colors = colors;
+        btn.onClick.AddListener(SellAll);
+
+        var textGO = new GameObject("Label");
+        textGO.transform.SetParent(_sellAllButton.transform, false);
+        var textRect = textGO.AddComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.sizeDelta = Vector2.zero;
+        var label = textGO.AddComponent<TextMeshProUGUI>();
+        label.text = "SELL ALL DRUGS";
+        label.alignment = TextAlignmentOptions.Center;
+        label.color = Color.white;
+        label.fontStyle = FontStyles.Bold;
+        label.fontSize = 10;
+    }
+
+    private void SellAll()
+    {
+        var drugsToSell = PlayerStats.Instance.inventory
+            .Where(i => i.Type == ItemType.Drug && i.Amount > 0)
+            .ToList();
+        if (drugsToSell.Count == 0) return;
+
+        int totalProfit = 0;
+        int totalValue = 0;
+
+        foreach (var playerItem in drugsToSell)
+        {
+            int sellPrice = dealer.GetModifiedSellPrice(playerItem);
+            totalValue += sellPrice * playerItem.Amount;
+            totalProfit += (sellPrice - playerItem.AvgPurchasePrice) * playerItem.Amount;
+
+            ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.Name == playerItem.Name);
+            if (dealerItem == null)
+            {
+                dealerItem = new ItemInstance(playerItem, amountOverride: 0);
+                dealer.RuntimeInventory.Add(dealerItem);
+            }
+
+            if (heatManager != null)
+            {
+                float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
+                heatManager.AddHeat(Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm));
+            }
+
+            dealerItem.ChangeAmount(playerItem.Amount);
+            playerItem.ChangeAmount(-playerItem.Amount);
+        }
+
+        PlayerStats.Instance.inventory.RemoveAll(i => i.Amount <= 0);
+        PlayerStats.Instance.PlayerWallet += totalValue;
+        PlayerStats.Instance.NotifyInventoryChanged();
+        cityUIHandler.UpdateWalletDisplay();
+
+        if (ProfitLossPopup.Instance != null)
+            ProfitLossPopup.Instance.Show(totalProfit);
+
+        PopulateDealerPanel();
+        PopulatePlayerPanel();
     }
 
     private void OnPlayerSellClicked(ItemInstance playerItem, InventoryItemUI playerItemUI)
@@ -213,7 +306,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         if (playerItem.Type == ItemType.Drug && heatManager != null)
         {
-            heatManager.AddHeat(playerItem.HeatValue * amountToSell);
+            float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
+            heatManager.AddHeat(Mathf.RoundToInt(playerItem.HeatValue * amountToSell * _hm));
         }
 
         if (dealerItemUIMap.ContainsKey(dealerItem))
@@ -269,7 +363,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         if (item.Type == ItemType.Drug && heatManager != null)
         {
-            int buyHeat = Mathf.Max(1, Mathf.RoundToInt(item.HeatValue * item.BuyHeatMultiplier * amountToBuy));
+            float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
+            int buyHeat = Mathf.Max(1, Mathf.RoundToInt(item.HeatValue * item.BuyHeatMultiplier * amountToBuy * _hm));
             heatManager.AddHeat(buyHeat);
         }
 

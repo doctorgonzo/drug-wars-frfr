@@ -1150,6 +1150,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421693718}
   m_CullTransparentMesh: 1
+--- !u!1 &484534819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 484534821}
+  - component: {fileID: 484534820}
+  m_Layer: 0
+  m_Name: TimeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &484534820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484534819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b26f65cf852b3499d1c0c8fa8397a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameTime
+  timeScale: 0.0167
+  startDay: 1
+  startHour: 0
+  startMinute: 0
+  startSecond: 0
+  timeText: {fileID: 0}
+  OnSecondChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMinuteChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHourChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDayChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &484534821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484534819}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1572.1594, y: 1025.2899, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &487234793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,6 +1245,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c762f3912da4cb40a5afaf5e7f59e8e, type: 2}
   - {fileID: 11400000, guid: b24c1ae1f8c90af45948e42a562589a0, type: 2}
   - {fileID: 11400000, guid: 276519b5f09efa0499d1009cd4260a7a, type: 2}
+  allTrenchcoats:
+  - {fileID: 11400000, guid: 25c1bc1aa45ed3c409cec4f6f38489a2, type: 2}
+  - {fileID: 11400000, guid: dff3e4efda4a84c4da14fbc55ff79e8c, type: 2}
+  - {fileID: 11400000, guid: 2ea5bbb2bed047c42896a1742f55f6a0, type: 2}
+  - {fileID: 11400000, guid: f00954b54663d89438903948d2456ca3, type: 2}
+  - {fileID: 11400000, guid: 1301acb8047cac440b5263460839cc09, type: 2}
+  allWeapons:
+  - {fileID: 11400000, guid: 164b557298b60ee4391ed08725a12bea, type: 2}
+  - {fileID: 11400000, guid: e86a75663cb1e6b4eb94783eeab35527, type: 2}
+  - {fileID: 11400000, guid: 0365277b154caea42850d07305111145, type: 2}
+  playerSprites:
+  - {fileID: 512506619223028387, guid: dc20e915d5d649a4c9db1a624a478ced, type: 3}
+  - {fileID: 8812731307688354182, guid: 4653382c4973b294786463782d18508f, type: 3}
+  - {fileID: 6916507504320922074, guid: 60781531574fa044b9fa9544519e9961, type: 3}
+  - {fileID: 6833041306909522587, guid: 2e5481cb9bd278e4cbc27737901817e1, type: 3}
+  - {fileID: -3777727041246650567, guid: 080a2737e3b2a7a4898b090e59f3a266, type: 3}
 --- !u!4 &487234795
 Transform:
   m_ObjectHideFlags: 0
@@ -3293,6 +3371,7 @@ MonoBehaviour:
   - {fileID: 894118539}
   graphicsDropdown: {fileID: 1197232456}
   continueButton: {fileID: 0}
+  newGameSceneName: Intro
 --- !u!1 &1853592221
 GameObject:
   m_ObjectHideFlags: 0
@@ -3657,3 +3736,4 @@ SceneRoots:
   - {fileID: 1763639792}
   - {fileID: 487234795}
   - {fileID: 1521244066}
+  - {fileID: 484534821}

@@ -1,42 +1,36 @@
-using System.IO;
 using UnityEngine;
 
-// Handles reading/writing SaveData to a JSON file in Application.persistentDataPath.
+// WebGL-safe save/load using PlayerPrefs (browser localStorage).
 public static class SaveLoadHelper
 {
-    private const string FileName = "drugwars_save.json";
-
-    public static string SavePath => Path.Combine(Application.persistentDataPath, FileName);
+    private const string SaveKey = "DrugWarsSave";
 
     public static void WriteToDisk(SaveData data)
     {
-        string json = JsonUtility.ToJson(data, prettyPrint: true);
-        File.WriteAllText(SavePath, json);
-        Debug.Log($"[SaveLoad] Saved to {SavePath}");
+        string json = JsonUtility.ToJson(data, prettyPrint: false);
+        PlayerPrefs.SetString(SaveKey, json);
+        PlayerPrefs.Save();
+        Debug.Log("[SaveLoad] Saved.");
     }
 
     public static SaveData ReadFromDisk()
     {
-        if (!File.Exists(SavePath))
+        if (!PlayerPrefs.HasKey(SaveKey))
         {
-            Debug.Log("[SaveLoad] No save file found.");
+            Debug.Log("[SaveLoad] No save found.");
             return null;
         }
-
-        string json = File.ReadAllText(SavePath);
-        SaveData data = JsonUtility.FromJson<SaveData>(json);
-        Debug.Log("[SaveLoad] Loaded save file.");
-        return data;
+        string json = PlayerPrefs.GetString(SaveKey);
+        Debug.Log("[SaveLoad] Loaded.");
+        return JsonUtility.FromJson<SaveData>(json);
     }
 
-    public static bool SaveExists() => File.Exists(SavePath);
+    public static bool SaveExists() => PlayerPrefs.HasKey(SaveKey);
 
     public static void DeleteSave()
     {
-        if (File.Exists(SavePath))
-        {
-            File.Delete(SavePath);
-            Debug.Log("[SaveLoad] Save file deleted.");
-        }
+        PlayerPrefs.DeleteKey(SaveKey);
+        PlayerPrefs.Save();
+        Debug.Log("[SaveLoad] Save deleted.");
     }
 }

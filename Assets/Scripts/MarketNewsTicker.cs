@@ -101,6 +101,22 @@ public class MarketNewsTicker : MonoBehaviour
 
         var messages = new List<string>();
 
+        // City event — prepend so it leads the ticker
+        var cityEvt = CityEventManager.GetEventForCity(city.Name);
+        if (cityEvt == CityEventManager.CityEvent.Lockdown)
+        {
+            messages.Add("<color=#FF4444>!! CITY LOCKDOWN !!</color> — Police presence doubled. Heat penalty active. Prices depressed.");
+        }
+        else if (cityEvt == CityEventManager.CityEvent.Festival)
+        {
+            string favName = city.FavoriteDrug != null ? city.FavoriteDrug.Name : "product";
+            messages.Add($"<color=#FFD700>CITY FESTIVAL</color> — {favName} demand through the roof! Sell prices DOUBLED today.");
+        }
+        else if (cityEvt == CityEventManager.CityEvent.Shortage)
+        {
+            messages.Add("<color=#FF8800>SUPPLY SHORTAGE</color> — Distribution lines cut. All drug prices surging 80%. Heat risk elevated.");
+        }
+
         // Check each item type for boom/bust events
         foreach (var mod in city.priceModifiers)
         {

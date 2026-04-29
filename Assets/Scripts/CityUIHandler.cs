@@ -62,6 +62,21 @@ public class CityUIHandler : MonoBehaviour
         ps.OnInventoryChanged += UpdateNetWorthDisplay;
         ps.OnWalletChanged += OnWalletChangedHandler;
         ps.OnDebtChanged += _ => UpdateDebtDisplay();
+
+        if (GameTime.Instance != null)
+        {
+            GameTime.Instance.MinuteChanged += OnTimeChanged;
+            GameTime.Instance.HourChanged += OnTimeChanged;
+            GameTime.Instance.DayChanged += OnTimeChanged;
+        }
+
+        if (dayText != null)
+        {
+            dayText.enableAutoSizing = true;
+            dayText.fontSizeMin = 6f;
+            dayText.fontSizeMax = 36f;
+        }
+
         UpdateDebtDisplay();
         UpdateDayDisplay();
         UpdateNetWorthDisplay();
@@ -96,13 +111,14 @@ public class CityUIHandler : MonoBehaviour
             debtText.text = $"Debt: ${ps.Debt:N0}";
     }
 
+    private void OnTimeChanged(GameTime.GameDateTime _) => UpdateDayDisplay();
+
     public void UpdateDayDisplay()
     {
-        if (dayText == null) return;
-        var gt = FindObjectOfType<GameTime>();
-        if (gt == null || PlayerStats.Instance == null) return;
+        if (dayText == null || GameTime.Instance == null || PlayerStats.Instance == null) return;
+        var gt = GameTime.Instance;
         int daysLeft = Mathf.Max(0, PlayerStats.Instance.DayLimit - gt.Day);
-        dayText.text = $"Day {gt.Day} / {PlayerStats.Instance.DayLimit}  ({daysLeft} left)";
+        dayText.text = $"Day {gt.Day} / {PlayerStats.Instance.DayLimit}  ({daysLeft} left)\n{gt.Hour:D2}:{gt.Minute:D2}";
     }
 
     private void OnDestroy()
@@ -113,6 +129,12 @@ public class CityUIHandler : MonoBehaviour
             ps.OnInventoryChanged -= UpdateTrenchSlotsDisplay;
             ps.OnInventoryChanged -= UpdateNetWorthDisplay;
             ps.OnWalletChanged -= OnWalletChangedHandler;
+        }
+        if (GameTime.Instance != null)
+        {
+            GameTime.Instance.MinuteChanged -= OnTimeChanged;
+            GameTime.Instance.HourChanged -= OnTimeChanged;
+            GameTime.Instance.DayChanged -= OnTimeChanged;
         }
     }
 

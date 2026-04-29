@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Marijuana
   Description: It's weed, yo...
   Cost: 50
-  Amount: 40
+  Amount: 100
   Type: 0
   Image: {fileID: 21300000, guid: 1f57958e62b3dc249b257bdd3c4be0a1, type: 3}
   HeatValue: 1

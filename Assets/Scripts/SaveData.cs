@@ -22,6 +22,7 @@ public class SaveData
     public int timesCaughtByCops;
     public int level;
     public string currentCityName;
+    public int debt;
 
     // World state
     public int inGameDay;
@@ -37,6 +38,7 @@ public class SavedItemInstance
     public int amount;
     public int itemType; // cast of ItemType enum
     public int heatValue;
+    public int avgPurchasePrice;
 }
 
 [Serializable]
