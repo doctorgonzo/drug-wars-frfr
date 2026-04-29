@@ -16,5 +16,9 @@ MonoBehaviour:
   Description: 
   Image: {fileID: 21300000, guid: dbf5da1ec27954d0d9d644f84984458d, type: 3}
   Wallet: 0
-  Inventory: []
+  Inventory:
+  - {fileID: 11400000, guid: a67415c0cb14a4798b0f3489a828117a, type: 2}
+  - {fileID: 11400000, guid: d5671b476a9e14fd59f8817fb46a4a5d, type: 2}
+  - {fileID: 11400000, guid: 65f54c5b96c5f438a82212364240a3dd, type: 2}
+  - {fileID: 11400000, guid: d72551cc92dbc448e9904a8500c45ca3, type: 2}
   priceModifiers: []

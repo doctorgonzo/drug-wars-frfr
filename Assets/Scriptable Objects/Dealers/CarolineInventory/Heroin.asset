@@ -11,13 +11,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a7446fe489ac3d438639dacd21bd11e, type: 3}
   m_Name: Heroin
-  m_EditorClassIdentifier: Assembly-CSharp::Drug
+  m_EditorClassIdentifier: 
   Name: Heroin
-  Description: 
-  Cost: 750
-  Amount: 35
+  Description: The white whale. Massive profit, massive risk.
+  Cost: 1200
+  Amount: 6
   Type: 0
   Image: {fileID: -948606299100542230, guid: 6ed21d988ff8f4d3399b92de2cbdd1d1, type: 3}
-  HeatValue: 5
+  HeatValue: 18
   BuyHeatMultiplier: 0.4
   RiskTier: 2

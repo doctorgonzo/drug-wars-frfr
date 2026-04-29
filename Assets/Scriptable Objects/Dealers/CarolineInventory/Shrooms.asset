@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a7446fe489ac3d438639dacd21bd11e, type: 3}
-  m_Name: Heroin
+  m_Name: Shrooms
   m_EditorClassIdentifier: 
-  Name: Heroin
-  Description: The white whale. Massive profit, massive risk.
-  Cost: 1200
-  Amount: 6
+  Name: Shrooms
+  Description: Magic mushrooms. Nature's little trip.
+  Cost: 60
+  Amount: 45
   Type: 0
-  Image: {fileID: -948606299100542230, guid: 6ed21d988ff8f4d3399b92de2cbdd1d1, type: 3}
-  HeatValue: 18
-  BuyHeatMultiplier: 0.4
-  RiskTier: 2
+  Image: {fileID: 6705067628321220605, guid: 59eccde95de3e4918bcbc87f92e5b9f4, type: 3}
+  HeatValue: 2
