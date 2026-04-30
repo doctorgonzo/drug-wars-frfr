@@ -55,6 +55,7 @@ public partial class PlayerStats
         if (Debt <= 0) return;
         int interest = Mathf.Max(1, Mathf.RoundToInt(Debt * dailyInterestRate));
         Debt += interest;
+        RecordInterestPaid(interest);
     }
 
     // Returns the actual amount borrowed (capped at maxSingleBorrow).
@@ -65,6 +66,7 @@ public partial class PlayerStats
         int debtAdded = Mathf.RoundToInt(amount * (1f + borrowPremiumRate));
         PlayerWallet += amount;
         Debt += debtAdded;
+        RecordBorrowed(amount);
         return amount;
     }
 
@@ -74,6 +76,12 @@ public partial class PlayerStats
         if (amount <= 0) return;
         PlayerWallet -= amount;
         Debt = Mathf.Max(0, Debt - amount);
+        RecordDebtPaid(amount);
+        if (Debt <= 0)
+        {
+            int day = GameTime.Instance != null ? GameTime.Instance.Day : 0;
+            RecordDayDebtCleared(day);
+        }
     }
 
     public City CurrentCity { get => currentCity; set => currentCity = value; }

@@ -174,12 +174,14 @@ public class CharCreationUI : MonoBehaviour
 
     private IEnumerator ConfirmAndLoad()
     {
+        PlayerStats.Instance.ResetRunStats();
         PlayerStats.Instance.PlayerName = nameInput.text;
         PlayerStats.Instance.PlayerWallet -= (trenchcoats[curTrenchIndex].Cost + weapons[curWeaponIndex].Cost);
         PlayerStats.Instance.PlayerSprite = charSprites[curCharIndex];
         PlayerStats.Instance.CurrentTrench = trenchcoats[curTrenchIndex];
         PlayerStats.Instance.CurrentCity = startingCity;
         PlayerStats.Instance.CurrentWeapon = weapons[curWeaponIndex];
+        PlayerStats.Instance.RecordCityVisited(startingCity != null ? startingCity.Name : null);
         PlayerStats.Instance.InitializeDebt();
         PriceService.RunSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 

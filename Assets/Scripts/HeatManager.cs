@@ -229,6 +229,7 @@ public class HeatManager : MonoBehaviour
         PlayerStats.Instance.CurrentHeat += heatAmount;
         EnsureDecayRunning();
         PlayerStats.Instance.CurrentHeat = Mathf.Clamp(PlayerStats.Instance.CurrentHeat, 0, maxHeat);
+        PlayerStats.Instance.RecordHeatSample(PlayerStats.Instance.CurrentHeat);
 
         UpdateHeatDisplay();
         CheckForCops();

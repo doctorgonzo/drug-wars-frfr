@@ -247,8 +247,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         foreach (var playerItem in drugsToSell)
         {
             int sellPrice = dealer.GetModifiedSellPrice(playerItem);
-            totalValue += sellPrice * playerItem.Amount;
+            int lineValue = sellPrice * playerItem.Amount;
+            totalValue += lineValue;
             totalProfit += (sellPrice - playerItem.AvgPurchasePrice) * playerItem.Amount;
+            PlayerStats.Instance.RecordDrugSell(playerItem.Name, playerItem.Amount, lineValue);
 
             ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.Name == playerItem.Name);
             if (dealerItem == null)
@@ -303,6 +305,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         int totalValue = sellPrice * amountToSell;
         int totalProfit = (sellPrice - playerItem.AvgPurchasePrice) * amountToSell;
         PlayerStats.Instance.PlayerWallet += totalValue;
+        if (playerItem.Type == ItemType.Drug)
+            PlayerStats.Instance.RecordDrugSell(playerItem.Name, amountToSell, totalValue);
         cityUIHandler.UpdateWalletDisplay();
         playerItem.ChangeAmount(-amountToSell);
 
@@ -365,6 +369,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
 
         PlayerStats.Instance.PlayerWallet -= totalCost;
+        if (item.Type == ItemType.Drug)
+            PlayerStats.Instance.RecordDrugBuy(amountToBuy, totalCost);
         cityUIHandler.UpdateWalletDisplay();
         item.ChangeAmount(-amountToBuy);
 

@@ -28,6 +28,9 @@ public class SaveData
     public int inGameDay;
     public int runSeed;
     public List<SavedDealerState> dealerStates = new List<SavedDealerState>();
+
+    // Per-run statistics snapshot (endgame summary + leaderboard).
+    public RunStatsSnapshot runStats;
 }
 
 [Serializable]

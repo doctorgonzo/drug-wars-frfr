@@ -170,7 +170,8 @@ public class GameSessionManager : MonoBehaviour
             weaponName          = ps.CurrentWeapon != null ? ps.CurrentWeapon.Name : "",
             inGameDay           = PriceService.InGameDay,
             runSeed             = PriceService.RunSeed,
-            debt                = ps.Debt
+            debt                = ps.Debt,
+            runStats            = ps.CaptureRunStatsSnapshot()
         };
 
         foreach (var item in ps.inventory)
@@ -216,6 +217,7 @@ public class GameSessionManager : MonoBehaviour
         ps.TimesCaughtByCops  = data.timesCaughtByCops;
         ps.Level              = data.level;
         ps.Debt               = data.debt;
+        ps.RestoreRunStatsSnapshot(data.runStats);
 
         // Player sprite
         if (playerSprites != null && data.playerSpriteIndex >= 0 && data.playerSpriteIndex < playerSprites.Length)

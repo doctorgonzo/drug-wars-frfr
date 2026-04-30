@@ -119,6 +119,7 @@ public class TravelManager : MonoBehaviour
 
         // Deduct fare
         PlayerStats.Instance.PlayerWallet -= travelCost;
+        PlayerStats.Instance.RecordTravelSpend(travelCost);
 
         // Advance in-game time
         var gameTime = GameTime.Instance ?? FindObjectOfType<GameTime>();
@@ -128,6 +129,7 @@ public class TravelManager : MonoBehaviour
         // Update city
         PlayerStats.Instance.CurrentCity = destinationCity;
         PlayerStats.Instance.CitiesVisited++;
+        PlayerStats.Instance.RecordCityVisited(destinationCity.Name);
 
         // Auto-save before loading
         if (GameSessionManager.Instance != null)

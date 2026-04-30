@@ -282,6 +282,8 @@ public class CopEncounterUIManager : MonoBehaviour
         if (accepted)
         {
             SpendPlayerCash?.Invoke(offer);
+            if (PlayerStats.Instance != null)
+                PlayerStats.Instance.RecordBribePaid(offer);
             copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesAcceptBribe, "Fine. We never met.")}\"";
             EndEncounter(success: true);
             return;
@@ -397,6 +399,8 @@ public class CopEncounterUIManager : MonoBehaviour
             {
                 int actualSteal = Mathf.Min(steal, SafeGetCash());
                 SpendPlayerCash?.Invoke(actualSteal);
+                if (PlayerStats.Instance != null)
+                    PlayerStats.Instance.RecordCashConfiscated(actualSteal);
                 OnCopStoleCash?.Invoke(actualSteal);
                 copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Move along.")}\"" +
                     FormatLossSummary(actualSteal, "confiscated", null);
@@ -409,6 +413,8 @@ public class CopEncounterUIManager : MonoBehaviour
                 int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f);
                 string searchDrugList = BuildDrugConfiscationList();
                 SpendPlayerCash?.Invoke(arrestFine);
+                if (PlayerStats.Instance != null)
+                    PlayerStats.Instance.RecordFinePaid(arrestFine);
                 OnPlayerArrested?.Invoke();
                 copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You're under arrest.")}\"" +
                     FormatLossSummary(arrestFine, "fine (20%)", searchDrugList);
@@ -448,6 +454,8 @@ public class CopEncounterUIManager : MonoBehaviour
         if (escaped)
         {
             copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Tch—he got away!")}\"";
+            if (PlayerStats.Instance != null)
+                PlayerStats.Instance.RecordEscape();
             OnEscaped?.Invoke();
             EndEncounter(success: true);
             return;
@@ -483,6 +491,8 @@ public class CopEncounterUIManager : MonoBehaviour
                     int runArrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.15f);
                     string runDrugList = BuildDrugConfiscationList();
                     SpendPlayerCash?.Invoke(runArrestFine);
+                    if (PlayerStats.Instance != null)
+                        PlayerStats.Instance.RecordFinePaid(runArrestFine);
                     OnPlayerArrested?.Invoke();
                     copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That's it—you're under arrest.")}\"" +
                         FormatLossSummary(runArrestFine, "fine (15%)", runDrugList);
@@ -881,6 +891,7 @@ public class CopEncounterUIManager : MonoBehaviour
         var heatManager = FindObjectOfType<HeatManager>();
         float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
         PlayerStats.Instance.CurrentHeat = halfMax;
+        PlayerStats.Instance.RecordCombatWin();
 
         EndEncounter(success: true);
     }
@@ -892,6 +903,11 @@ public class CopEncounterUIManager : MonoBehaviour
         int   cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
         string combatDrugList = BuildDrugConfiscationList();
         SpendPlayerCash?.Invoke(cashLoss);
+        if (PlayerStats.Instance != null)
+        {
+            PlayerStats.Instance.RecordCombatCashLoss(cashLoss);
+            PlayerStats.Instance.RecordCombatLoss();
+        }
         int pct = Mathf.RoundToInt(lossPct * 100f);
         AppendLog($"Beaten. Lost ${cashLoss:N0} ({pct}%).");
         if (combatDrugList != null) AppendLog($"Seized: {combatDrugList}");
@@ -909,6 +925,7 @@ public class CopEncounterUIManager : MonoBehaviour
         var heatManager = FindObjectOfType<HeatManager>();
         float halfMax = heatManager != null ? heatManager.MaxHeat * 0.5f : 50f;
         PlayerStats.Instance.CurrentHeat = halfMax;
+        PlayerStats.Instance.RecordEscape();
         EndEncounter(success: true);
     }
 

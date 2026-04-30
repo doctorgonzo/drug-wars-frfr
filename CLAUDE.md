@@ -66,7 +66,7 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 ### Tier 3 — Juice & Feel
 - **Profit/loss feedback** — `ProfitLossPopup.cs` shows "+$X PROFIT" / "-$X LOSS" / "BREAK EVEN" on every sale. Scale-overshoot snap-in → hold → float-up fade-out. Files: `ProfitLossPopup.cs`, `Item.cs`, `DealerClicks.cs`
 - **Net worth tracker** — `NetWorth` computed property on `PlayerStats.Economy.cs`. Displayed in `CityUIHandler`, reactive to wallet and inventory changes.
-- **Run summary / high score** — `RunSummaryUI.cs` on GameOver and YouWin scenes. Shows net worth, cash, debt, days, cops encountered/busted, cities visited. High score persisted via `PlayerPrefs`. **New file:** `RunSummaryUI.cs`
+- **Run summary / high score** — `RunSummaryUI.cs` on GameOver and YouWin scenes. Originally showed net worth, cash, debt, days, cops encountered/busted, cities visited. **Expanded** — see "Endgame Stats & Leaderboard" below.
 
 ### Tutorial & Intro
 - **Intro sequence** — `IntroSequence.cs` drives a 4-panel click-through narrative before CharCreation. Crossfades via `CanvasGroup`. `StartUIHandler` routes to `"Intro"` scene first. **New file:** `IntroSequence.cs`
@@ -182,6 +182,22 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 ### Balance Tuning
 - **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
 - **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
+
+### Endgame Stats & Leaderboard
+- **Per-run stats tracker** — `PlayerStats.RunStats.cs` partial class. Counters for money flow (sales revenue, drug spend, equipment, travel, interest, debt paid, fines, confiscation, combat loss, bribes, borrowed), drug stats (qty bought/sold, biggest single sale, favorite drug by qty), combat outcomes (wins, losses, escapes, successful bribes), peak heat, unique cities (`HashSet<string>`), day-debt-cleared, and total clicks. `ResetRunStats()` called from `CharCreationUI.HandleContinue` for every new run. **New file:** `PlayerStats.RunStats.cs`
+- **Click counting** — `PlayerStats.Update()` increments `TotalClicks` on every `Input.GetMouseButtonDown(0)`. PlayerStats is `DontDestroyOnLoad` so this works across scenes.
+- **Counter wiring:** `RecordDrugBuy/Sell` in `DealerClicks.cs`; `RecordEquipmentBuy` in `EquipmentShop.cs`; `RecordTravelSpend/CityVisited` in `TravelManager.cs`; `RecordInterestPaid/DebtPaid/Borrowed/DayDebtCleared` in `PlayerStats.Progression.cs`; `RecordBribePaid/Confiscated/FinePaid/CombatCashLoss/CombatWin/CombatLoss/Escape` in `CopEncounterUIManager.cs`; `RecordHeatSample` in `HeatManager.AddHeat`.
+- **Leaderboard** — `Leaderboard.cs` static class. Top 10 entries by JSON in `PlayerPrefs["Leaderboard_v1"]`. Sort: wins above losses; within wins, fewest days (tiebreak by net worth desc); within losses, highest net worth. Both win and loss runs are submitted from `RunSummaryUI`. **New file:** `Leaderboard.cs`
+- **`RunSummaryUI` rewritten** — single rich-text `statsBlockText` shows all stats grouped by section (TIMELINE / MONEY / DRUGS / HEAT & COPS / MISC) with color-coded values. Old per-stat `TMP_Text` fields kept as optional fallbacks. New fields: `statsBlockText`, `leaderboardUI`, `leaderboardRankText`, `mainMenuButton`, `playAgainSceneName`. Leaderboard entry submitted automatically; rank shown if it cracks the top 10.
+- **`LeaderboardUI`** — two render modes: (a) `singleBlockText` mode renders the whole table into one TMP_Text using `<mspace>` for column alignment; (b) row-prefab mode instantiates `LeaderboardRowUI` instances under `rowContainer`. Highlights the just-inserted row. **New files:** `LeaderboardUI.cs`, `LeaderboardRowUI.cs`
+- **Save/load** — `RunStatsSnapshot` added to `SaveData`. `GameSessionManager.SaveGame/LoadGame` capture/restore via `PlayerStats.CaptureRunStatsSnapshot/RestoreRunStatsSnapshot`. Old saves without runStats default-construct a snapshot of zeros.
+- **Inspector wiring required (per scene — GameOver and YouWin):**
+  1. **`RunSummaryUI`** root GameObject — set `isVictory` (false on GameOver, true on YouWin)
+  2. Wire `statsBlockText` → big TMP_Text inside a ScrollRect (recommend `enableWordWrapping=true`, autosize off so the rich-text spacing stays consistent). Use a monospace TMP font asset for `singleBlockText` of LeaderboardUI.
+  3. Add a GameObject with `LeaderboardUI` component. Wire its `singleBlockText` → another TMP_Text. Drag this GameObject into `RunSummaryUI.leaderboardUI`.
+  4. Optional: `leaderboardRankText` → small TMP_Text shown when run made the board.
+  5. Optional: `playAgainButton` → defaults to loading "CharCreation"; `mainMenuButton` → "Start".
+- **Old `HighScore_NetWorth` PlayerPrefs key** — abandoned (not deleted). Safe to clear via `Leaderboard.Clear()` if needed; the game no longer reads or writes the old key.
 
 ---
 

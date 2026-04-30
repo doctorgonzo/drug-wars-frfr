@@ -277,6 +277,7 @@ public class EquipmentShop : MonoBehaviour
         }
 
         ps.PlayerWallet -= upgradeCost;
+        ps.RecordEquipmentBuy(upgradeCost);
         ps.CurrentTrench = trench;
         ps.NotifyInventoryChanged();
 
@@ -299,6 +300,7 @@ public class EquipmentShop : MonoBehaviour
         }
 
         ps.PlayerWallet -= upgradeCost;
+        ps.RecordEquipmentBuy(upgradeCost);
         ps.CurrentWeapon = weapon;
 
         ShowFeedback($"Equipped {weapon.Name}! (Paid ${upgradeCost:N0} after trade-in)");
