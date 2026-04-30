@@ -15,9 +15,9 @@ MonoBehaviour:
   Name: Weed
   Description: 420 Blaze it!!!!
   Cost: 35
-  Amount: 200
+  Amount: 40
   Type: 0
   Image: {fileID: 21300000, guid: 1f57958e62b3dc249b257bdd3c4be0a1, type: 3}
-  HeatValue: 5
+  HeatValue: 1
   BuyHeatMultiplier: 0.4
   RiskTier: 0

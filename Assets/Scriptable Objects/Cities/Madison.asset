@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fec0aeeb1d8c5a4aa135da57a4daf34, type: 3}
+  m_Name: Madison
+  m_EditorClassIdentifier: Assembly-CSharp::City
+  Name: Madison
+  Description: The liberals have won
+  Image: {fileID: 0}
+  Population: 268000
+  FavoriteDrug: {fileID: 11400000, guid: a8a5b153eadf3423c88054c5cf6fdd3c, type: 2}
+  SceneName: Madison
+  Dealers:
+  - {fileID: 11400000, guid: 885c89175be9e4a9eb14e9af8b6c726b, type: 2}
+  - {fileID: 11400000, guid: 747f3c2eab8c848da82297b56c5506c4, type: 2}
+  costOfLiving: 1.299
+  favoriteDrugDemandMultiplier: 1.47
+  priceModifiers:
+  - itemType: 0
+    buyPriceMultiplier: 1.09
+    sellPriceRatio: 0.573
+    dailyVolatility: 0.382
+    boomChance: 0.311
+    boomMultiplier: 1.53
+    bustChance: 0.163
+    bustMultiplier: 0.3
+  drugBonuses:
+  - drugName: LSD
+    sellMultiplier: 1.6
+  - drugName: Shrooms
+    sellMultiplier: 1.5
+  - drugName: Weed
+    sellMultiplier: 1.4
+  - drugName: Marijuana
+    sellMultiplier: 1.4
+  - drugName: Ecstasy
+    sellMultiplier: 1.3

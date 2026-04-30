@@ -36,6 +36,7 @@ namespace DrugWars.NPC
         [Header("Presentation")]
         public string displayName = "Officer";
         [TextArea] public string description;
+        public Sprite portrait;
 
         [Header("Personality Traits (0..1)")]
         [Range(0f, 1f)] public float corruption = 0.35f; // higher = more likely to steal or accept bribes

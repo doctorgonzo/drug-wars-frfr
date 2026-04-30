@@ -23,13 +23,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 524bb547459ee45729327204fc5b8cb5, type: 2}
   - {fileID: 11400000, guid: 9a0fe3c86f21e4ecc999163e2ad051f6, type: 2}
   costOfLiving: 1
-  favoriteDrugDemandMultiplier: 1.25
+  favoriteDrugDemandMultiplier: 2.04
   priceModifiers:
   - itemType: 0
-    buyPriceMultiplier: 1
+    buyPriceMultiplier: 1.3
     sellPriceRatio: 0.5
     dailyVolatility: 0.2
     boomChance: 0.1
     boomMultiplier: 1.4
     bustChance: 0.08
     bustMultiplier: 0.6
+  drugBonuses:
+  - drugName: Shrooms
+    sellMultiplier: 1.8
+  - drugName: LSD
+    sellMultiplier: 1.7
+  - drugName: Crack
+    sellMultiplier: 1.2

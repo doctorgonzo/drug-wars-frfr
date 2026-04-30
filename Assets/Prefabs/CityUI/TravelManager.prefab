@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3629727632128437598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 413428148820020184}
+  - component: {fileID: 3969598735671379749}
+  m_Layer: 0
+  m_Name: TravelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &413428148820020184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3629727632128437598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 59.396484, y: 189.16742, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3969598735671379749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3629727632128437598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca91eb9f004d254db6739a862d3074f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  travelUnlockThreshold: 20000
+  travelCost: 500
+  allCities:
+  - {fileID: 11400000, guid: 276519b5f09efa0499d1009cd4260a7a, type: 2}
+  - {fileID: 11400000, guid: b24c1ae1f8c90af45948e42a562589a0, type: 2}
+  - {fileID: 11400000, guid: 3c762f3912da4cb40a5afaf5e7f59e8e, type: 2}
+  - {fileID: 11400000, guid: 773d88c0e7b414099aed207fc0226dfd, type: 2}
+  - {fileID: 11400000, guid: c369100493e654277b91ceceb38bf36e, type: 2}
+  - {fileID: 11400000, guid: a008153bd7f274d4cb65ce3ab554b1fe, type: 2}
+  - {fileID: 11400000, guid: f0b06cf47f70842d6b0d71a5611334b1, type: 2}
+  travelTimeHours: 6
+  fadeDuration: 1
+  travelUIParent: {fileID: 0}
+  cityDropdown: {fileID: 0}
+  travelButton: {fileID: 0}
+  travelCostText: {fileID: 0}
+  cityPreviewPanel: {fileID: 0}
+  previewCityName: {fileID: 0}
+  previewPopulation: {fileID: 0}
+  previewCOL: {fileID: 0}
+  previewFavDrug: {fileID: 0}
+  previewHoldSeconds: 3
+  previewFadeSeconds: 0.5

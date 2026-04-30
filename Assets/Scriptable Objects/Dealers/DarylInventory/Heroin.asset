@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Heroin
   Description: The most dangerous game
   Cost: 1200
-  Amount: 10
+  Amount: 6
   Type: 0
   Image: {fileID: -948606299100542230, guid: 6ed21d988ff8f4d3399b92de2cbdd1d1, type: 3}
   HeatValue: 18

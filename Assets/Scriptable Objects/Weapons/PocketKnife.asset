@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pocket Knife
   Description: A basic folding pocketknife
-  Cost: 0
+  Cost: 500
   Amount: 1
   Type: 1
   Image: {fileID: 21300000, guid: 4785d6bd711718e4385362137badf8b7, type: 3}

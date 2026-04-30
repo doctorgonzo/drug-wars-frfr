@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &264345030385643333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4158649244587479892}
+  - component: {fileID: 272410661443368887}
+  m_Layer: 0
+  m_Name: EquipmentShop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4158649244587479892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264345030385643333}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1137.4249, y: 1983.3362, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &272410661443368887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264345030385643333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1fdc6c1027049e6ac525daf4abbfc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentShop
+  trenchcoatsForSale:
+  - {fileID: 11400000, guid: 25c1bc1aa45ed3c409cec4f6f38489a2, type: 2}
+  - {fileID: 11400000, guid: dff3e4efda4a84c4da14fbc55ff79e8c, type: 2}
+  - {fileID: 11400000, guid: 2ea5bbb2bed047c42896a1742f55f6a0, type: 2}
+  weaponsForSale:
+  - {fileID: 11400000, guid: 164b557298b60ee4391ed08725a12bea, type: 2}
+  - {fileID: 11400000, guid: 0365277b154caea42850d07305111145, type: 2}
+  - {fileID: 11400000, guid: e86a75663cb1e6b4eb94783eeab35527, type: 2}
+  shopPanel: {fileID: 0}
+  openShopButton: {fileID: 0}
+  closeShopButton: {fileID: 0}
+  itemListContent: {fileID: 0}
+  shopItemPrefab: {fileID: 7444485536732759930, guid: 418452e994fab41839366e08f2a55116, type: 3}
+  feedbackText: {fileID: 0}
+  cityUIHandler: {fileID: 0}

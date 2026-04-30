@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Drug
   Name: Crack
   Description: Cocaine + Baking Soda = Awesome!
-  Cost: 100
-  Amount: 100
+  Cost: 600
+  Amount: 8
   Type: 0
   Image: {fileID: 21300000, guid: ba9e9c6b32706d04ab7bc8c7d387d8a5, type: 3}
-  HeatValue: 5
+  HeatValue: 12
   BuyHeatMultiplier: 0.4
   RiskTier: 2

@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: LSD
   Description: Are the walls melting yet?
   Cost: 120
-  Amount: 60
+  Amount: 25
   Type: 0
   Image: {fileID: 21300000, guid: 31b086c5112731549979d11d0fc3366c, type: 3}
   HeatValue: 3

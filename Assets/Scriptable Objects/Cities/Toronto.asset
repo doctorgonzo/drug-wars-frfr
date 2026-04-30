@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fec0aeeb1d8c5a4aa135da57a4daf34, type: 3}
   m_Name: Toronto
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   Name: Toronto
   Description: Cold outside, warm deals inside
   Image: {fileID: 0}
@@ -21,7 +21,6 @@ MonoBehaviour:
   Dealers:
   - {fileID: 11400000, guid: b28d081c55161f5429f002b5f497fd5a, type: 2}
   - {fileID: 11400000, guid: 885c89175be9e4a9eb14e9af8b6c726b, type: 2}
-  - {fileID: 11400000, guid: 6922bfef3de634546adf95a1d0a42e8a, type: 2}
   costOfLiving: 1.1
   favoriteDrugDemandMultiplier: 1.8
   priceModifiers:

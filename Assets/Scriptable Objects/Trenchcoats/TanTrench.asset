@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tan Trenchcoat
   Description: A basic trenchcoat
-  Cost: 0
+  Cost: 1000
   Amount: 1
   Type: 2
   Image: {fileID: 21300000, guid: 5739911b2d22d3c46836034b88dbd057, type: 3}

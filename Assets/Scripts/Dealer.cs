@@ -111,8 +111,16 @@ public class Dealer : ScriptableObject
 
         int sellPrice = Mathf.RoundToInt(modifiedBuy * dealerSellRatio);
 
-        // Festival: 2× sell on city's favorite drug
+        // City drug bonus: premium for selling specific drugs in their home market
         City sellCity = PlayerStats.Instance?.CurrentCity;
+        if (item.Type == ItemType.Drug && sellCity != null)
+        {
+            float drugBonus = sellCity.GetDrugSellBonus(item.Name);
+            if (drugBonus > 1f)
+                sellPrice = Mathf.RoundToInt(sellPrice * drugBonus);
+        }
+
+        // Festival: 2× sell on city's favorite drug
         if (item.Type == ItemType.Drug
             && CityEventManager.GetEventForCity(sellCity?.Name ?? "") == CityEventManager.CityEvent.Festival
             && sellCity?.FavoriteDrug != null

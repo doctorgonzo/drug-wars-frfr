@@ -23,13 +23,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 885c89175be9e4a9eb14e9af8b6c726b, type: 2}
   - {fileID: 11400000, guid: 524bb547459ee45729327204fc5b8cb5, type: 2}
   costOfLiving: 1
-  favoriteDrugDemandMultiplier: 1.25
+  favoriteDrugDemandMultiplier: 1.5
   priceModifiers:
   - itemType: 0
-    buyPriceMultiplier: 1.11
+    buyPriceMultiplier: 1.25
     sellPriceRatio: 0.353
     dailyVolatility: 0.462
     boomChance: 0.207
     boomMultiplier: 1.27
     bustChance: 0.044
     bustMultiplier: 0.22
+  drugBonuses:
+  - drugName: Weed
+    sellMultiplier: 2.0
+  - drugName: Marijuana
+    sellMultiplier: 2.0
+  - drugName: Ecstasy
+    sellMultiplier: 2.0
+  - drugName: Heroin
+    sellMultiplier: 1.7
+  - drugName: LSD
+    sellMultiplier: 1.3
+  - drugName: Shrooms
+    sellMultiplier: 1.3

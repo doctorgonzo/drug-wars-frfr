@@ -549,7 +549,7 @@ public class CopEncounterUIManager : MonoBehaviour
         grid.childAlignment  = TextAnchor.LowerCenter;
         grid.padding         = new RectOffset(8, 8, 8, 8);
 
-        string wName       = (PlayerStats.Instance.CurrentWeapon?.itemName ?? "").ToLower();
+        string wName       = (PlayerStats.Instance.CurrentWeapon?.name ?? "").ToLower();
         string specialLabel = wName.Contains("shotgun")                           ? "Buckshot"  :
                               wName.Contains("handgun") || wName.Contains("gun") ? "Aimed Shot" :
                                                                                     "Improvise";
@@ -622,7 +622,7 @@ public class CopEncounterUIManager : MonoBehaviour
     {
         int weaponDmg = PlayerStats.Instance.CurrentWeapon != null ? PlayerStats.Instance.CurrentWeapon.Damage : 5;
         int armor     = PlayerStats.Instance.CurrentTrench != null ? PlayerStats.Instance.CurrentTrench.ArmorValue : 0;
-        string wName  = (PlayerStats.Instance.CurrentWeapon?.itemName ?? "").ToLower();
+        string wName  = (PlayerStats.Instance.CurrentWeapon?.name ?? "").ToLower();
 
         switch (action)
         {
