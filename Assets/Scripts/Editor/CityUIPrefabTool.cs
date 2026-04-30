@@ -234,7 +234,13 @@ public static class CityUIPrefabTool
                     wired += Wire(tso, "itemNameText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerName"), log);
                     wired += Wire(tso, "itemDescriptionText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerDescription"), log);
                 }
-                wired += Wire(tso, "canvasRectTransform", infoCanvas.GetComponent<RectTransform>(), log);
+                // canvasRectTransform must be the TooltipCanvas (the canvas the tooltip renders on)
+                if (tooltipPanelRoot != null)
+                {
+                    var tooltipCanvas = FindDeepTransform(tooltipPanelRoot, "TooltipCanvas");
+                    if (tooltipCanvas != null)
+                        wired += Wire(tso, "canvasRectTransform", tooltipCanvas.GetComponent<RectTransform>(), log);
+                }
                 tso.ApplyModifiedProperties();
                 log.AppendLine("  TooltipUI: done");
             }
