@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,14 @@ public class DealerManager : MonoBehaviour
     void Start()
     {
         SpawnDealersForCurrentCity();
+        StartCoroutine(ResetInventoryScroll());
+    }
+
+    private IEnumerator ResetInventoryScroll()
+    {
+        yield return null;
+        var scrollRect = playerInventoryContent.GetComponentInParent<ScrollRect>();
+        if (scrollRect != null) scrollRect.verticalNormalizedPosition = 1f;
     }
 
     void SpawnDealersForCurrentCity()
