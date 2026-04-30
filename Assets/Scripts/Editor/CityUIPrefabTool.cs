@@ -7,27 +7,38 @@ using System.Linq;
 
 public static class CityUIPrefabTool
 {
-    private const string PrefabFolder = "Assets/Prefabs";
-    private const string InfoCanvasPrefabPath = PrefabFolder + "/CityUICanvas.prefab";
-    private const string FadeCanvasPrefabPath = PrefabFolder + "/FadeCanvas.prefab";
-    private const string ToastCanvasPrefabPath = PrefabFolder + "/ToastCanvas.prefab";
+    private const string PrefabFolder = "Assets/Prefabs/CityUI";
+
+    private static readonly string[] PrefabTargets =
+    {
+        "InfoCanvas",
+        "FadeCanvas",
+        "ToastManager",
+        "DealerManager",
+        "HeatManager",
+        "DebtManager",
+        "TravelManager",
+        "MarketNewsTicker",
+        "EquipmentShop",
+    };
 
     private static readonly string[] CitySceneNames =
         { "Milwaukee", "Baghdad", "Belgrade", "Miami", "Toronto", "Tokyo" };
 
+    private static string PrefabPath(string name) => $"{PrefabFolder}/{name}.prefab";
+
     // ───────────────────────────────────────────────
     // Step 1 — Save prefabs from the current scene
     // ───────────────────────────────────────────────
-    [MenuItem("Drug Wars/Prefabs/1. Save CityUI Prefabs From Current Scene")]
+    [MenuItem("Drug Wars/Prefabs/1. Save All CityUI Prefabs From Current Scene")]
     private static void SavePrefabs()
     {
         if (!Directory.Exists(PrefabFolder))
             Directory.CreateDirectory(PrefabFolder);
 
         int saved = 0;
-        saved += TrySavePrefab("InfoCanvas", InfoCanvasPrefabPath);
-        saved += TrySavePrefab("FadeCanvas", FadeCanvasPrefabPath);
-        saved += TrySavePrefab("ToastCanvas", ToastCanvasPrefabPath);
+        foreach (string target in PrefabTargets)
+            saved += TrySavePrefab(target);
 
         if (saved > 0)
         {
@@ -43,12 +54,12 @@ public static class CityUIPrefabTool
         {
             EditorUtility.DisplayDialog("CityUI Prefabs",
                 "No matching root GameObjects found in the current scene.\n" +
-                "Expected: InfoCanvas, FadeCanvas, ToastCanvas.",
+                $"Expected roots: {string.Join(", ", PrefabTargets)}",
                 "OK");
         }
     }
 
-    private static int TrySavePrefab(string rootName, string path)
+    private static int TrySavePrefab(string rootName)
     {
         var go = FindRootByName(rootName);
         if (go == null)
@@ -57,6 +68,7 @@ public static class CityUIPrefabTool
             return 0;
         }
 
+        string path = PrefabPath(rootName);
         bool isNew = !File.Exists(path);
         PrefabUtility.SaveAsPrefabAssetAndConnect(go, path, InteractionMode.UserAction);
         Debug.Log($"[CityUIPrefabTool] {(isNew ? "Created" : "Updated")} prefab: {path}");
@@ -70,9 +82,8 @@ public static class CityUIPrefabTool
     private static void ReplaceCurrentScene()
     {
         int replaced = 0;
-        replaced += TryReplace("InfoCanvas", InfoCanvasPrefabPath);
-        replaced += TryReplace("FadeCanvas", FadeCanvasPrefabPath);
-        replaced += TryReplace("ToastCanvas", ToastCanvasPrefabPath);
+        foreach (string target in PrefabTargets)
+            replaced += TryReplace(target);
 
         if (replaced > 0)
         {
@@ -80,8 +91,8 @@ public static class CityUIPrefabTool
             EditorUtility.DisplayDialog("CityUI Prefabs",
                 $"Replaced {replaced} object(s) with prefab instances.\n\n" +
                 "Check Inspector for any per-city overrides\n" +
-                "(EquipmentShop inventory, spawn point positions, etc.).\n\n" +
-                "Remember to save the scene (Ctrl+S / Cmd+S).",
+                "(EquipmentShop inventory, etc.).\n\n" +
+                "Remember to save the scene (Cmd+S).",
                 "OK");
         }
         else
@@ -93,8 +104,9 @@ public static class CityUIPrefabTool
         }
     }
 
-    private static int TryReplace(string rootName, string prefabPath)
+    private static int TryReplace(string rootName)
     {
+        string prefabPath = PrefabPath(rootName);
         if (!File.Exists(prefabPath))
         {
             Debug.LogWarning($"[CityUIPrefabTool] Prefab not found: {prefabPath} — run Step 1 first.");
@@ -127,13 +139,12 @@ public static class CityUIPrefabTool
         }
 
         int siblingIndex = existing.transform.GetSiblingIndex();
-        Undo.RegisterCompleteObjectUndo(existing, "Replace with CityUI prefab");
+        Undo.RegisterCompleteObjectUndo(existing, $"Replace {rootName} with prefab");
 
         var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
         instance.name = rootName;
         instance.transform.SetSiblingIndex(siblingIndex);
 
-        // Copy RectTransform positioning if both have one
         var oldRT = existing.GetComponent<RectTransform>();
         var newRT = instance.GetComponent<RectTransform>();
         if (oldRT != null && newRT != null)
@@ -146,7 +157,7 @@ public static class CityUIPrefabTool
         }
 
         Undo.DestroyObjectImmediate(existing);
-        Undo.RegisterCreatedObjectUndo(instance, "Replace with CityUI prefab");
+        Undo.RegisterCreatedObjectUndo(instance, $"Replace {rootName} with prefab");
 
         Debug.Log($"[CityUIPrefabTool] Replaced '{rootName}' with prefab instance from {prefabPath}.");
         return 1;
@@ -158,7 +169,6 @@ public static class CityUIPrefabTool
     [MenuItem("Drug Wars/Prefabs/3. Validate All City Scenes")]
     private static void ValidateAllScenes()
     {
-        var sceneGuids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets/Scenes" });
         var report = new System.Text.StringBuilder();
         int issues = 0;
 
@@ -169,43 +179,45 @@ public static class CityUIPrefabTool
             string scenePath = $"Assets/Scenes/{sceneName}.unity";
             if (!File.Exists(scenePath))
             {
-                report.AppendLine($"  ⚠ {sceneName}: scene file not found at {scenePath}");
+                report.AppendLine($"  \u26a0 {sceneName}: scene file not found");
                 issues++;
                 continue;
             }
 
+            report.AppendLine($"\n--- {sceneName} ---");
             var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
             var roots = scene.GetRootGameObjects();
 
-            issues += CheckPrefabLink(roots, "InfoCanvas", InfoCanvasPrefabPath, sceneName, report);
-            issues += CheckPrefabLink(roots, "FadeCanvas", FadeCanvasPrefabPath, sceneName, report);
-            issues += CheckPrefabLink(roots, "ToastCanvas", ToastCanvasPrefabPath, sceneName, report);
+            foreach (string target in PrefabTargets)
+                issues += CheckPrefabLink(roots, target, sceneName, report);
 
             if (scene.path != currentScenePath)
                 EditorSceneManager.CloseScene(scene, true);
         }
 
-        if (issues == 0)
-            report.Insert(0, "All city scenes are using the shared prefabs.\n\n");
-        else
-            report.Insert(0, $"Found {issues} issue(s):\n\n");
+        string header = issues == 0
+            ? "All city scenes are using shared prefabs.\n"
+            : $"Found {issues} issue(s):\n";
 
+        report.Insert(0, header);
         EditorUtility.DisplayDialog("CityUI Validation", report.ToString(), "OK");
     }
 
-    private static int CheckPrefabLink(GameObject[] roots, string name, string expectedPath,
+    private static int CheckPrefabLink(GameObject[] roots, string name,
         string sceneName, System.Text.StringBuilder report)
     {
+        string expectedPath = PrefabPath(name);
         var go = roots.FirstOrDefault(r => r.name == name);
+
         if (go == null)
         {
-            report.AppendLine($"  ⚠ {sceneName}: '{name}' not found");
+            report.AppendLine($"  \u26a0 '{name}' not found");
             return 1;
         }
 
         if (!PrefabUtility.IsPartOfPrefabInstance(go))
         {
-            report.AppendLine($"  ✗ {sceneName}: '{name}' is NOT a prefab instance — run Step 2");
+            report.AppendLine($"  \u2717 '{name}' is NOT a prefab instance — run Step 2");
             return 1;
         }
 
@@ -213,18 +225,14 @@ public static class CityUIPrefabTool
         string actualPath = AssetDatabase.GetAssetPath(source);
         if (actualPath != expectedPath)
         {
-            report.AppendLine($"  ✗ {sceneName}: '{name}' linked to {actualPath} instead of {expectedPath}");
+            report.AppendLine($"  \u2717 '{name}' linked to wrong prefab: {actualPath}");
             return 1;
         }
 
-        // Check for overrides (informational)
         var overrides = PrefabUtility.GetObjectOverrides(go, true);
-        var propOverrides = PrefabUtility.GetPropertyModifications(go);
-        int overrideCount = overrides.Count;
-        if (overrideCount > 0)
-            report.AppendLine($"  ✓ {sceneName}: '{name}' — prefab instance ({overrideCount} override(s))");
-        else
-            report.AppendLine($"  ✓ {sceneName}: '{name}' — prefab instance (no overrides)");
+        int count = overrides.Count;
+        string suffix = count > 0 ? $" ({count} override(s))" : "";
+        report.AppendLine($"  \u2713 '{name}'{suffix}");
 
         return 0;
     }
