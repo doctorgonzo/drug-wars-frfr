@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Heroin
   Description: The white whale. Massive profit, massive risk.
-  Cost: 1200
+  Cost: 800
   Amount: 6
   Type: 0
   Image: {fileID: -948606299100542230, guid: 6ed21d988ff8f4d3399b92de2cbdd1d1, type: 3}

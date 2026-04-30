@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ecstasy
   Description: Pure MDMA. The party drug of choice.
-  Cost: 250
+  Cost: 167
   Amount: 20
   Type: 0
   Image: {fileID: -6791042598038255558, guid: 32a1462e5557f4b42b61d7fb4feba23c, type: 3}
