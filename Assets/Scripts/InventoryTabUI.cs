@@ -80,6 +80,9 @@ public class InventoryTabUI : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent as RectTransform);
+
+        var scrollRect = contentParent.GetComponentInParent<ScrollRect>();
+        if (scrollRect != null) scrollRect.verticalNormalizedPosition = 1f;
     }
 
     // ─── Row builders ────────────────────────────────────────
