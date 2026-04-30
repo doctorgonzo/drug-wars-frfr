@@ -115,6 +115,7 @@ public class GameSessionManager : MonoBehaviour
             trenchcoatName      = ps.CurrentTrench != null ? ps.CurrentTrench.Name : "",
             weaponName          = ps.CurrentWeapon != null ? ps.CurrentWeapon.Name : "",
             inGameDay           = PriceService.InGameDay,
+            runSeed             = PriceService.RunSeed,
             debt                = ps.Debt
         };
 
@@ -175,6 +176,7 @@ public class GameSessionManager : MonoBehaviour
         // Day — restored after scene load so GameTime.Awake() doesn't overwrite it
         _pendingLoadDay = data.inGameDay;
         PriceService.InGameDay = data.inGameDay;
+        PriceService.RunSeed = data.runSeed;
         SceneManager.sceneLoaded += RestoreDayAfterSceneLoad;
 
         // Initialize all dealers first so we have a complete item template map for lookups

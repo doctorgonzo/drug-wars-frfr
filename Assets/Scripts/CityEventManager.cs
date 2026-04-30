@@ -24,7 +24,7 @@ public static class CityEventManager
 
     public static CityEvent GetEventForCity(string cityName)
     {
-        float u = Roll($"cityevent:{PriceService.InGameDay}:{cityName}");
+        float u = Roll($"cityevent:{PriceService.RunSeed}:{PriceService.InGameDay}:{cityName}");
         if (u < LockdownChance)                                   return CityEvent.Lockdown;
         if (u < LockdownChance + FestivalChance)                  return CityEvent.Festival;
         if (u < LockdownChance + FestivalChance + ShortageChance) return CityEvent.Shortage;

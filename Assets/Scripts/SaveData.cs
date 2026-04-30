@@ -26,6 +26,7 @@ public class SaveData
 
     // World state
     public int inGameDay;
+    public int runSeed;
     public List<SavedDealerState> dealerStates = new List<SavedDealerState>();
 }
 

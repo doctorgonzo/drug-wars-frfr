@@ -181,6 +181,7 @@ public class CharCreationUI : MonoBehaviour
         PlayerStats.Instance.CurrentCity = startingCity;
         PlayerStats.Instance.CurrentWeapon = weapons[curWeaponIndex];
         PlayerStats.Instance.InitializeDebt();
+        PriceService.RunSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 
         if (FadeController.Instance != null)
             FadeController.Instance.FadeOut(1f);

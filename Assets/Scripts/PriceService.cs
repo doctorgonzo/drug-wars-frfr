@@ -3,6 +3,7 @@
 public static class PriceService
 {
     public static int InGameDay = 1;
+    public static int RunSeed = 0;
 
     // 🔹 Plug-in provider for "what day is it?" Defaults to real-world if not set.
     public static Func<int> DayProvider = () =>
@@ -28,7 +29,7 @@ public static class PriceService
     public static float DailyVolatility(string cityName, string itemName, float volatility)
     {
         if (volatility <= 0f) return 0f;
-        string dayKey = $"day:{InGameDay}";           // 🔁 uses in-game day now
+        string dayKey = $"run:{RunSeed}|day:{InGameDay}";
         float u = StableRandom01($"{dayKey}|{cityName}|{itemName}|vol");
         return (u * 2f - 1f) * volatility;
     }
@@ -38,7 +39,7 @@ public static class PriceService
     // Deterministic daily event per (city, itemType) using *in-game day*
     public static MarketEvent DailyEvent(string cityName, ItemType type, float boomChance, float bustChance)
     {
-        string dayKey = $"day:{InGameDay}";           // 🔁 uses in-game day now
+        string dayKey = $"run:{RunSeed}|day:{InGameDay}";
         float u = StableRandom01($"{dayKey}|{cityName}|{type}|evt");
 
         if (u < boomChance) return MarketEvent.Boom;
