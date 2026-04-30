@@ -182,6 +182,7 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 ### Balance Tuning
 - **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
 - **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
+- **High-tier drug cost cuts:** Heroin base $1,200 → $800; Ecstasy base $250 → $167 (~33% reduction each). The favorite-drug-demand fix amplified high-tier drug returns; trimming the base costs keeps the late-game economy from trivializing the debt. Crack left at $100 — already nerfed and below Ecstasy's pre-cut value, so leave it alone. Files: `Assets/Scriptable Objects/Drugs/Heroin.asset`, `Ecstasy.asset`
 
 ### Decision-Density Pass
 Four interlocking changes to make every turn matter more.
@@ -215,7 +216,7 @@ Four interlocking changes to make every turn matter more.
 
   | Drug | UnitsPerSlot |
   |---|---|
-  | Marijuana | 50 |
+  | Weed | 50 |
   | Shrooms | 40 |
   | LSD | 30 |
   | Ecstasy | 20 |
@@ -270,6 +271,43 @@ Four interlocking changes to make every turn matter more.
 - **Override path:** if you wire any scene UI manually (e.g. drop a custom RunSummaryUI in the scene with `statsBlockText` set), the auto-spawn skips and your wiring is used instead.
 - **Old `HighScore_NetWorth` PlayerPrefs key** — abandoned (not deleted). Safe to clear via `Leaderboard.Clear()` if needed; the game no longer reads or writes the old key.
 
+### Endgame UI Layout Fixes
+Two bugs caught after first playtest of the auto-spawned RunSummaryUI:
+- **Stats block was invisible.** The main `VerticalLayoutGroup` had `childControlHeight = false`, so it ignored each row's `LayoutElement.preferredHeight` and collapsed every child to Unity's default 100px sizeDelta. Headline and subhead happened to fit; the stats/leaderboard `Content` row was clipped to nearly nothing. Set to `true` (and the inner LB column's VLG too) so all rows render at their requested heights.
+- **Wrong main-menu scene name.** `mainMenuSceneName` was a `[SerializeField]` defaulting to `"Start"` — but the actual scene is `"Startup"`. Existing scene serializations could pin it to a stale value. Replaced both `mainMenuSceneName` and `playAgainSceneName` with `private const` (`"Startup"` and `"CharCreation"`) so Inspector drift can't override.
+- **Belt-and-suspenders:** Auto-built Canvas now spawns at scene root (not under `transform`) so an inactive parent can't hide it, and `sortingOrder` bumped to 1000 so any pre-existing scene UI doesn't paint over it. `EnsureUIBuilt` always runs (gated only against double-build), so a partially-wired legacy `RunSummaryUI` in the scene still gets the full layout.
+
+File: `RunSummaryUI.cs`
+
+### Drug SO Cleanup — Pot/Marijuana → Weed
+- **Two stale dealer-inventory drug SOs** (`Assets/Scriptable Objects/Dealers/DarylInventory/Pot.asset` and `TJInventory/Pot.asset`) had `m_Name = Pot` but `Name = Marijuana` — so dealer panels showed "Marijuana" while the file on disk was "Pot". Both fields normalized to `Weed`. Files renamed to `Weed.asset` + matching `.meta`. The `.meta` GUIDs are preserved through `git mv`, so dealer `Inventory[]` references hold.
+- **City `drugBonuses` entries** — Madison, Belgrade, and Toronto each had both a `Weed` AND a `Marijuana`/`Pot` entry with matching multipliers. Dropped the legacy duplicates.
+- **`City.cs` tooltip** — example name updated `'Marijuana'` → `'Weed'`.
+
+### JuiceFX — Visual Game-Feel Pass
+- **`JuiceFX.cs`** — auto-spawned manager (`[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`) that builds its own `ScreenSpaceOverlay` Canvas at `sortingOrder = 5000` and sits there providing visual flourishes to the rest of the game. No Editor wiring; all assets are procedural. **New file:** `JuiceFX.cs`
+- **Procedural coin sprite** — `MakeCircleSprite()` generates a soft-edged circle into a `Texture2D` once at boot, then reused for all coin particles. No image asset needed.
+- **Public API:**
+  - `CoinBurstAtUI(RectTransform anchor, int count, Color tint)` / `CoinBurstAtScreen(Vector2 screenPos, ...)` — spawns pooled `Image`-based coin particles with random velocity + gravity + fade.
+  - `FlashScreen(Color, duration, peakAlpha)` — full-screen Image fade in/out.
+  - `NumberPunch(TMP_Text, scaleAmount, duration)` — quick scale-up-and-settle on a label.
+  - `TweenIntegerText(TMP_Text, from, to, prefix, suffix, duration)` — eased count-up/down between integers (ease-out cubic).
+- **Wired sites:**
+  - `CityUIHandler` wallet, net worth, debt all tween + punch when their values change. Each tracks `_lastXxxDisplayed` and skips the tween on first call (so initial seed isn't a tween from 0).
+  - `DealerClicks` Sell-All + per-item sell pop coins from the wallet display anchor (`CityUIHandler.WalletRect`). Coin count scales with the take. Gold tint on profit, red on loss.
+  - `HeatManager.AddHeat` punches the heat label and red-flashes the screen on big jumps (alpha scales with `heatAmount / maxHeat`).
+
+### ResetRunStats — Full New-Run Wipe
+- **Bug:** PlayerStats is `DontDestroyOnLoad`, so the same instance carries from run to run. `ResetRunStats` originally only reset the per-run stat counters — wallet/inventory/heat/equipment/day all leaked from the previous run. A player ending a winning run with $50k would walk into "Play Again" still holding $50k.
+- **Fix:** `ResetRunStats()` now does a full new-run wipe: `PlayerWallet → 10,000` (`DefaultStartingWallet` const), `inventory.Clear()` + `NotifyInventoryChanged()`, `CurrentHeat = 0`, `CurrentTrench`/`CurrentWeapon` nulled, `LastSeenBuyPrice` cleared, `Debt = 0` (then re-set by `InitializeDebt()` immediately after).
+- **`GameTime.ResetToStart()`** — new method, fires `SetTime(startDay, startHour, ...)` with `invokeEvents: false` so listeners don't react to "day went from 22 back to 1." Called from `ResetRunStats`.
+- **`GameSessionManager.ResetForNewRun()`** — calls `InitializeAllDealers()` to rebuild dealer runtime inventories from their templates. Called from `ResetRunStats` so leftover stock and stale restock timers from the last run don't carry over.
+- **`PriceService.InGameDay = 1`** and **`DailyTipService.InvalidateCache()`** also reset so daily price hashes and the cached tip start fresh.
+- **`CharCreationUI.Start`** now calls `ResetRunStats()` *before* reading `PlayerWallet` for the gear-affordability filter. Otherwise leftover cash leaked into "can I afford this trenchcoat?" and the player ended a "new" run still sitting on the previous wallet.
+
+### Design Backlog
+`balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
+
 ---
 
 ## Known Issues / To Do
@@ -288,13 +326,15 @@ Four interlocking changes to make every turn matter more.
 ---
 
 ## Architecture Notes
-- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs`, `.Identity.cs`, `.Equipment.cs`, `.Economy.cs`, `.Progression.cs`
+- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs` (Awake + singleton), `.Identity.cs` (name, sprite), `.Equipment.cs` (trenchcoat, weapon), `.Economy.cs` (wallet, inventory, slot math, slot helpers), `.Progression.cs` (heat, debt, day-limit, cop counters), `.RunStats.cs` (per-run counters, click tracking, leaderboard snapshot, **`ResetRunStats()` does the full new-run wipe**), `.CityHeat.cs` (per-city heat memory, decay, arrival application).
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
 - **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime. Restock state (`dealerLastRestockDay`) also lives in `GameSessionManager`, keyed by SO instance ID, persisted via `SavedDealerState.lastRestockDay`.
 - **Price system:**
-  - **Buy:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × daily volatility × market event × visit multiplier (±20%) × city event (Lockdown/Shortage on drugs).
-  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug).
+  - **Buy:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × daily volatility × market event × visit multiplier (±20%) × city event (Lockdown/Shortage on drugs) × **daily tip `DealBuy` mult** (when today's tip points at this city + drug).
+  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug) × **daily tip `HotSell` mult** (when today's tip points here).
   - **Note:** `favoriteDrugDemandMultiplier` lives on the SELL side. It used to be on the buy side, which inflated buy prices in the favorite-drug city while sellRatio cancelled out the boost on sell — making "2.0x demand" cities pay-as-usual to sell into and 2× expensive to source from. Moved to sell so the UI label ("2.0x demand") translates to a real 2× sell-price boost.
+- **Daily tip events:** `DailyTipService.GetTodaysTip()` deterministically rolls one tip per `(RunSeed, InGameDay)` (65% chance of any tip). `DealBuy` discounts a target city's buy price for a target drug; `HotSell` premiums a target city's sell price. `MarketNewsTicker` shows the headline. Cache invalidated on `ResetRunStats`.
+- **City heat memory:** `PlayerStats.CityHeat.cs` tracks per-city heat in a `Dictionary<string, float>`. Selling bumps it via `BumpCityHeat(cityName, heatAmount)` (called from `DealerClicks` SellAll and per-item sell). `GameSessionManager.HandleDayChanged` decays all entries by 8/day. `TravelManager` calls `ApplyCityHeatOnArrival` on travel — boosts player heat by `cityHeat × 0.35`. Persisted via `RunStatsSnapshot.cityHeatNames/cityHeatValues`.
 - **Save system:** JSON serialized via `JsonUtility`, stored in `PlayerPrefs["DrugWarsSave"]`. Equipment resolved by name from `GameSessionManager.allTrenchcoats/allWeapons`. Item images reconstructed from SO registry on load.
 - **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown. Cop encounters use `CopEncounterSeed` built from current `PlayerStats` state.
 - **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices. `GameSessionManager` also subscribes for dealer restock checks.
@@ -302,3 +342,10 @@ Four interlocking changes to make every turn matter more.
 - **GameTime.AssignTimeText():** `GameTime` is `DontDestroyOnLoad`, so the Inspector `timeText` reference can't be wired per-scene. The `AssignTimeText()` method (called from `Start` and `OnSceneLoaded`) finds the scene's `TimeText` GameObject via `Resources.FindObjectsOfTypeAll<TMP_Text>()` filtered by `SceneManager.GetActiveScene()`. Necessary because `GameObject.Find` doesn't return objects whose ancestors are inactive (e.g., when `Content_Stats` starts collapsed).
 - **FadeController** must exist in every scene including CharCreation, Intro, GameOver, YouWin
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
+- **Auto-spawned, code-built UI managers** (no Editor wiring required, all bootstrapped via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]` and persisted with `DontDestroyOnLoad`):
+  - **`CheatMenu`** — Esc toggles a debug overlay with `+ $10k`, `Drop heat`, `Quick Start`. Sorting order 32000.
+  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances.
+  - **`RunSummaryUI`** — auto-spawns on YouWin/GameOver scene load and builds the full endgame screen + leaderboard from code if no hand-wired instance is in the scene. `isVictory` derived from active scene name.
+  - All three live independently — they don't reference each other and can be removed individually with no cascade.
+- **Slot capacity** is two-dimensional: `Drug.UnitsPerSlot` is the per-drug bulk; `Trenchcoat.RiskTierCapacityMultipliers[3]` scales it by the drug's `RiskTier`. Effective per-slot capacity = `UnitsPerSlot × Trenchcoat.GetCapacityMultiplier(riskTier)`. `PlayerStats.GetEffectiveUnitsPerSlot(item)` is the single source of truth for slot math.
+- **`ResetRunStats()` is the canonical "new run" entry point.** Called from `CharCreationUI.Start` (early, before the gear-affordability filter), `CharCreationUI.HandleContinue` (idempotent), and `CheatMenu.QuickStart`. Wipes wallet → `$10,000`, inventory, heat, equipment, debt, `LastSeenBuyPrice`, all per-run stat counters, all city heat. Also resets `GameTime` to start, `PriceService.InGameDay = 1`, dealer runtime inventories (via `GameSessionManager.ResetForNewRun()`), and the `DailyTipService` cache.
