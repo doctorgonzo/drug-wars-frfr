@@ -31,6 +31,9 @@ public class InventoryTabUI : MonoBehaviour
             PlayerStats.Instance.OnInventoryChanged += Refresh;
 
         Refresh();
+
+        if (_scrollCoroutine != null) StopCoroutine(_scrollCoroutine);
+        _scrollCoroutine = StartCoroutine(ScrollToTop());
     }
 
     private void OnDestroy()
@@ -90,8 +93,15 @@ public class InventoryTabUI : MonoBehaviour
 
     private IEnumerator ScrollToTop()
     {
-        yield return new WaitForEndOfFrame();
-        if (_scrollRect != null) _scrollRect.verticalNormalizedPosition = 1f;
+        if (_scrollRect == null && contentParent != null)
+            _scrollRect = contentParent.GetComponentInParent<ScrollRect>();
+        yield return null;
+        yield return null;
+        if (_scrollRect != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            _scrollRect.verticalNormalizedPosition = 1f;
+        }
     }
 
     // ─── Row builders ────────────────────────────────────────
