@@ -215,7 +215,15 @@ public class GameTime : MonoBehaviour
 
     private void AssignTimeText()
     {
-        timeText = GameObject.Find("TimeText")?.GetComponent<TMP_Text>();
+        timeText = null;
+        var activeScene = SceneManager.GetActiveScene();
+        var all = Resources.FindObjectsOfTypeAll<TMP_Text>();
+        foreach (var t in all)
+        {
+            if (t == null) continue;
+            if (t.gameObject.scene != activeScene) continue; // skip prefab assets and other scenes
+            if (t.gameObject.name == "TimeText") { timeText = t; break; }
+        }
         if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
     }
 
