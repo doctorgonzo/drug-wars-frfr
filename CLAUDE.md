@@ -113,6 +113,35 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Haggle capped:** `_haggleCount` tracked against `maxHaggles` (default 3, Inspector-configurable). On the final haggle the button disables and dialogue says "Last chance." If exceeded, cop immediately escalates to search or combat. File: `CopEncounterUIManager.cs`
 - **Run cooldown coroutine stopped in `EndEncounter`:** Prevents the coroutine re-enabling the Run button during the post-encounter fade window. File: `CopEncounterUIManager.cs`
 
+### CityUI Prefab System
+- **Editor tooling:** `Assets/Scripts/Editor/CityUIPrefabTool.cs` — menu items under **Drug Wars → Prefabs** to create, replace, wire, and validate shared UI prefabs across all 6 city scenes. **New file.**
+- **Prefab targets (13 root objects):** InfoCanvas, FadeCanvas, ToastManager, DealerManager, HeatManager, DebtManager, TravelManager, MarketNewsTicker, EquipmentShop, TravelUIParent, CityUIHandler, DealerContainer, CityPreviewCard
+- **Prefab location:** `Assets/Prefabs/CityUI/` — one `.prefab` per root object
+- **Workflow:**
+  1. **Step 1** — Open Milwaukee (source of truth), run "Save All CityUI Prefabs" to create/update prefabs
+  2. **Step 2** — Open each other city scene, run "Replace With Prefab Instances"
+  3. **Step 4** — Run "Auto-Wire Cross References" in each scene to reconnect cross-prefab SerializeField references
+  4. **Step 5** — Run "Validate All City Scenes" to confirm all scenes use shared prefabs
+  5. Save each scene after Steps 2–4 (Cmd+S)
+- **Auto-wire handles all cross-prefab references:**
+  - CityUIHandler → all InfoCanvas text/image fields + TravelManager
+  - TooltipUI (on CityUIHandler GO) → TooltipCanvas RectTransform, inner TooltipPanel, DealerName/DealerDescription texts
+  - HeatManager → HeatSlider, fill image, heat/status/risk texts (all in InfoCanvas/WalletPanel)
+  - DebtManager → DebtText, DayCounterText, pay/borrow buttons and inputs (all in InfoCanvas/Content_Debt)
+  - DealerManager → CityUIHandler, HeatManager, PlayerInventory content, DealerInfoPanel, StatusMessageText, asset prefabs (DealerItem, DealerPrefab), spawn points from MapCanvas
+  - EquipmentShop → ShopPanel, OpenShopButton, CloseButton, ItemListContent, FeedbackText, CityUIHandler, ShopItemPrefab asset
+  - TravelManager → TravelUIParent, Dropdown, Button, FareText, CityPreviewCard (child of TooltipCanvas) + preview texts
+- **Per-city overrides** (set as prefab overrides in Inspector, not touched by prefab edits):
+  - EquipmentShop: `trenchcoatsForSale`, `weaponsForSale` arrays
+  - DealerSpawn point positions in MapCanvas (scene-specific layout)
+  - TravelManager: `allCities` list (if cities differ)
+- **Scene hierarchy notes:**
+  - Dealer spawn points (`DealerSpawn1/2/3`) are children of **MapCanvas**, not DealerContainer. DealerContainer is an empty root.
+  - CityPreviewCard is a child of **TooltipCanvas** (inside TooltipPanel prefab), not a root object
+  - TooltipUI component lives on the **CityUIHandler** root GameObject (alongside the CityUIHandler script)
+  - TooltipPanel prefab has two objects named "TooltipPanel" — root (Layer 0, just a Transform) and inner panel (Layer 5, child of TooltipCanvas, the actual UI panel that shows/hides)
+  - CityUIHandler is a standalone root object with no children — all its UI references point to InfoCanvas children
+
 ### Bug Fixes
 - **Dealer panel drug bleed-through:** Fixed pool clearing to wipe ALL children from `dealerInfoPanel`, not just the current dealer's tracked items. File: `DealerClicks.cs`
 - **Equipment shop NRE on direct scene load:** Added null guards to `isOwned` checks and buy methods. File: `EquipmentShop.cs`
@@ -151,3 +180,4 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices
 - **GameTime.cs** has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
 - **FadeController** must exist in every scene including CharCreation, Intro, GameOver, YouWin
+- **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
