@@ -195,6 +195,9 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             var capturedItem = playerItem;
             playerItemUI.OnMinusClicked.AddListener((_) => OnPlayerSellClicked(capturedItem, playerItemUI));
         }
+
+        var scrollRect = playerInventoryContent.GetComponentInParent<ScrollRect>();
+        if (scrollRect != null) scrollRect.verticalNormalizedPosition = 1f;
     }
 
     private void EnsureSellAllButton()
