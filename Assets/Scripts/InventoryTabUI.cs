@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -80,7 +81,12 @@ public class InventoryTabUI : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent as RectTransform);
+        StartCoroutine(ScrollToTop());
+    }
 
+    private IEnumerator ScrollToTop()
+    {
+        yield return null;
         var scrollRect = contentParent.GetComponentInParent<ScrollRect>();
         if (scrollRect != null) scrollRect.verticalNormalizedPosition = 1f;
     }
