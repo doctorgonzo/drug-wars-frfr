@@ -199,12 +199,8 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **`RunSummaryUI` rewritten** — single rich-text `statsBlockText` shows all stats grouped by section (TIMELINE / MONEY / DRUGS / HEAT & COPS / MISC) with color-coded values. Old per-stat `TMP_Text` fields kept as optional fallbacks. New fields: `statsBlockText`, `leaderboardUI`, `leaderboardRankText`, `mainMenuButton`, `playAgainSceneName`. Leaderboard entry submitted automatically; rank shown if it cracks the top 10.
 - **`LeaderboardUI`** — two render modes: (a) `singleBlockText` mode renders the whole table into one TMP_Text using `<mspace>` for column alignment; (b) row-prefab mode instantiates `LeaderboardRowUI` instances under `rowContainer`. Highlights the just-inserted row. **New files:** `LeaderboardUI.cs`, `LeaderboardRowUI.cs`
 - **Save/load** — `RunStatsSnapshot` added to `SaveData`. `GameSessionManager.SaveGame/LoadGame` capture/restore via `PlayerStats.CaptureRunStatsSnapshot/RestoreRunStatsSnapshot`. Old saves without runStats default-construct a snapshot of zeros.
-- **Inspector wiring required (per scene — GameOver and YouWin):**
-  1. **`RunSummaryUI`** root GameObject — set `isVictory` (false on GameOver, true on YouWin)
-  2. Wire `statsBlockText` → big TMP_Text inside a ScrollRect (recommend `enableWordWrapping=true`, autosize off so the rich-text spacing stays consistent). Use a monospace TMP font asset for `singleBlockText` of LeaderboardUI.
-  3. Add a GameObject with `LeaderboardUI` component. Wire its `singleBlockText` → another TMP_Text. Drag this GameObject into `RunSummaryUI.leaderboardUI`.
-  4. Optional: `leaderboardRankText` → small TMP_Text shown when run made the board.
-  5. Optional: `playAgainButton` → defaults to loading "CharCreation"; `mainMenuButton` → "Start".
+- **No Inspector wiring required.** `RunSummaryUI` auto-spawns on YouWin/GameOver scene load via `[RuntimeInitializeOnLoadMethod]` + `SceneManager.sceneLoaded` callback, then auto-builds the entire UI from code in `EnsureUIBuilt()` — Canvas, headline, two-column stats/leaderboard, and Play Again / Main Menu buttons. `isVictory` is derived from the active scene name (`"YouWin"` → true, `"GameOver"` → false), so no per-scene checkbox toggling.
+- **Override path:** if you wire any scene UI manually (e.g. drop a custom RunSummaryUI in the scene with `statsBlockText` set), the auto-spawn skips and your wiring is used instead.
 - **Old `HighScore_NetWorth` PlayerPrefs key** — abandoned (not deleted). Safe to clear via `Leaderboard.Clear()` if needed; the game no longer reads or writes the old key.
 
 ---

@@ -34,9 +34,20 @@ public class LeaderboardUI : MonoBehaviour
     [SerializeField] private bool boldHighlight = true;
 
     private readonly List<LeaderboardRowUI> _spawnedRows = new List<LeaderboardRowUI>();
+    private bool _externallyConfigured;
+
+    // Lets RunSummaryUI hand us a TMP_Text it just built in code, before Start() runs.
+    public void SetSingleBlockText(TMP_Text text)
+    {
+        singleBlockText = text;
+        _externallyConfigured = true;
+    }
 
     private void Start()
     {
+        // If a code-driven owner (e.g. RunSummaryUI auto-build) wired us up and called Refresh
+        // already, don't overwrite the highlighted state with a plain refresh.
+        if (_externallyConfigured) return;
         if (headerLabel != null) headerLabel.text = headerText;
         Refresh(highlightEntry: null);
     }
