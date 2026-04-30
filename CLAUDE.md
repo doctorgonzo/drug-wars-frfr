@@ -164,6 +164,24 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Stale RuntimeInventory YAML:** Removed orphaned serialized data from all dealer `.asset` files.
 - **Dealer panel not switching:** Added `static DealerClicks activeDealer` — only the exact instance that opened the panel can close it. File: `DealerClicks.cs`
 - **FadeController rewritten:** No longer `DontDestroyOnLoad`. Each scene owns its own instance, starts black, auto-fades in on `Start()`. Every scene needs a `FadeController` wired up. File: `FadeController.cs`
+- **TimeText not updating in non-Milwaukee cities:** `GameTime.AssignTimeText()` used `GameObject.Find("TimeText")` which returns null when the parent (`Content_Stats` inside `TabbedPanel`) starts inactive. Replaced with `Resources.FindObjectsOfTypeAll<TMP_Text>()` filtered by `SceneManager.GetActiveScene()`. Also writes the current time string immediately on assignment so there's no 1-frame stale gap after travel. File: `GameTime.cs`
+
+### Dealer Restock System
+- **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 3, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
+- **GameSessionManager hook:** Subscribes to `GameTime.DayChanged` lazily (via `SceneManager.sceneLoaded` since `GameTime.Instance` may not exist when `GameSessionManager.Awake()` runs). Tracks per-dealer last-restock day in `Dictionary<int, int> dealerLastRestockDay` keyed by SO instance ID.
+- **Save/load support:** `SavedDealerState.lastRestockDay` persists the timer across saves. Old saves without the field default to 0 (graceful fallback — dealer restocks on next day-change after load).
+
+### Bribe System Overhaul (Round 2)
+- **Header text always reflects current ask:** `bribeAskText` now shows `"<b>{cop} demands ${X}</b>"` and is refreshed on every state change via `RefreshBribePanelUI()`. Previously stuck on the initial demand line during counter-offers (the "silent rejection" bug).
+- **Live slider/input sync:** Added `bribeInput.onValueChanged` listener so the slider tracks typing in real time. Pay button reads from `bribeInput.text` first via `GetCurrentBribeOffer()` — typed values can no longer be silently lost when clicking Pay without blurring the field.
+- **Patience cap on failed pays:** `maxFailedPayAttempts` (default 4, Inspector). After that many rejections the cop escalates to search/combat. Previously only haggle clicks counted.
+- **Avoid repeated dialogue:** `RandomLine` takes an optional `avoidLine` param; `PickBribeLine()` tracks `_lastBribeLine` so back-to-back rejections show different text.
+- **Overpay always accepts:** If `offer >= askAmount`, accept chance is forced ≥0.9 and the ask never increases on rejection. Fixes nonsense "I need a little more" line after overpaying.
+- **Slider capped at player cash:** No more phantom slider movement past payable amounts. File: `CopEncounterUIManager.cs`
+
+### Balance Tuning
+- **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
+- **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
 
 ---
 
@@ -185,12 +203,12 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 ## Architecture Notes
 - **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs`, `.Identity.cs`, `.Equipment.cs`, `.Economy.cs`, `.Progression.cs`
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
-- **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime
+- **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime. Restock state (`dealerLastRestockDay`) also lives in `GameSessionManager`, keyed by SO instance ID, persisted via `SavedDealerState.lastRestockDay`.
 - **Price system:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × favorite drug mult × daily volatility × market event × visit multiplier (±20%)
 - **Save system:** JSON serialized via `JsonUtility`, stored in `PlayerPrefs["DrugWarsSave"]`. Equipment resolved by name from `GameSessionManager.allTrenchcoats/allWeapons`. Item images reconstructed from SO registry on load.
 - **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown. Cop encounters use `CopEncounterSeed` built from current `PlayerStats` state.
-- **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices
+- **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices. `GameSessionManager` also subscribes for dealer restock checks.
 - **PriceService.RunSeed** randomizes all market events per playthrough. Without it, same day+city+item always produces same boom/bust/volatility. Set at char creation, persisted in save data.
-- **GameTime.cs** has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
+- **GameTime.AssignTimeText():** `GameTime` is `DontDestroyOnLoad`, so the Inspector `timeText` reference can't be wired per-scene. The `AssignTimeText()` method (called from `Start` and `OnSceneLoaded`) finds the scene's `TimeText` GameObject via `Resources.FindObjectsOfTypeAll<TMP_Text>()` filtered by `SceneManager.GetActiveScene()`. Necessary because `GameObject.Find` doesn't return objects whose ancestors are inactive (e.g., when `Content_Stats` starts collapsed).
 - **FadeController** must exist in every scene including CharCreation, Intro, GameOver, YouWin
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
