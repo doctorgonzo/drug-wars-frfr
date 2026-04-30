@@ -46,5 +46,6 @@ public class SavedItemInstance
 public class SavedDealerState
 {
     public string dealerName;
+    public int lastRestockDay;
     public List<SavedItemInstance> inventory = new List<SavedItemInstance>();
 }
