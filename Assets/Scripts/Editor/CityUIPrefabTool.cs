@@ -188,7 +188,9 @@ public static class CityUIPrefabTool
         var cityUIGO = FindRootByName("CityUIHandler");
         var dealerContainer = FindRootByName("DealerContainer");
         var mapCanvas = FindRootByName("MapCanvas");
-        var previewCard = FindRootByName("CityPreviewCard");
+        // CityPreviewCard is a child of TooltipCanvas (inside TooltipPanel prefab), not a root
+        var tooltipRoot = FindRootByName("TooltipPanel");
+        var previewCard = tooltipRoot != null ? FindDeepGO(tooltipRoot, "CityPreviewCard") : null;
 
         // ── CityUIHandler ──
         if (cityUIGO != null && infoCanvas != null)
