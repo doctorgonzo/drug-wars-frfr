@@ -35,8 +35,6 @@ MonoBehaviour:
   drugBonuses:
   - drugName: Weed
     sellMultiplier: 1.7
-  - drugName: Pot
-    sellMultiplier: 1.7
   - drugName: LSD
     sellMultiplier: 1.5
   - drugName: Shrooms

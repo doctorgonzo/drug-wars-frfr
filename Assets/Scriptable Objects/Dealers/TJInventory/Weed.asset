@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a7446fe489ac3d438639dacd21bd11e, type: 3}
-  m_Name: Pot
-  m_EditorClassIdentifier: 
-  Name: Marijuana
+  m_Name: Weed
+  m_EditorClassIdentifier:
+  Name: Weed
   Description: It's weed, yo...
   Cost: 50
   Amount: 100

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class CityDrugBonus
 {
-    [Tooltip("Must match the Item SO's Name field exactly (e.g. 'LSD', 'Crack', 'Marijuana').")]
+    [Tooltip("Must match the Item SO's Name field exactly (e.g. 'LSD', 'Crack', 'Weed').")]
     public string drugName;
     [Range(1f, 3f)]
     [Tooltip("Sell price multiplier applied when the player sells this drug here.")]

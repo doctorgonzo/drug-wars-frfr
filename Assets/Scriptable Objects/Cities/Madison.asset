@@ -39,7 +39,5 @@ MonoBehaviour:
     sellMultiplier: 1.5
   - drugName: Weed
     sellMultiplier: 1.4
-  - drugName: Marijuana
-    sellMultiplier: 1.4
   - drugName: Ecstasy
     sellMultiplier: 1.3

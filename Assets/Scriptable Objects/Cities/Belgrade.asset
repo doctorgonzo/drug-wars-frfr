@@ -36,8 +36,6 @@ MonoBehaviour:
   drugBonuses:
   - drugName: Weed
     sellMultiplier: 2.0
-  - drugName: Marijuana
-    sellMultiplier: 2.0
   - drugName: Ecstasy
     sellMultiplier: 2.0
   - drugName: Heroin
