@@ -196,15 +196,25 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
   | Crack | 15 |
   | Heroin | 10 |
 
-- **Resulting capacity** (slots × UnitsPerSlot for max-stack-of-one-drug):
+- **Per-Trenchcoat per-RiskTier multiplier** (Trenchcoat.cs `RiskTierCapacityMultipliers[3]`, indexed 0=Safe, 1=Medium, 2=Hard) — cheap coats penalize risky drugs harder, premium coats give a small bonus, so gear progression is meaningful for Crack/Heroin/Ecstasy specifically:
 
-  | Trenchcoat | Slots | Weed cap | Heroin cap |
+  | Trenchcoat | Safe | Medium | Hard |
   |---|---|---|---|
-  | Tan | 3 | 150 | 30 |
-  | Olive | 5 | 250 | 50 |
-  | Grey | 8 | 400 | 80 |
-  | Black | 12 | 600 | 120 |
-  | Leather | 18 | 900 | 180 |
+  | Tan | 1.0 | 0.7 | 0.5 |
+  | Olive | 1.0 | 0.8 | 0.65 |
+  | Grey | 1.0 | 1.0 | 1.0 |
+  | Black | 1.0 | 1.1 | 1.15 |
+  | Leather | 1.0 | 1.2 | 1.3 |
+
+- **Resulting capacity** (slots × effective UnitsPerSlot, where effective = base × trenchcoat multiplier):
+
+  | Trenchcoat | Slots | Weed cap | Ecstasy cap | Heroin cap |
+  |---|---|---|---|---|
+  | Tan | 3 | 150 | 42 | 15 |
+  | Olive | 5 | 250 | 80 | 35 |
+  | Grey | 8 | 400 | 160 | 80 |
+  | Black | 12 | 600 | 264 | 144 |
+  | Leather | 18 | 900 | 432 | 234 |
 
 - **`PlayerStats.Economy.cs` API:**
   - `GetUsedSlots()` — sums `ceil(amount / UnitsPerSlot)` per drug stack.

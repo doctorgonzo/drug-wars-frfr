@@ -20,3 +20,7 @@ MonoBehaviour:
   Image: {fileID: 21300000, guid: cc0d785c64d22b84aa97847a64ef1058, type: 3}
   StorageSlots: 8
   ArmorValue: 7
+  RiskTierCapacityMultipliers:
+  - 1
+  - 1
+  - 1

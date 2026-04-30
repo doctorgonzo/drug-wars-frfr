@@ -33,7 +33,18 @@ public partial class PlayerStats
         return CurrentTrench != null ? CurrentTrench.StorageSlots : 0;
     }
 
-    // Slots used = sum across drug stacks of ceil(amount / UnitsPerSlot).
+    // Effective units-per-slot for a drug, factoring in the current trenchcoat's per-RiskTier
+    // capacity multiplier. Cheap trenchcoats penalize harder drugs (smaller effective per-slot
+    // capacity → more slots consumed); premium trenchcoats boost them.
+    public int GetEffectiveUnitsPerSlot(ItemInstance item)
+    {
+        if (item == null) return 30;
+        int basePerSlot = Mathf.Max(1, item.UnitsPerSlot);
+        float mult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(item.RiskTier) : 1f;
+        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * mult));
+    }
+
+    // Slots used = sum across drug stacks of ceil(amount / effectiveUnitsPerSlot).
     // Bulky drugs (low UnitsPerSlot) consume more slots per stack, so volume actually matters.
     public int GetUsedSlots()
     {
@@ -41,7 +52,7 @@ public partial class PlayerStats
         foreach (var it in inventory)
         {
             if (it == null || it.Type != ItemType.Drug || it.Amount <= 0) continue;
-            int per = Mathf.Max(1, it.UnitsPerSlot);
+            int per = GetEffectiveUnitsPerSlot(it);
             slots += Mathf.CeilToInt((float)it.Amount / per);
         }
         return slots;
@@ -52,13 +63,13 @@ public partial class PlayerStats
         return Mathf.Max(0, GetTotalSlots() - GetUsedSlots());
     }
 
-    // How many slots a hypothetical buy would add. Accounts for the existing stack of the same
-    // drug (so adding 5 weed onto an existing 25-weed stack might cost 0 or 1 additional slots
-    // depending on the per-slot capacity).
-    public int GetSlotCostForBuy(string drugName, int amountToAdd, int unitsPerSlot)
+    // How many slots a hypothetical buy would add. Caller passes the drug template's UnitsPerSlot
+    // and RiskTier so we can apply the trenchcoat's capacity multiplier even when the player
+    // doesn't have an existing stack of this drug.
+    public int GetSlotCostForBuy(string drugName, int amountToAdd, int templateUnitsPerSlot, int riskTier)
     {
         if (amountToAdd <= 0) return 0;
-        int per = Mathf.Max(1, unitsPerSlot);
+        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier);
         int existingAmt = 0;
         var existing = inventory.FirstOrDefault(i => i != null && i.Name == drugName && i.Type == ItemType.Drug);
         if (existing != null) existingAmt = existing.Amount;
@@ -68,9 +79,9 @@ public partial class PlayerStats
     }
 
     // Largest amount of this drug the player can still buy without exceeding total slot capacity.
-    public int GetMaxBuyableAmount(string drugName, int unitsPerSlot)
+    public int GetMaxBuyableAmount(string drugName, int templateUnitsPerSlot, int riskTier)
     {
-        int per = Mathf.Max(1, unitsPerSlot);
+        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier);
         int existingAmt = 0;
         var existing = inventory.FirstOrDefault(i => i != null && i.Name == drugName && i.Type == ItemType.Drug);
         if (existing != null) existingAmt = existing.Amount;
@@ -79,6 +90,13 @@ public partial class PlayerStats
         int slotsAvailableToThisStack = Mathf.Max(0, GetTotalSlots() - otherStacksSlots);
         int maxStackUnits = slotsAvailableToThisStack * per;
         return Mathf.Max(0, maxStackUnits - existingAmt);
+    }
+
+    private int GetEffectiveUnitsPerSlotFor(int templateUnitsPerSlot, int riskTier)
+    {
+        int basePerSlot = Mathf.Max(1, templateUnitsPerSlot);
+        float mult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(riskTier) : 1f;
+        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * mult));
     }
 
     public int NetWorth =>

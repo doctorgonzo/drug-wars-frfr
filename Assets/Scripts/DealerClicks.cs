@@ -345,7 +345,7 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (item.Type == ItemType.Drug)
         {
             int unitsPerSlot = Mathf.Max(1, item.UnitsPerSlot);
-            int maxBuyable = PlayerStats.Instance.GetMaxBuyableAmount(item.Name, unitsPerSlot);
+            int maxBuyable = PlayerStats.Instance.GetMaxBuyableAmount(item.Name, unitsPerSlot, item.RiskTier);
             if (maxBuyable <= 0)
             {
                 ShowFeedback($"Out of room! Trenchcoat full.");
