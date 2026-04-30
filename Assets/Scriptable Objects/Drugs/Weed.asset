@@ -21,3 +21,4 @@ MonoBehaviour:
   HeatValue: 5
   BuyHeatMultiplier: 0.4
   RiskTier: 0
+  UnitsPerSlot: 50

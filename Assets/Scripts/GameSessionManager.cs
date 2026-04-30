@@ -319,6 +319,7 @@ public class GameSessionManager : MonoBehaviour
         Sprite restoredImage = null;
         float buyHeatMultiplier = 1f;
         int riskTier = 0;
+        int unitsPerSlot = 30;
 
         // Search through the template inventories for a matching template
         ItemInstance template = FindItemTemplate(saved.name, itemType, templateInventories);
@@ -328,6 +329,7 @@ public class GameSessionManager : MonoBehaviour
             restoredImage = template.Image;
             buyHeatMultiplier = template.BuyHeatMultiplier;
             riskTier = template.RiskTier;
+            unitsPerSlot = template.UnitsPerSlot;
         }
 
         return new ItemInstance
@@ -341,6 +343,7 @@ public class GameSessionManager : MonoBehaviour
             Image       = restoredImage,
             BuyHeatMultiplier = buyHeatMultiplier,
             RiskTier    = riskTier,
+            UnitsPerSlot = unitsPerSlot,
             AvgPurchasePrice = saved.avgPurchasePrice
         };
     }

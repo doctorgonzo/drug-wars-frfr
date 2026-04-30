@@ -155,7 +155,13 @@ public class InventoryItemUI : MonoBehaviour
     {
         if (boundItem != null)
         {
-            TooltipUI.Instance.ShowTooltip(boundItem.Name, boundItem.Description);
+            string desc = boundItem.Description ?? "";
+            if (boundItem.Type == ItemType.Drug && boundItem.UnitsPerSlot > 0)
+            {
+                if (!string.IsNullOrEmpty(desc)) desc += "\n";
+                desc += $"<size=85%><color=#AAAAAA>Bulk: {boundItem.UnitsPerSlot} units per slot</color></size>";
+            }
+            TooltipUI.Instance.ShowTooltip(boundItem.Name, desc);
         }
     }
 

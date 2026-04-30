@@ -344,20 +344,18 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (amountToBuy <= 0) return;
         if (item.Type == ItemType.Drug)
         {
-            // Do we already have this drug? (same stack)
-            var existing2 = PlayerStats.Instance.inventory.FirstOrDefault(i => i.Name == item.Name);
-
-            if (existing2 == null)
+            int unitsPerSlot = Mathf.Max(1, item.UnitsPerSlot);
+            int maxBuyable = PlayerStats.Instance.GetMaxBuyableAmount(item.Name, unitsPerSlot);
+            if (maxBuyable <= 0)
             {
-                // This purchase would create a NEW stack; need one free slot
-                if (PlayerStats.Instance.GetFreeSlots() <= 0)
-                {
-                    ShowFeedback("No free slots!");
-                    return;
-                }
-                // Fine: making one new stack. No need to clamp amountToBuy: stacks have no unit limit.
+                ShowFeedback($"Out of room! Trenchcoat full.");
+                return;
             }
-            // else: adding to existing stack uses no slots → proceed
+            if (amountToBuy > maxBuyable)
+            {
+                ShowFeedback($"Trenchcoat only has room for {maxBuyable} more.");
+                amountToBuy = maxBuyable;
+            }
         }
         int buyPrice = dealer.GetModifiedBuyPrice(item);
         int totalCost = buyPrice * amountToBuy;

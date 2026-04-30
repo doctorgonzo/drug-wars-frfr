@@ -38,6 +38,9 @@ public class ItemInstance
     public float BuyHeatMultiplier = 1f;
     public int RiskTier; // DrugRiskTier cast to int; 0 for non-drugs
 
+    // How many units fit in one trenchcoat slot. Bulky drugs use small values.
+    public int UnitsPerSlot = 30;
+
     // Tracks the average price per unit the player paid (for profit/loss feedback).
     public int AvgPurchasePrice;
 
@@ -60,6 +63,7 @@ public class ItemInstance
             this.HeatValue = drugItem.HeatValue;
             this.BuyHeatMultiplier = drugItem.BuyHeatMultiplier;
             this.RiskTier = (int)drugItem.RiskTier;
+            this.UnitsPerSlot = Mathf.Max(1, drugItem.UnitsPerSlot);
         }
     }
 
@@ -75,6 +79,7 @@ public class ItemInstance
         HeatValue = other.HeatValue;
         BuyHeatMultiplier = other.BuyHeatMultiplier;
         RiskTier = other.RiskTier;
+        UnitsPerSlot = other.UnitsPerSlot;
         AvgPurchasePrice = other.AvgPurchasePrice;
     }
 

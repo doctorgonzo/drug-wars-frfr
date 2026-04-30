@@ -183,6 +183,37 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
 - **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
 
+### Slot Capacity Overhaul
+- **Slots now constrain volume, not just variety.** Previously a slot held one unique drug type and stack sizes were unlimited; players could win with the starter Tan trenchcoat (3 slots) by stockpiling 999+ units of two drugs. Now each drug has a `UnitsPerSlot` value (Drug.cs) and a stack consumes `ceil(amount / UnitsPerSlot)` slots.
+- **Per-drug bulk** (lower = bulkier):
+
+  | Drug | UnitsPerSlot |
+  |---|---|
+  | Marijuana | 50 |
+  | Shrooms | 40 |
+  | LSD | 30 |
+  | Ecstasy | 20 |
+  | Crack | 15 |
+  | Heroin | 10 |
+
+- **Resulting capacity** (slots × UnitsPerSlot for max-stack-of-one-drug):
+
+  | Trenchcoat | Slots | Weed cap | Heroin cap |
+  |---|---|---|---|
+  | Tan | 3 | 150 | 30 |
+  | Olive | 5 | 250 | 50 |
+  | Grey | 8 | 400 | 80 |
+  | Black | 12 | 600 | 120 |
+  | Leather | 18 | 900 | 180 |
+
+- **`PlayerStats.Economy.cs` API:**
+  - `GetUsedSlots()` — sums `ceil(amount / UnitsPerSlot)` per drug stack.
+  - `GetSlotCostForBuy(drugName, amountToAdd, unitsPerSlot)` — slot delta a hypothetical buy would add.
+  - `GetMaxBuyableAmount(drugName, unitsPerSlot)` — clamp helper used by `DealerClicks.OnPlusClicked` to cap buys at remaining capacity.
+- **Buy guard** in `DealerClicks.cs` now clamps to `GetMaxBuyableAmount()` and shows "Trenchcoat only has room for X more" instead of the old binary "No free slots!".
+- **Tooltip surfaces bulk** — drug item tooltips append `"Bulk: N units per slot"` so players can plan loadouts.
+- **Save/load:** `UnitsPerSlot` is restored from the drug template SO at load time, so old saves work without a save-format change. `Item.cs` `ItemInstance` carries the field at runtime; the constructor and copy-constructor both propagate it.
+
 ### Cheat Menu (dev/test)
 - **`CheatMenu.cs`** — auto-spawned at game start via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`, no Editor wiring required. DontDestroyOnLoad. Press **Esc** anywhere to toggle.
 - **Buttons:** `+ $10,000 CASH`, `DROP HEAT TO 0`, `QUICK START (skip intro)`, Close.

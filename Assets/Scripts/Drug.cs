@@ -15,5 +15,9 @@ public class Drug : Item
 
     [Tooltip("Determines cop encounter difficulty when this drug is found. Affects bribe size, run chance, and arrest severity.")]
     public DrugRiskTier RiskTier = DrugRiskTier.Safe;
+
+    [Tooltip("How many units of this drug fit in a single trenchcoat slot. Bulky drugs (heroin, crack) use a smaller value so a stack consumes more slots; compact drugs (weed, shrooms) use a larger value.")]
+    [Min(1)]
+    public int UnitsPerSlot = 30;
 }
 
