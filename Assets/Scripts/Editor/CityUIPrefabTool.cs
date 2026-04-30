@@ -216,6 +216,28 @@ public static class CityUIPrefabTool
                 so.ApplyModifiedProperties();
                 log.AppendLine("  CityUIHandler: done");
             }
+
+            // TooltipUI also lives on the CityUIHandler GameObject
+            var tooltipUI = cityUIGO.GetComponent<TooltipUI>();
+            if (tooltipUI != null)
+            {
+                var tso = new SerializedObject(tooltipUI);
+                // TooltipPanel prefab instance — find by name in scene
+                var tooltipPanelRoot = FindRootByName("TooltipPanel");
+                if (tooltipPanelRoot != null)
+                {
+                    var innerPanel = FindDeepGO(tooltipPanelRoot, "TooltipPanel");
+                    if (innerPanel != null && innerPanel != tooltipPanelRoot)
+                        wired += Wire(tso, "tooltipPanel", innerPanel, log);
+                    else
+                        wired += Wire(tso, "tooltipPanel", tooltipPanelRoot, log);
+                    wired += Wire(tso, "itemNameText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerName"), log);
+                    wired += Wire(tso, "itemDescriptionText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerDescription"), log);
+                }
+                wired += Wire(tso, "canvasRectTransform", infoCanvas.GetComponent<RectTransform>(), log);
+                tso.ApplyModifiedProperties();
+                log.AppendLine("  TooltipUI: done");
+            }
         }
 
         // ── HeatManager ──
