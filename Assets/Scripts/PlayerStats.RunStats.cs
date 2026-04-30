@@ -129,6 +129,7 @@ public partial class PlayerStats
 
     public void ResetRunStats()
     {
+        ResetCityHeat();
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;
@@ -187,8 +188,11 @@ public partial class PlayerStats
             totalClicks = TotalClicks,
             visitedCities = new List<string>(_visitedCityNames),
             drugSaleNames = new List<string>(_drugSoldByName.Keys),
-            drugSaleCounts = new List<int>(_drugSoldByName.Values)
+            drugSaleCounts = new List<int>(_drugSoldByName.Values),
+            cityHeatNames = new List<string>(),
+            cityHeatValues = new List<float>()
         };
+        CaptureCityHeat(snap.cityHeatNames, snap.cityHeatValues);
         return snap;
     }
 
@@ -227,6 +231,8 @@ public partial class PlayerStats
             int n = Mathf.Min(s.drugSaleNames.Count, s.drugSaleCounts.Count);
             for (int i = 0; i < n; i++) _drugSoldByName[s.drugSaleNames[i]] = s.drugSaleCounts[i];
         }
+
+        RestoreCityHeat(s.cityHeatNames, s.cityHeatValues);
     }
 }
 
@@ -257,4 +263,6 @@ public class RunStatsSnapshot
     public List<string> visitedCities = new List<string>();
     public List<string> drugSaleNames = new List<string>();
     public List<int> drugSaleCounts = new List<int>();
+    public List<string> cityHeatNames = new List<string>();
+    public List<float> cityHeatValues = new List<float>();
 }

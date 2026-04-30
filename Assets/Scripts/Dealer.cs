@@ -79,6 +79,14 @@ public class Dealer : ScriptableObject
         //    demand" boost for sellers only, applied in GetModifiedSellPrice.
         float final = basePrice * cityCOL * cityBuyMult * dailyMult * eventMult * VisitMultiplier;
 
+        // Daily tip: if today's tip is a "DealBuy" pointing at this city + drug, knock the price down.
+        if (item.Type == ItemType.Drug)
+        {
+            var tip = DailyTipService.GetTodaysTip();
+            if (tip.Type == DailyTipType.DealBuy && tip.Matches(city?.Name ?? "", item.Name))
+                final *= tip.Multiplier;
+        }
+
         // 7) City event modifier (drugs only)
         if (item.Type == ItemType.Drug)
         {
@@ -133,6 +141,14 @@ public class Dealer : ScriptableObject
             && string.Equals(item.Name, sellCity.FavoriteDrug.Name, System.StringComparison.Ordinal))
         {
             sellPriceF *= CityEventManager.FestivalSellMult;
+        }
+
+        // Daily tip: HotSell pumps up the sell price for today only at the target city + drug.
+        if (item.Type == ItemType.Drug && sellCity != null)
+        {
+            var tip = DailyTipService.GetTodaysTip();
+            if (tip.Type == DailyTipType.HotSell && tip.Matches(sellCity.Name, item.Name))
+                sellPriceF *= tip.Multiplier;
         }
 
         int sellPrice = Mathf.RoundToInt(sellPriceF);

@@ -72,6 +72,10 @@ public class GameSessionManager : MonoBehaviour
 
     private void HandleDayChanged(GameTime.GameDateTime dt)
     {
+        // Decay per-city heat memory once per day so hot cities cool off if the player avoids them.
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.DecayAllCityHeat();
+
         if (allCitiesInGame == null) return;
         foreach (City city in allCitiesInGame)
         {

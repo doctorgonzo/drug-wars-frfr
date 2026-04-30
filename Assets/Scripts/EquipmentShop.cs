@@ -76,12 +76,21 @@ public class EquipmentShop : MonoBehaviour
             CreateShopEntry(
                 weapon.Image,
                 weapon.Name,
-                $"Damage: {weapon.Damage}",
+                BuildWeaponStatsLine(weapon),
                 weapon.Cost,
                 isOwned,
                 () => BuyWeapon(weapon)
             );
         }
+    }
+
+    private static string BuildWeaponStatsLine(Weapon weapon)
+    {
+        var parts = new System.Collections.Generic.List<string> { $"Damage: {weapon.Damage}" };
+        if (weapon.RunSuccessBonus > 0f) parts.Add($"Run +{weapon.RunSuccessBonus * 100f:F0}%");
+        if (weapon.BribeLeverage > 0f)   parts.Add($"Bribe -{weapon.BribeLeverage * 100f:F0}%");
+        if (weapon.PenaltyReduction > 0f) parts.Add($"Penalty -{weapon.PenaltyReduction * 100f:F0}%");
+        return string.Join("  |  ", parts);
     }
 
     private void EnsureContentLayout()

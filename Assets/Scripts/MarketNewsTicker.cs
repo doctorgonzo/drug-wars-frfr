@@ -145,6 +145,11 @@ public class MarketNewsTicker : MonoBehaviour
             messages.Add($"<color=#44FF44>HOT MARKET</color> — {city.FavoriteDrug.Name} is in high demand here!");
         }
 
+        // Today's one-shot tip (might point at a different city — that's the player's decision to chase or not).
+        var tip = DailyTipService.GetTodaysTip();
+        if (tip.Type != DailyTipType.None)
+            messages.Add(tip.ToHeadline());
+
         if (messages.Count == 0) yield break;
 
         newsPanel.SetActive(true);

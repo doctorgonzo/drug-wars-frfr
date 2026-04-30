@@ -19,3 +19,6 @@ MonoBehaviour:
   Type: 1
   Image: {fileID: 21300000, guid: 4785d6bd711718e4385362137badf8b7, type: 3}
   Damage: 8
+  RunSuccessBonus: 0
+  BribeLeverage: 0
+  PenaltyReduction: 0

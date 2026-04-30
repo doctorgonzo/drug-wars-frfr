@@ -10,9 +10,9 @@ public partial class PlayerStats
 
     [Header("Loan Shark")]
     [SerializeField] private int startingDebt = 50000;
-    [SerializeField] private int dayLimit = 30;
+    [SerializeField] private int dayLimit = 22;
     [Tooltip("Daily interest rate applied to remaining debt (e.g. 0.05 = 5%).")]
-    [SerializeField] private float dailyInterestRate = 0.05f;
+    [SerializeField] private float dailyInterestRate = 0.08f;
     [Tooltip("Debt premium charged when borrowing mid-game (e.g. 0.20 = 20% on top).")]
     [SerializeField] private float borrowPremiumRate = 0.20f;
     [Tooltip("Maximum amount the shark will lend in a single transaction.")]
@@ -47,6 +47,11 @@ public partial class PlayerStats
 
     public void InitializeDebt()
     {
+        // Force-set balance values so stale scene serializations (older PlayerStats baked with
+        // 30-day limit / 5% interest) can't override the current tuning.
+        dayLimit = 22;
+        dailyInterestRate = 0.08f;
+        borrowPremiumRate = 0.20f;
         Debt = startingDebt;
     }
 

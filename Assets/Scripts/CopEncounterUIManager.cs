@@ -270,7 +270,9 @@ public class CopEncounterUIManager : MonoBehaviour
         int cash = SafeGetCash();
         offer = Mathf.Clamp(offer, 0, cash);
 
-        float minFrac = currentCop.minBribeFraction;
+        // Weapon leverage: a bigger gun makes the cop accept a lower bribe fraction.
+        float weaponLeverage = WeaponBribeLeverage();
+        float minFrac = Mathf.Max(0.05f, currentCop.minBribeFraction - weaponLeverage);
         bool adequate = offer >= Mathf.CeilToInt(askAmount * minFrac);
         bool overpay  = offer >= askAmount;
 
@@ -397,7 +399,8 @@ public class CopEncounterUIManager : MonoBehaviour
         {
             case SearchOutcome.Steal:
             {
-                int actualSteal = Mathf.Min(steal, SafeGetCash());
+                int rawSteal = Mathf.Min(steal, SafeGetCash());
+                int actualSteal = Mathf.RoundToInt(rawSteal * (1f - WeaponPenaltyReduction()));
                 SpendPlayerCash?.Invoke(actualSteal);
                 if (PlayerStats.Instance != null)
                     PlayerStats.Instance.RecordCashConfiscated(actualSteal);
@@ -410,7 +413,7 @@ public class CopEncounterUIManager : MonoBehaviour
 
             case SearchOutcome.Arrest:
             {
-                int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f);
+                int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f * (1f - WeaponPenaltyReduction()));
                 string searchDrugList = BuildDrugConfiscationList();
                 SpendPlayerCash?.Invoke(arrestFine);
                 if (PlayerStats.Instance != null)
@@ -444,6 +447,9 @@ public class CopEncounterUIManager : MonoBehaviour
 
         // Apply hostility penalty from previous failures
         chance = Mathf.Clamp01(chance - hostilityRunPenalty);
+
+        // Weapon bonus: bigger gun = cop hesitates, easier to break away
+        chance = Mathf.Clamp01(chance + WeaponRunBonus());
 
         bool escaped = UnityEngine.Random.value < chance;
 
@@ -488,7 +494,7 @@ public class CopEncounterUIManager : MonoBehaviour
                 bool arrestsNow = UnityEngine.Random.value < 0.35f;
                 if (arrestsNow)
                 {
-                    int runArrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.15f);
+                    int runArrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.15f * (1f - WeaponPenaltyReduction()));
                     string runDrugList = BuildDrugConfiscationList();
                     SpendPlayerCash?.Invoke(runArrestFine);
                     if (PlayerStats.Instance != null)
@@ -899,7 +905,7 @@ public class CopEncounterUIManager : MonoBehaviour
     private void HandleCombatLoss()
     {
         inCombat = false;
-        float lossPct  = 0.25f + currentSeed.contrabandRiskLevel * 0.10f;
+        float lossPct  = (0.25f + currentSeed.contrabandRiskLevel * 0.10f) * (1f - WeaponPenaltyReduction());
         int   cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
         string combatDrugList = BuildDrugConfiscationList();
         SpendPlayerCash?.Invoke(cashLoss);
@@ -1035,6 +1041,25 @@ public class CopEncounterUIManager : MonoBehaviour
             }
         }
         return fallback;
+    }
+
+    // ---- Weapon influence on out-of-combat cop interactions ----
+    private float WeaponRunBonus()
+    {
+        var w = PlayerStats.Instance != null ? PlayerStats.Instance.CurrentWeapon : null;
+        return w != null ? w.RunSuccessBonus : 0f;
+    }
+
+    private float WeaponBribeLeverage()
+    {
+        var w = PlayerStats.Instance != null ? PlayerStats.Instance.CurrentWeapon : null;
+        return w != null ? w.BribeLeverage : 0f;
+    }
+
+    private float WeaponPenaltyReduction()
+    {
+        var w = PlayerStats.Instance != null ? PlayerStats.Instance.CurrentWeapon : null;
+        return w != null ? Mathf.Clamp01(w.PenaltyReduction) : 0f;
     }
 
     private int SafeGetCash() => Mathf.Max(0, GetPlayerCash?.Invoke() ?? 0);

@@ -262,7 +262,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (heatManager != null)
             {
                 float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-                heatManager.AddHeat(Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm));
+                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm);
+                heatManager.AddHeat(sellHeat);
+                if (PlayerStats.Instance?.CurrentCity != null)
+                    PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
             }
 
             dealerItem.ChangeAmount(playerItem.Amount);
@@ -318,7 +321,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (playerItem.Type == ItemType.Drug && heatManager != null)
         {
             float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-            heatManager.AddHeat(Mathf.RoundToInt(playerItem.HeatValue * amountToSell * _hm));
+            int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * amountToSell * _hm);
+            heatManager.AddHeat(sellHeat);
+            if (PlayerStats.Instance?.CurrentCity != null)
+                PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
         }
 
         if (dealerItemUIMap.ContainsKey(dealerItem))

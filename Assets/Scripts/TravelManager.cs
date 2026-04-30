@@ -131,6 +131,11 @@ public class TravelManager : MonoBehaviour
         PlayerStats.Instance.CitiesVisited++;
         PlayerStats.Instance.RecordCityVisited(destinationCity.Name);
 
+        // Apply lingering city heat from previous trips here — cops remember hot dealers.
+        int arrivalHeatBump = PlayerStats.Instance.ApplyCityHeatOnArrival(destinationCity.Name);
+        if (arrivalHeatBump > 0 && ToastUI.Instance != null)
+            ToastUI.Instance.Show($"COPS REMEMBER YOU\n+{arrivalHeatBump} heat", new Color(0.95f, 0.4f, 0.2f));
+
         // Auto-save before loading
         if (GameSessionManager.Instance != null)
             GameSessionManager.Instance.SaveGame();
@@ -212,7 +217,18 @@ public class TravelManager : MonoBehaviour
         if (previewFavDrug != null)
         {
             string drugName = city.FavoriteDrug != null ? city.FavoriteDrug.Name : "—";
-            previewFavDrug.text = $"Hot Drug: {drugName} ({city.favoriteDrugDemandMultiplier:F1}x demand)";
+            string heatTag = "";
+            if (PlayerStats.Instance != null)
+            {
+                float ch = PlayerStats.Instance.GetCityHeat(city.Name);
+                if (ch >= 15f)
+                {
+                    string label = PlayerStats.Instance.DescribeCityHeat(city.Name);
+                    string color = ch >= 60f ? "#FF3030" : ch >= 35f ? "#FF8800" : "#FFCC44";
+                    heatTag = $"\n<color={color}>POLICE: {label}</color>";
+                }
+            }
+            previewFavDrug.text = $"Hot Drug: {drugName} ({city.favoriteDrugDemandMultiplier:F1}x demand){heatTag}";
         }
 
         if (previewCanvasGroup != null)

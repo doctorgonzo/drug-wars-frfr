@@ -183,6 +183,32 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
 - **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
 
+### Decision-Density Pass
+Four interlocking changes to make every turn matter more.
+
+**Time pressure tightened.** `PlayerStats.Progression.cs` now hard-codes `dayLimit = 22` and `dailyInterestRate = 0.08f` inside `InitializeDebt()` so stale scene serializations (the older 30-day / 5%-interest values) can't override the current tuning at runtime. Players must move actual product, not grind safe weed for 30 days.
+
+**Weapons influence non-combat cop interactions.** `Weapon.cs` adds three new stats — `RunSuccessBonus`, `BribeLeverage`, `PenaltyReduction` — read by `CopEncounterUIManager`:
+  - `OnRunClicked` adds the bonus to the run-success roll.
+  - `OnBribePayClicked` subtracts `BribeLeverage` from `cop.minBribeFraction` (a 9mm or shotgun gives the cop pause).
+  - All three penalty paths (search-steal, search-arrest fine, run-arrest fine, combat cash loss) multiply by `(1 - PenaltyReduction)`.
+
+  | Weapon | Damage | Run Bonus | Bribe Leverage | Penalty Reduction |
+  |---|---|---|---|---|
+  | Pocket Knife | 8 | 0% | 0% | 0% |
+  | Handgun | 18 | +8% | -8% | -10% |
+  | Shotgun | 35 | +15% | -15% | -20% |
+
+  Surfaced in `EquipmentShop` via `BuildWeaponStatsLine()`.
+
+**City heat memory.** New `PlayerStats.CityHeat.cs` partial. Selling raises a per-city heat value alongside the player's global heat. On arrival in a city via `TravelManager`, `ApplyCityHeatOnArrival` adds `cityHeat * 0.35` to the player's heat (with a "COPS REMEMBER YOU" toast). The value decays by 8/day via `GameSessionManager.HandleDayChanged`. Persisted in `RunStatsSnapshot.cityHeatNames/cityHeatValues`. The travel preview card surfaces it as `POLICE: QUIET / WARM / HOT / BURNING`. So camping one trade route is no longer free — the player has to rotate or eat the heat.
+
+**Daily tip events.** New `DailyTip.cs` rolls one tip per in-game day (deterministic on `PriceService.RunSeed + InGameDay`, 65% chance a tip exists). Two tip types:
+  - **DealBuy** — target city sells the target drug at 65–80% of normal price (applied in `Dealer.GetModifiedBuyPrice`).
+  - **HotSell** — target city pays 125–145% on the sell side (applied in `Dealer.GetModifiedSellPrice` after sellRatio + favoriteDrugDemandMultiplier).
+
+  `MarketNewsTicker` appends the tip headline to its rotation, so players see "TIP — Cheap LSD in Tokyo today, save ~25%" and have to decide whether the travel cost + days lost are worth chasing it. Tips are city-specific and one-day-only — miss the window and it's gone.
+
 ### Slot Capacity Overhaul
 - **Slots now constrain volume, not just variety.** Previously a slot held one unique drug type and stack sizes were unlimited; players could win with the starter Tan trenchcoat (3 slots) by stockpiling 999+ units of two drugs. Now each drug has a `UnitsPerSlot` value (Drug.cs) and a stack consumes `ceil(amount / UnitsPerSlot)` slots.
 - **Per-drug bulk** (lower = bulkier):
