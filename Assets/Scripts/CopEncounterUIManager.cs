@@ -21,7 +21,7 @@ public class CopEncounterUIManager : MonoBehaviour
 
     [Header("Bribe UI (inline, not a popup)")]
     [SerializeField] private GameObject bribePanel;   // enable/disable whole group
-    [SerializeField] private TMP_Text bribeAskText;   // “Officer demands $X”
+    [SerializeField] private TMP_Text bribeAskText;   // "Officer demands $X"
     [SerializeField] private TMP_InputField bribeInput;
     [SerializeField] private Slider bribeSlider;
     [SerializeField] private Button bribePayButton;
@@ -192,7 +192,7 @@ public class CopEncounterUIManager : MonoBehaviour
         float riskBribeMult = 1f + currentSeed.contrabandRiskLevel * 0.5f;
         askAmount = Mathf.RoundToInt(rawAsk * riskBribeMult);
 
-        bribeAskText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"That heat isn’t cheap to forget. {Money(askAmount)} and you walk.")}\"";
+        bribeAskText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"That heat isn't cheap to forget. {Money(askAmount)} and you walk.")}\"";
         bribeHintText.text = $"You have {Money(playerCash)}.";
 
         // Configure slider/input to player cash
@@ -306,7 +306,7 @@ public class CopEncounterUIManager : MonoBehaviour
         else
         {
             askAmount = Mathf.Min(playerCash, askAmount + Mathf.RoundToInt(askAmount * 0.10f));
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "You’re wasting my time. Price just went up.")}\"";
+            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "You're wasting my time. Price just went up.")}\"";
         }
 
         bribeSlider.maxValue = Mathf.Max(askAmount, playerCash);
@@ -317,7 +317,7 @@ public class CopEncounterUIManager : MonoBehaviour
 
     private void OnBribeRefuseClicked()
     {
-        // Refusing pushes to Search or Attack based on cop’s diligence/violence
+        // Refusing pushes to Search or Attack based on cop's diligence/violence
         bool goesSearch = rng.NextDouble() < Mathf.Lerp(0.25f, 0.75f, currentCop.diligence);
         if (goesSearch)
         {
@@ -352,8 +352,8 @@ public class CopEncounterUIManager : MonoBehaviour
                 int actualSteal = Mathf.Min(steal, SafeGetCash());
                 SpendPlayerCash?.Invoke(actualSteal);
                 OnCopStoleCash?.Invoke(actualSteal);
-                copDialogueText.text = $”{currentCop.displayName}: \”{RandomLine(currentCop.linesWarn, “Move along.”)}\”” +
-                    FormatLossSummary(actualSteal, “confiscated”, null);
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Move along.")}\"" +
+                    FormatLossSummary(actualSteal, "confiscated", null);
                 EndEncounter(success: false);
                 break;
             }
@@ -364,8 +364,8 @@ public class CopEncounterUIManager : MonoBehaviour
                 string searchDrugList = BuildDrugConfiscationList();
                 SpendPlayerCash?.Invoke(arrestFine);
                 OnPlayerArrested?.Invoke();
-                copDialogueText.text = $”{currentCop.displayName}: \”{RandomLine(currentCop.linesArrest, “You’re under arrest.”)}\”” +
-                    FormatLossSummary(arrestFine, “fine (20%)”, searchDrugList);
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You're under arrest.")}\"" +
+                    FormatLossSummary(arrestFine, "fine (20%)", searchDrugList);
                 EndEncounter(success: false);
                 break;
             }
@@ -438,14 +438,14 @@ public class CopEncounterUIManager : MonoBehaviour
                     string runDrugList = BuildDrugConfiscationList();
                     SpendPlayerCash?.Invoke(runArrestFine);
                     OnPlayerArrested?.Invoke();
-                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That’s it—you’re under arrest.")}\"" +
+                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That's it—you're under arrest.")}\"" +
                         FormatLossSummary(runArrestFine, "fine (15%)", runDrugList);
                     EndEncounter(success: false);
                 }
                 else
                 {
                     // Cop lets it go — player escapes with a warning
-                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Get out of here. Don’t let me see you again.")}\"";
+                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, "Get out of here. Don't let me see you again.")}\"";
                     EndEncounter(success: true);
                 }
             }
