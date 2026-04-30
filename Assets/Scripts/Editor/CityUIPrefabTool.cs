@@ -187,6 +187,7 @@ public static class CityUIPrefabTool
         var equipShopGO = FindRootByName("EquipmentShop");
         var cityUIGO = FindRootByName("CityUIHandler");
         var dealerContainer = FindRootByName("DealerContainer");
+        var mapCanvas = FindRootByName("MapCanvas");
         var previewCard = FindRootByName("CityPreviewCard");
 
         // ── CityUIHandler ──
@@ -287,18 +288,24 @@ public static class CityUIPrefabTool
                 var dealerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/DealerPrefab.prefab");
                 wired += Wire(so, "dealerPrefab", dealerPrefab, log);
 
-                // Dealer spawn points from DealerContainer children
-                if (dealerContainer != null)
+                // Dealer spawn points live inside MapCanvas (scene-specific)
+                var spawnParent = mapCanvas ?? dealerContainer;
+                if (spawnParent != null)
                 {
                     var spawnProp = so.FindProperty("dealerSpawnPoints");
                     if (spawnProp != null)
                     {
-                        int childCount = dealerContainer.transform.childCount;
-                        spawnProp.arraySize = childCount;
-                        for (int i = 0; i < childCount; i++)
-                            spawnProp.GetArrayElementAtIndex(i).objectReferenceValue =
-                                dealerContainer.transform.GetChild(i);
-                        wired += childCount;
+                        var spawns = new System.Collections.Generic.List<Transform>();
+                        for (int i = 1; i <= 6; i++)
+                        {
+                            var t = FindDeepTransform(spawnParent, $"DealerSpawn{i}");
+                            if (t != null) spawns.Add(t);
+                        }
+                        spawnProp.arraySize = spawns.Count;
+                        for (int i = 0; i < spawns.Count; i++)
+                            spawnProp.GetArrayElementAtIndex(i).objectReferenceValue = spawns[i];
+                        wired += spawns.Count;
+                        log.AppendLine($"    Found {spawns.Count} dealer spawn point(s)");
                     }
                 }
 
