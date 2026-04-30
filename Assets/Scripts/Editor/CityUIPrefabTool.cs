@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 using System.IO;
 using System.Linq;
 
@@ -21,6 +23,9 @@ public static class CityUIPrefabTool
         "MarketNewsTicker",
         "EquipmentShop",
         "TravelUIParent",
+        "CityUIHandler",
+        "DealerContainer",
+        "CityPreviewCard",
     };
 
     private static readonly string[] CitySceneNames =
@@ -164,10 +169,209 @@ public static class CityUIPrefabTool
         return 1;
     }
 
+    // ──────────────────────────────────────────────────────────
+    // Step 4 — Auto-wire cross-prefab references in the scene
+    // ──────────────────────────────────────────────────────────
+    [MenuItem("Drug Wars/Prefabs/4. Auto-Wire Cross References (Current Scene)")]
+    private static void AutoWire()
+    {
+        int wired = 0;
+        var log = new System.Text.StringBuilder();
+
+        var infoCanvas = FindRootByName("InfoCanvas");
+        var travelMgrGO = FindRootByName("TravelManager");
+        var travelUI = FindRootByName("TravelUIParent");
+        var heatMgrGO = FindRootByName("HeatManager");
+        var debtMgrGO = FindRootByName("DebtManager");
+        var dealerMgrGO = FindRootByName("DealerManager");
+        var equipShopGO = FindRootByName("EquipmentShop");
+        var cityUIGO = FindRootByName("CityUIHandler");
+        var dealerContainer = FindRootByName("DealerContainer");
+        var previewCard = FindRootByName("CityPreviewCard");
+
+        // ── CityUIHandler ──
+        if (cityUIGO != null && infoCanvas != null)
+        {
+            var comp = cityUIGO.GetComponent<CityUIHandler>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+                wired += Wire(so, "playerName", FindDeep<TMP_Text>(infoCanvas, "PlayerName"), log);
+                wired += Wire(so, "playerWallet", FindDeep<TMP_Text>(infoCanvas, "WalletText"), log);
+                wired += Wire(so, "playerImage", FindDeep<Image>(infoCanvas, "PlayerImage"), log);
+                wired += Wire(so, "trenchSlotsText", FindDeep<TMP_Text>(infoCanvas, "TrenchSlots"), log);
+                wired += Wire(so, "trenchArmorText", FindDeep<TMP_Text>(infoCanvas, "TrenchArmor"), log);
+                wired += Wire(so, "trenchImage", FindDeep<Image>(infoCanvas, "TrenchImage"), log);
+                wired += Wire(so, "weaponDamageText", FindDeep<TMP_Text>(infoCanvas, "WeaponDamage"), log);
+                wired += Wire(so, "weaponImage", FindDeep<Image>(infoCanvas, "WeaponImage"), log);
+                wired += Wire(so, "cityNameText", FindDeep<TMP_Text>(infoCanvas, "CityName"), log);
+                wired += Wire(so, "cityPopulationText", FindDeep<TMP_Text>(infoCanvas, "Population"), log);
+                wired += Wire(so, "cityFavoriteDrugText", FindDeep<TMP_Text>(infoCanvas, "FavoriteDrug"), log);
+                wired += Wire(so, "debtText", FindDeep<TMP_Text>(infoCanvas, "DebtText"), log);
+                wired += Wire(so, "dayText", FindDeep<TMP_Text>(infoCanvas, "DayCounterText"), log);
+                wired += Wire(so, "netWorthText", FindDeep<TMP_Text>(infoCanvas, "NetWorthText"), log);
+                if (travelMgrGO != null)
+                    wired += Wire(so, "travelManager", travelMgrGO.GetComponent<TravelManager>(), log);
+                so.ApplyModifiedProperties();
+                log.AppendLine("  CityUIHandler: done");
+            }
+        }
+
+        // ── HeatManager ──
+        if (heatMgrGO != null && infoCanvas != null)
+        {
+            var comp = heatMgrGO.GetComponent<HeatManager>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+                var slider = FindDeep<Slider>(infoCanvas, "HeatSlider");
+                wired += Wire(so, "heatSlider", slider, log);
+                wired += Wire(so, "heatText", FindDeep<TMP_Text>(infoCanvas, "HeatText"), log);
+                wired += Wire(so, "heatStatusText", FindDeep<TMP_Text>(infoCanvas, "HeatStatusText"), log);
+                wired += Wire(so, "riskLevelText", FindDeep<TMP_Text>(infoCanvas, "RiskLevelText"), log);
+                if (slider != null)
+                {
+                    var fillArea = slider.transform.Find("Fill Area/Fill");
+                    if (fillArea != null)
+                        wired += Wire(so, "heatFillImage", fillArea.GetComponent<Image>(), log);
+                }
+                so.ApplyModifiedProperties();
+                log.AppendLine("  HeatManager: done");
+            }
+        }
+
+        // ── DebtManager ──
+        if (debtMgrGO != null && infoCanvas != null)
+        {
+            var comp = debtMgrGO.GetComponent<DebtManager>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+                wired += Wire(so, "debtText", FindDeep<TMP_Text>(infoCanvas, "DebtText"), log);
+                wired += Wire(so, "dayText", FindDeep<TMP_Text>(infoCanvas, "DayCounterText"), log);
+                wired += Wire(so, "interestWarningText", FindDeep<TMP_Text>(infoCanvas, "InterestWarningText"), log);
+                wired += Wire(so, "payDebtButton", FindDeep<Button>(infoCanvas, "PayDebtButton"), log);
+                wired += Wire(so, "payAmountInput", FindDeep<TMP_InputField>(infoCanvas, "PayAmountInput"), log);
+                wired += Wire(so, "borrowButton", FindDeep<Button>(infoCanvas, "BorrowButton"), log);
+                wired += Wire(so, "borrowAmountInput", FindDeep<TMP_InputField>(infoCanvas, "BorrowInput"), log);
+                wired += Wire(so, "borrowInfoText", FindDeep<TMP_Text>(infoCanvas, "BorrowInfoText"), log);
+                so.ApplyModifiedProperties();
+                log.AppendLine("  DebtManager: done");
+            }
+        }
+
+        // ── DealerManager ──
+        if (dealerMgrGO != null && infoCanvas != null)
+        {
+            var comp = dealerMgrGO.GetComponent<DealerManager>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+
+                if (cityUIGO != null)
+                    wired += Wire(so, "cityUIHandler", cityUIGO.GetComponent<CityUIHandler>(), log);
+                wired += Wire(so, "heatManager", heatMgrGO != null ? heatMgrGO.GetComponent<HeatManager>() : null, log);
+
+                var viewportContent = infoCanvas.transform.Find("PlayerInventory/Viewport/Content");
+                if (viewportContent != null)
+                    wired += Wire(so, "playerInventoryContent", viewportContent, log);
+
+                var dealerInfoPanel = FindDeepGO(infoCanvas, "DealerInfoPanel");
+                wired += Wire(so, "dealerInfoPanel", dealerInfoPanel, log);
+
+                wired += Wire(so, "statusText", FindDeep<TMP_Text>(infoCanvas, "StatusMessageText"), log);
+
+                var dealerItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/DealerItem.prefab");
+                wired += Wire(so, "inventoryItemPrefab", dealerItemPrefab, log);
+
+                var dealerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/DealerPrefab.prefab");
+                wired += Wire(so, "dealerPrefab", dealerPrefab, log);
+
+                // Dealer spawn points from DealerContainer children
+                if (dealerContainer != null)
+                {
+                    var spawnProp = so.FindProperty("dealerSpawnPoints");
+                    if (spawnProp != null)
+                    {
+                        int childCount = dealerContainer.transform.childCount;
+                        spawnProp.arraySize = childCount;
+                        for (int i = 0; i < childCount; i++)
+                            spawnProp.GetArrayElementAtIndex(i).objectReferenceValue =
+                                dealerContainer.transform.GetChild(i);
+                        wired += childCount;
+                    }
+                }
+
+                so.ApplyModifiedProperties();
+                log.AppendLine("  DealerManager: done");
+            }
+        }
+
+        // ── EquipmentShop ──
+        if (equipShopGO != null && infoCanvas != null)
+        {
+            var comp = equipShopGO.GetComponent<EquipmentShop>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+                wired += Wire(so, "shopPanel", FindDeepGO(infoCanvas, "ShopPanel"), log);
+                wired += Wire(so, "openShopButton", FindDeep<Button>(infoCanvas, "OpenShopBUtton"), log);
+                // Try alternate spelling in case it was fixed
+                if (FindDeep<Button>(infoCanvas, "OpenShopBUtton") == null)
+                    wired += Wire(so, "openShopButton", FindDeep<Button>(infoCanvas, "OpenShopButton"), log);
+                wired += Wire(so, "closeShopButton", FindDeep<Button>(infoCanvas, "CloseButton"), log);
+                wired += Wire(so, "itemListContent", FindDeepTransform(infoCanvas, "ItemListContent"), log);
+                wired += Wire(so, "feedbackText", FindDeep<TMP_Text>(infoCanvas, "FeedbackText"), log);
+                if (cityUIGO != null)
+                    wired += Wire(so, "cityUIHandler", cityUIGO.GetComponent<CityUIHandler>(), log);
+
+                var shopPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ShopItemPrefab.prefab");
+                wired += Wire(so, "shopItemPrefab", shopPrefab, log);
+
+                so.ApplyModifiedProperties();
+                log.AppendLine("  EquipmentShop: done");
+            }
+        }
+
+        // ── TravelManager ──
+        if (travelMgrGO != null)
+        {
+            var comp = travelMgrGO.GetComponent<TravelManager>();
+            if (comp != null)
+            {
+                var so = new SerializedObject(comp);
+                if (travelUI != null)
+                {
+                    wired += Wire(so, "travelUIParent", travelUI, log);
+                    wired += Wire(so, "cityDropdown", FindDeep<TMP_Dropdown>(travelUI, "Dropdown"), log);
+                    wired += Wire(so, "travelButton", FindDeep<Button>(travelUI, "Button"), log);
+                    wired += Wire(so, "travelCostText", FindDeep<TMP_Text>(travelUI, "FareText"), log);
+                }
+                if (previewCard != null)
+                {
+                    wired += Wire(so, "cityPreviewPanel", previewCard, log);
+                    wired += Wire(so, "previewCityName", FindDeep<TMP_Text>(previewCard, "PreviewCityName"), log);
+                    wired += Wire(so, "previewPopulation", FindDeep<TMP_Text>(previewCard, "PreviewPopulation"), log);
+                    wired += Wire(so, "previewCOL", FindDeep<TMP_Text>(previewCard, "PreviewCOL"), log);
+                    wired += Wire(so, "previewFavDrug", FindDeep<TMP_Text>(previewCard, "PreviewFavDrug"), log);
+                }
+                so.ApplyModifiedProperties();
+                log.AppendLine("  TravelManager: done");
+            }
+        }
+
+        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+
+        string msg = wired > 0
+            ? $"Wired {wired} reference(s).\n\nRemember to save (Cmd+S).\n\n{log}"
+            : $"No references wired. Check console for warnings.\n\n{log}";
+        EditorUtility.DisplayDialog("Auto-Wire", msg, "OK");
+    }
+
     // ─────────────────────────────────
-    // Step 3 — Validate all city scenes
+    // Step 5 — Validate all city scenes
     // ─────────────────────────────────
-    [MenuItem("Drug Wars/Prefabs/3. Validate All City Scenes")]
+    [MenuItem("Drug Wars/Prefabs/5. Validate All City Scenes")]
     private static void ValidateAllScenes()
     {
         var report = new System.Text.StringBuilder();
@@ -246,5 +450,52 @@ public static class CityUIPrefabTool
         return SceneManager.GetActiveScene()
             .GetRootGameObjects()
             .FirstOrDefault(go => go.name == name);
+    }
+
+    private static T FindDeep<T>(GameObject root, string childName) where T : Component
+    {
+        if (root == null) return null;
+        var all = root.GetComponentsInChildren<T>(true);
+        return all.FirstOrDefault(c => c.gameObject.name == childName);
+    }
+
+    private static GameObject FindDeepGO(GameObject root, string childName)
+    {
+        if (root == null) return null;
+        return FindInChildren(root.transform, childName)?.gameObject;
+    }
+
+    private static Transform FindDeepTransform(GameObject root, string childName)
+    {
+        if (root == null) return null;
+        return FindInChildren(root.transform, childName);
+    }
+
+    private static Transform FindInChildren(Transform parent, string name)
+    {
+        if (parent.name == name) return parent;
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            var found = FindInChildren(parent.GetChild(i), name);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private static int Wire(SerializedObject so, string field, Object value, System.Text.StringBuilder log)
+    {
+        var prop = so.FindProperty(field);
+        if (prop == null)
+        {
+            log.AppendLine($"    WARN: field '{field}' not found on {so.targetObject.GetType().Name}");
+            return 0;
+        }
+        if (value == null)
+        {
+            log.AppendLine($"    WARN: no target found for '{field}'");
+            return 0;
+        }
+        prop.objectReferenceValue = value;
+        return 1;
     }
 }
