@@ -224,7 +224,10 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs`, `.Identity.cs`, `.Equipment.cs`, `.Economy.cs`, `.Progression.cs`
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
 - **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime. Restock state (`dealerLastRestockDay`) also lives in `GameSessionManager`, keyed by SO instance ID, persisted via `SavedDealerState.lastRestockDay`.
-- **Price system:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × favorite drug mult × daily volatility × market event × visit multiplier (±20%)
+- **Price system:**
+  - **Buy:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × daily volatility × market event × visit multiplier (±20%) × city event (Lockdown/Shortage on drugs).
+  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug).
+  - **Note:** `favoriteDrugDemandMultiplier` lives on the SELL side. It used to be on the buy side, which inflated buy prices in the favorite-drug city while sellRatio cancelled out the boost on sell — making "2.0x demand" cities pay-as-usual to sell into and 2× expensive to source from. Moved to sell so the UI label ("2.0x demand") translates to a real 2× sell-price boost.
 - **Save system:** JSON serialized via `JsonUtility`, stored in `PlayerPrefs["DrugWarsSave"]`. Equipment resolved by name from `GameSessionManager.allTrenchcoats/allWeapons`. Item images reconstructed from SO registry on load.
 - **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown. Cop encounters use `CopEncounterSeed` built from current `PlayerStats` state.
 - **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices. `GameSessionManager` also subscribes for dealer restock checks.

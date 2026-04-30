@@ -59,22 +59,12 @@ public class Dealer : ScriptableObject
         CityPriceModifier cityMod = FindCityMod(city, item.Type);
         float cityBuyMult = cityMod != null ? cityMod.buyPriceMultiplier : 1f;
 
-        // 3) Favorite drug demand multiplier
-        float faveMult = 1f;
-        if (city != null && city.FavoriteDrug != null && item.Type == ItemType.Drug)
-        {
-            if (string.Equals(item.Name, city.FavoriteDrug.Name, System.StringComparison.Ordinal))
-            {
-                faveMult = city.favoriteDrugDemandMultiplier;
-            }
-        }
-
-        // 4) Daily volatility
+        // 3) Daily volatility
         float vol = cityMod != null ? cityMod.dailyVolatility : 0.2f; // default 20% if not set
         float dv = PriceService.DailyVolatility(city?.Name ?? "Unknown", item.Name, vol);
         float dailyMult = 1f + dv;
 
-        // 5) Market events (buy side tends to be affected similarly)
+        // 4) Market events (buy side tends to be affected similarly)
         var evt = PriceService.DailyEvent(city?.Name ?? "Unknown", item.Type,
                     cityMod != null ? cityMod.boomChance : 0.05f,
                     cityMod != null ? cityMod.bustChance : 0.05f);
@@ -85,8 +75,9 @@ public class Dealer : ScriptableObject
         else if (evt == PriceService.MarketEvent.Bust)
             eventMult = cityMod != null ? cityMod.bustMultiplier : 0.6f;
 
-        // 6) Combine
-        float final = basePrice * cityCOL * cityBuyMult * faveMult * dailyMult * eventMult * VisitMultiplier;
+        // 5) Combine — note: favoriteDrugDemandMultiplier is NOT applied here. It's a "consumer
+        //    demand" boost for sellers only, applied in GetModifiedSellPrice.
+        float final = basePrice * cityCOL * cityBuyMult * dailyMult * eventMult * VisitMultiplier;
 
         // 7) City event modifier (drugs only)
         if (item.Type == ItemType.Drug)
@@ -112,25 +103,39 @@ public class Dealer : ScriptableObject
         ItemPriceModifier dealerMod = priceModifiers.FirstOrDefault(m => m.itemType == item.Type);
         float dealerSellRatio = dealerMod != null ? dealerMod.sellPriceRatio : 0.5f;
 
-        int sellPrice = Mathf.RoundToInt(modifiedBuy * dealerSellRatio);
+        float sellPriceF = modifiedBuy * dealerSellRatio;
 
-        // City drug bonus: premium for selling specific drugs in their home market
         City sellCity = PlayerStats.Instance?.CurrentCity;
+
+        // Favorite drug demand: a city's favorite drug commands a premium when sold here.
+        // (Previously applied to BUY which made the city expensive to source from; now it's a
+        // true consumer-demand boost on the sell side, matching the UI label "Xx demand".)
+        if (item.Type == ItemType.Drug
+            && sellCity != null
+            && sellCity.FavoriteDrug != null
+            && string.Equals(item.Name, sellCity.FavoriteDrug.Name, System.StringComparison.Ordinal))
+        {
+            sellPriceF *= sellCity.favoriteDrugDemandMultiplier;
+        }
+
+        // City drug bonus: premium for selling specific drugs (per-drug list, separate from FavoriteDrug)
         if (item.Type == ItemType.Drug && sellCity != null)
         {
             float drugBonus = sellCity.GetDrugSellBonus(item.Name);
             if (drugBonus > 1f)
-                sellPrice = Mathf.RoundToInt(sellPrice * drugBonus);
+                sellPriceF *= drugBonus;
         }
 
-        // Festival: 2× sell on city's favorite drug
+        // Festival: extra multiplier on top when the city is celebrating its favorite drug
         if (item.Type == ItemType.Drug
             && CityEventManager.GetEventForCity(sellCity?.Name ?? "") == CityEventManager.CityEvent.Festival
             && sellCity?.FavoriteDrug != null
             && string.Equals(item.Name, sellCity.FavoriteDrug.Name, System.StringComparison.Ordinal))
         {
-            sellPrice = Mathf.RoundToInt(sellPrice * CityEventManager.FestivalSellMult);
+            sellPriceF *= CityEventManager.FestivalSellMult;
         }
+
+        int sellPrice = Mathf.RoundToInt(sellPriceF);
 
         // Guard rails
         sellPrice = Mathf.Clamp(sellPrice, 1, 999_999);
