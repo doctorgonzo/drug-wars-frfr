@@ -224,7 +224,13 @@ public class GameTime : MonoBehaviour
             if (t.gameObject.scene != activeScene) continue; // skip prefab assets and other scenes
             if (t.gameObject.name == "TimeText") { timeText = t; break; }
         }
-        if (timeText != null) { timeText.enableAutoSizing = true; timeText.fontSizeMin = 8; timeText.fontSizeMax = 48; }
+        if (timeText != null)
+        {
+            timeText.enableAutoSizing = true;
+            timeText.fontSizeMin = 8;
+            timeText.fontSizeMax = 48;
+            timeText.text = $"{DayLabel()}  {Hour:D2}:{Minute:D2}";
+        }
     }
 
     private void AdvanceSecond()
