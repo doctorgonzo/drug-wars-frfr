@@ -141,8 +141,23 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
   - TooltipUI component lives on the **CityUIHandler** root GameObject (alongside the CityUIHandler script)
   - TooltipPanel prefab has two objects named "TooltipPanel" — root (Layer 0, just a Transform) and inner panel (Layer 5, child of TooltipCanvas, the actual UI panel that shows/hides)
   - CityUIHandler is a standalone root object with no children — all its UI references point to InfoCanvas children
+  - **PlayerInventory** (ScrollRect) is the dealer-interaction player panel, populated by `DealerClicks`. **Content_Inventory** (inside TabbedPanel) is the Inventory tab populated by `InventoryTabUI` — these are different objects, don't confuse them
+
+### Per-Run Market Randomization
+- **`PriceService.RunSeed`:** Random int generated at character creation, included in all hash keys for `DailyVolatility`, `DailyEvent`, and `CityEventManager.GetEventForCity`. Each new playthrough gets unique boom/bust events, price volatility, and city events — previously the same day+city always produced the same results. Files: `PriceService.cs`, `CityEventManager.cs`, `CharCreationUI.cs`
+- **Save/load support:** `RunSeed` stored in `SaveData.runSeed`, saved/loaded via `GameSessionManager`. File: `SaveData.cs`, `GameSessionManager.cs`
+
+### Cop Encounter Loss Feedback
+- **Itemized loss display:** Every cop encounter outcome now shows red-colored loss details below the cop dialogue via TMP rich text. File: `CopEncounterUIManager.cs`
+  - Search steal: "$X confiscated"
+  - Search arrest: "$X fine (20%)" + "Drugs seized: Marijuana x5, Crack x2"
+  - Run arrest: "$X fine (15%)" + itemized drug list
+  - Combat loss: "$X taken (25-45%)" + drugs seized (also in combat log)
+- **`BuildDrugConfiscationList()`** captures drug names+amounts before `HandleArrest()` removes them
+- **`FormatLossSummary()`** formats cash and drug losses into a `<color=#FF4444>` block appended to dialogue
 
 ### Bug Fixes
+- **Player inventory scroll position:** PlayerInventory ScrollRect started scrolled to the bottom on city load due to stale oversized Content height (642px) baked in scene. `DealerManager.Start()` now resets `verticalNormalizedPosition = 1f` after one frame. Also added scroll-to-top in `DealerClicks.PopulatePlayerPanel()` for when a dealer is clicked. Files: `DealerManager.cs`, `DealerClicks.cs`
 - **Dealer panel drug bleed-through:** Fixed pool clearing to wipe ALL children from `dealerInfoPanel`, not just the current dealer's tracked items. File: `DealerClicks.cs`
 - **Equipment shop NRE on direct scene load:** Added null guards to `isOwned` checks and buy methods. File: `EquipmentShop.cs`
 - **Equipment shop layout rebuilt:** Replaced prefab-based layout (broken nested Canvas) with fully code-built UI cards using `HorizontalLayoutGroup` + `VerticalLayoutGroup`. File: `EquipmentShop.cs`
@@ -156,9 +171,6 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 
 ### Editor work required (cannot fix via code)
 - **Belgrade has no dealers:** `Belgrade.asset` has null dealer slots. Need to assign Daryl + Mr. Wong in the Inspector, then add a `DealerManager` with spawn points to the Belgrade scene (copy from Milwaukee). Once done, add a drug `CityPriceModifier` with `buyPriceMultiplier: 1.1`, `dailyVolatility: 0.18` — Ecstasy favorite will then give ~80% profit on MKE→BGR route.
-
-### Minor code issues
-- **Hardcoded 50f heat after combat win** — `CopEncounterUIManager.cs` sets `PlayerStats.Instance.CurrentHeat = 50f` after the player wins a fight. Should be `maxHeat * 0.5f` so it respects the `HeatManager.maxHeat` Inspector value if ever changed.
 
 ### WebGL build readiness
 - Save/load: ✅ WebGL-safe (PlayerPrefs)
@@ -178,6 +190,7 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Save system:** JSON serialized via `JsonUtility`, stored in `PlayerPrefs["DrugWarsSave"]`. Equipment resolved by name from `GameSessionManager.allTrenchcoats/allWeapons`. Item images reconstructed from SO registry on load.
 - **Heat** triggers cop encounter at max (100). Decays via coroutine with cooldown. Cop encounters use `CopEncounterSeed` built from current `PlayerStats` state.
 - **GameTime** fires `DayChanged` event → `DebtManager` applies interest → `PriceService.InGameDay` updates for deterministic daily prices
+- **PriceService.RunSeed** randomizes all market events per playthrough. Without it, same day+city+item always produces same boom/bust/volatility. Set at char creation, persisted in save data.
 - **GameTime.cs** has encoding issues — cannot be read by tooling, edits must use grep + targeted writes
 - **FadeController** must exist in every scene including CharCreation, Intro, GameOver, YouWin
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
