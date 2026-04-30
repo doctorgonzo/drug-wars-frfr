@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,8 +14,6 @@ public class InventoryTabUI : MonoBehaviour
 
     private readonly List<GameObject> spawnedRows = new List<GameObject>();
     private TMP_FontAsset _cachedFont;
-    private ScrollRect _scrollRect;
-    private Coroutine _scrollCoroutine;
 
     private void OnEnable()
     {
@@ -31,9 +28,6 @@ public class InventoryTabUI : MonoBehaviour
             PlayerStats.Instance.OnInventoryChanged += Refresh;
 
         Refresh();
-
-        if (_scrollCoroutine != null) StopCoroutine(_scrollCoroutine);
-        _scrollCoroutine = StartCoroutine(ScrollToTop());
     }
 
     private void OnDestroy()
@@ -86,22 +80,6 @@ public class InventoryTabUI : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent as RectTransform);
-
-        if (_scrollCoroutine != null) StopCoroutine(_scrollCoroutine);
-        _scrollCoroutine = StartCoroutine(ScrollToTop());
-    }
-
-    private IEnumerator ScrollToTop()
-    {
-        if (_scrollRect == null && contentParent != null)
-            _scrollRect = contentParent.GetComponentInParent<ScrollRect>();
-        yield return null;
-        yield return null;
-        if (_scrollRect != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            _scrollRect.verticalNormalizedPosition = 1f;
-        }
     }
 
     // ─── Row builders ────────────────────────────────────────
@@ -250,23 +228,19 @@ public class InventoryTabUI : MonoBehaviour
             csf = contentParent.gameObject.AddComponent<ContentSizeFitter>();
         csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        // Add scroll support only if no ScrollRect exists anywhere up the chain
-        _scrollRect = contentParent.GetComponentInParent<ScrollRect>();
-        if (_scrollRect == null)
+        // Add scroll support
+        Transform parent = contentParent.parent;
+        if (parent != null && parent.GetComponent<ScrollRect>() == null)
         {
-            Transform parent = contentParent.parent;
-            if (parent != null)
-            {
-                _scrollRect = parent.gameObject.AddComponent<ScrollRect>();
-                _scrollRect.content = contentParent as RectTransform;
-                _scrollRect.horizontal = false;
-                _scrollRect.vertical = true;
-                _scrollRect.movementType = ScrollRect.MovementType.Elastic;
-                _scrollRect.scrollSensitivity = 20f;
+            var sr = parent.gameObject.AddComponent<ScrollRect>();
+            sr.content = contentParent as RectTransform;
+            sr.horizontal = false;
+            sr.vertical = true;
+            sr.movementType = ScrollRect.MovementType.Elastic;
+            sr.scrollSensitivity = 20f;
 
-                if (parent.GetComponent<RectMask2D>() == null)
-                    parent.gameObject.AddComponent<RectMask2D>();
-            }
+            if (parent.GetComponent<RectMask2D>() == null)
+                parent.gameObject.AddComponent<RectMask2D>();
         }
     }
 
