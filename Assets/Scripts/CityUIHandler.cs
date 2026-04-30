@@ -29,11 +29,13 @@ public class CityUIHandler : MonoBehaviour
     [Header("Systems")]
     [SerializeField] private TravelManager travelManager;
 
+    public RectTransform WalletRect => playerWallet != null ? playerWallet.rectTransform : null;
+
     private void Start()
     {
         var ps = PlayerStats.Instance;
         playerName.text = ps.PlayerName;
-        playerWallet.text = $"Wallet: ${ps.PlayerWallet:N0}";
+        UpdateWalletDisplay(); // seeds the tween baseline
         UpdateTrenchSlotsDisplay();
 
         if (ps.CurrentTrench != null)
@@ -82,9 +84,23 @@ public class CityUIHandler : MonoBehaviour
         UpdateNetWorthDisplay();
     }
 
+    private int _lastWalletDisplayed = int.MinValue;
     public void UpdateWalletDisplay()
     {
-        playerWallet.text = $"Wallet: ${PlayerStats.Instance.PlayerWallet:N0}";
+        int current = PlayerStats.Instance.PlayerWallet;
+        if (playerWallet != null)
+        {
+            if (JuiceFX.Instance != null && _lastWalletDisplayed != int.MinValue && _lastWalletDisplayed != current)
+            {
+                JuiceFX.Instance.TweenIntegerText(playerWallet, _lastWalletDisplayed, current, "Wallet: $", "");
+                JuiceFX.Instance.NumberPunch(playerWallet, current > _lastWalletDisplayed ? 1.18f : 1.10f);
+            }
+            else
+            {
+                playerWallet.text = $"Wallet: ${current:N0}";
+            }
+        }
+        _lastWalletDisplayed = current;
 
         // After updating the text, check if travel should be unlocked
         if (travelManager != null)
@@ -101,14 +117,27 @@ public class CityUIHandler : MonoBehaviour
         cityPopulationText.text = city.Population.ToString();
         cityFavoriteDrugText.text = city.FavoriteDrug != null ? city.FavoriteDrug.Name : "None";
     }
+    private int _lastDebtDisplayed = int.MinValue;
     public void UpdateDebtDisplay()
     {
         if (debtText == null || PlayerStats.Instance == null) return;
         var ps = PlayerStats.Instance;
+        int current = ps.Debt;
         if (ps.IsDebtPaidOff)
+        {
             debtText.text = "Debt: PAID OFF";
+            if (JuiceFX.Instance != null) JuiceFX.Instance.NumberPunch(debtText, 1.4f, 0.4f);
+        }
+        else if (JuiceFX.Instance != null && _lastDebtDisplayed != int.MinValue && _lastDebtDisplayed != current)
+        {
+            JuiceFX.Instance.TweenIntegerText(debtText, _lastDebtDisplayed, current, "Debt: $", "");
+            JuiceFX.Instance.NumberPunch(debtText, current > _lastDebtDisplayed ? 1.18f : 1.10f);
+        }
         else
-            debtText.text = $"Debt: ${ps.Debt:N0}";
+        {
+            debtText.text = $"Debt: ${current:N0}";
+        }
+        _lastDebtDisplayed = current;
     }
 
     private void OnTimeChanged(GameTime.GameDateTime _) => UpdateDayDisplay();
@@ -140,10 +169,16 @@ public class CityUIHandler : MonoBehaviour
 
     private void OnWalletChangedHandler(int _) { UpdateWalletDisplay(); UpdateNetWorthDisplay(); }
 
+    private int _lastNetWorthDisplayed = int.MinValue;
     public void UpdateNetWorthDisplay()
     {
         if (netWorthText == null || PlayerStats.Instance == null) return;
-        netWorthText.text = $"Net Worth: ${PlayerStats.Instance.NetWorth:N0}";
+        int current = PlayerStats.Instance.NetWorth;
+        if (JuiceFX.Instance != null && _lastNetWorthDisplayed != int.MinValue && _lastNetWorthDisplayed != current)
+            JuiceFX.Instance.TweenIntegerText(netWorthText, _lastNetWorthDisplayed, current, "Net Worth: $", "");
+        else
+            netWorthText.text = $"Net Worth: ${current:N0}";
+        _lastNetWorthDisplayed = current;
     }
 
     private void UpdateTrenchSlotsDisplay()

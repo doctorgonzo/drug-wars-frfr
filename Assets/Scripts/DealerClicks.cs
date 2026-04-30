@@ -280,6 +280,14 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (ProfitLossPopup.Instance != null)
             ProfitLossPopup.Instance.Show(totalProfit);
 
+        // Juice: coin shower scaled to the take
+        if (JuiceFX.Instance != null && cityUIHandler != null)
+        {
+            int coinCount = Mathf.Clamp(8 + totalValue / 200, 8, 40);
+            JuiceFX.Instance.CoinBurstAtUI(cityUIHandler.WalletRect, coinCount,
+                totalProfit >= 0 ? new Color(1f, 0.85f, 0.2f) : new Color(0.95f, 0.4f, 0.4f));
+        }
+
         PopulateDealerPanel();
         PopulatePlayerPanel();
     }
@@ -312,6 +320,14 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             PlayerStats.Instance.RecordDrugSell(playerItem.Name, amountToSell, totalValue);
         cityUIHandler.UpdateWalletDisplay();
         playerItem.ChangeAmount(-amountToSell);
+
+        // Juice: coin burst at wallet on every sale
+        if (JuiceFX.Instance != null && cityUIHandler != null)
+        {
+            int coinCount = Mathf.Clamp(6 + totalValue / 250, 6, 30);
+            JuiceFX.Instance.CoinBurstAtUI(cityUIHandler.WalletRect, coinCount,
+                totalProfit >= 0 ? new Color(1f, 0.85f, 0.2f) : new Color(0.95f, 0.4f, 0.4f));
+        }
 
         if (ProfitLossPopup.Instance != null)
             ProfitLossPopup.Instance.Show(totalProfit);

@@ -226,12 +226,23 @@ public class HeatManager : MonoBehaviour
         // Any time a transaction happens, reset the decay cooldown
         cooldownTimer = decayCooldown;
 
+        float before = PlayerStats.Instance.CurrentHeat;
         PlayerStats.Instance.CurrentHeat += heatAmount;
         EnsureDecayRunning();
         PlayerStats.Instance.CurrentHeat = Mathf.Clamp(PlayerStats.Instance.CurrentHeat, 0, maxHeat);
         PlayerStats.Instance.RecordHeatSample(PlayerStats.Instance.CurrentHeat);
 
         UpdateHeatDisplay();
+
+        // Juice: punch the heat label and flash the screen red on big jumps
+        if (JuiceFX.Instance != null)
+        {
+            if (heatText != null) JuiceFX.Instance.NumberPunch(heatText, 1.20f, 0.22f);
+            float bumpFrac = heatAmount / (float)maxHeat;
+            if (bumpFrac > 0.05f)
+                JuiceFX.Instance.FlashScreen(new Color(1f, 0.15f, 0.1f), 0.30f, Mathf.Clamp(bumpFrac * 1.5f, 0.18f, 0.55f));
+        }
+
         CheckForCops();
     }
 
