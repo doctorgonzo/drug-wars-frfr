@@ -55,9 +55,11 @@ public class RunSummaryUI : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button playAgainButton;
     [SerializeField] private Button mainMenuButton;
-    [SerializeField] private string mainMenuSceneName = "Startup";
-    [SerializeField] private string playAgainSceneName = "CharCreation";
 
+    // Scene names are hard-coded as consts so a stale Inspector serialization (e.g. an older
+    // scene baked with "Start") can't override the right value at runtime.
+    private const string MainMenuSceneName = "Startup";
+    private const string PlayAgainSceneName = "CharCreation";
     private const string YouWinSceneName = "YouWin";
     private const string GameOverSceneName = "GameOver";
 
@@ -292,13 +294,12 @@ public class RunSummaryUI : MonoBehaviour
 
     private void PlayAgain()
     {
-        string scene = string.IsNullOrEmpty(playAgainSceneName) ? mainMenuSceneName : playAgainSceneName;
-        SceneManager.LoadScene(scene);
+        SceneManager.LoadScene(PlayAgainSceneName);
     }
 
     private void GoToMainMenu()
     {
-        SceneManager.LoadScene(mainMenuSceneName);
+        SceneManager.LoadScene(MainMenuSceneName);
     }
 
     // ============================================================
@@ -308,16 +309,19 @@ public class RunSummaryUI : MonoBehaviour
     // from code so the YouWin / GameOver scenes need zero setup. The layout is two columns:
     // stats on the left, leaderboard on the right, with a headline above and buttons below.
 
+    private bool _autoBuilt;
     private void EnsureUIBuilt()
     {
-        if (statsBlockText != null) return; // assume scene is hand-wired
+        if (_autoBuilt) return;             // don't double-build on Start re-entry
+        _autoBuilt = true;
 
-        // Canvas
+        // Canvas — top-level in the active scene (not under our transform — so a hand-wired
+        // RunSummaryUI on an inactive/scaled-down GameObject can't accidentally hide us).
+        // High sortingOrder so we render above any pre-existing scene UI.
         var canvasGo = new GameObject("RunSummaryCanvas");
-        canvasGo.transform.SetParent(transform, false);
         var canvas = canvasGo.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 100;
+        canvas.sortingOrder = 1000;
         var scaler = canvasGo.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
@@ -344,7 +348,7 @@ public class RunSummaryUI : MonoBehaviour
         mainV.spacing = 18;
         mainV.childAlignment = TextAnchor.UpperCenter;
         mainV.childControlWidth = true;
-        mainV.childControlHeight = false;
+        mainV.childControlHeight = true;   // honor LayoutElement preferredHeight on each child
         mainV.childForceExpandWidth = true;
         mainV.childForceExpandHeight = false;
 
@@ -421,7 +425,7 @@ public class RunSummaryUI : MonoBehaviour
         innerV.spacing = 8;
         innerV.childAlignment = TextAnchor.UpperLeft;
         innerV.childControlWidth = true;
-        innerV.childControlHeight = false;
+        innerV.childControlHeight = true;   // honor LayoutElement preferredHeight on each child
         innerV.childForceExpandWidth = true;
         innerV.childForceExpandHeight = false;
 
@@ -483,7 +487,7 @@ public class RunSummaryUI : MonoBehaviour
         contentFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         sr.content = content;
 
-        var textGo = new GameObject("Text");
+        var textGo = new GameObject("Text", typeof(RectTransform));
         textGo.transform.SetParent(content, false);
         var t = textGo.AddComponent<TextMeshProUGUI>();
         t.text = "";
@@ -514,7 +518,7 @@ public class RunSummaryUI : MonoBehaviour
 
     private static TMP_Text MakeText(Transform parent, string name, string content, int size, FontStyles style, Color color, TextAlignmentOptions align, float preferredHeight)
     {
-        var go = new GameObject(name);
+        var go = new GameObject(name, typeof(RectTransform));
         go.transform.SetParent(parent, false);
         var t = go.AddComponent<TextMeshProUGUI>();
         t.text = content;
@@ -535,7 +539,7 @@ public class RunSummaryUI : MonoBehaviour
 
     private static Button MakeButton(Transform parent, string name, string label, Color bg, float minWidth)
     {
-        var go = new GameObject(name);
+        var go = new GameObject(name, typeof(RectTransform));
         go.transform.SetParent(parent, false);
         var img = go.AddComponent<Image>();
         img.color = bg;
@@ -550,7 +554,7 @@ public class RunSummaryUI : MonoBehaviour
         le.minWidth = minWidth;
         le.preferredWidth = minWidth;
 
-        var lblGo = new GameObject("Label");
+        var lblGo = new GameObject("Label", typeof(RectTransform));
         lblGo.transform.SetParent(go.transform, false);
         var t = lblGo.AddComponent<TextMeshProUGUI>();
         t.text = label;
