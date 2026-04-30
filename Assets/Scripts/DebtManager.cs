@@ -144,6 +144,9 @@ public class DebtManager : MonoBehaviour
             Invoke(nameof(HideInterestWarning), 4f);
         }
 
+        if (borrowAmountInput != null)
+            borrowAmountInput.text = "";
+
         RefreshUI();
     }
 
@@ -161,6 +164,10 @@ public class DebtManager : MonoBehaviour
         if (amount <= 0) return;
 
         ps.PayDebt(amount);
+
+        if (payAmountInput != null)
+            payAmountInput.text = "";
+
         RefreshUI();
 
         // Check immediate win
