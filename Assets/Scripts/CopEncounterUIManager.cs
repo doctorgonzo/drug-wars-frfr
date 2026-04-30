@@ -348,18 +348,21 @@ public class CopEncounterUIManager : MonoBehaviour
         switch (outcome)
         {
             case SearchOutcome.Steal:
-                SpendPlayerCash?.Invoke(Mathf.Min(steal, SafeGetCash()));
-                OnCopStoleCash?.Invoke(steal);
-                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesWarn, $"Confiscated {Money(steal)}. Move along.")}\"";
-                EndEncounter(success: false); // you “survive” but it’s a loss
+                int actualSteal = Mathf.Min(steal, SafeGetCash());
+                SpendPlayerCash?.Invoke(actualSteal);
+                OnCopStoleCash?.Invoke(actualSteal);
+                copDialogueText.text = $”{currentCop.displayName}: \”{RandomLine(currentCop.linesWarn, “Move along.”)}\”” +
+                    FormatLossSummary(actualSteal, “confiscated”, null);
+                EndEncounter(success: false);
                 break;
 
             case SearchOutcome.Arrest:
                 int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f);
+                string searchDrugList = BuildDrugConfiscationList();
                 SpendPlayerCash?.Invoke(arrestFine);
-                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You’re under arrest.")}\"";
-                if (combatLogText != null) combatLogText.text = $"Arrested! Lost ${arrestFine:N0} and all drugs confiscated.";
                 OnPlayerArrested?.Invoke();
+                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You’re under arrest.")}\"" +
+                    FormatLossSummary(arrestFine, "fine (20%)", searchDrugList);
                 EndEncounter(success: false);
                 break;
 
@@ -428,9 +431,11 @@ public class CopEncounterUIManager : MonoBehaviour
                 if (arrestsNow)
                 {
                     int runArrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.15f);
+                    string runDrugList = BuildDrugConfiscationList();
                     SpendPlayerCash?.Invoke(runArrestFine);
-                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That’s it—you’re under arrest.")}\"";
                     OnPlayerArrested?.Invoke();
+                    copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "That’s it—you’re under arrest.")}\"" +
+                        FormatLossSummary(runArrestFine, "fine (15%)", runDrugList);
                     EndEncounter(success: false);
                 }
                 else
@@ -835,9 +840,13 @@ public class CopEncounterUIManager : MonoBehaviour
         inCombat = false;
         float lossPct  = 0.25f + currentSeed.contrabandRiskLevel * 0.10f;
         int   cashLoss = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * lossPct);
+        string combatDrugList = BuildDrugConfiscationList();
         SpendPlayerCash?.Invoke(cashLoss);
-        AppendLog($"You were beaten. Lost ${cashLoss:N0}.");
-        copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "Should've cooperated.")}\"";
+        int pct = Mathf.RoundToInt(lossPct * 100f);
+        AppendLog($"Beaten. Lost ${cashLoss:N0} ({pct}%).");
+        if (combatDrugList != null) AppendLog($"Seized: {combatDrugList}");
+        copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "Should've cooperated.")}\"" +
+            FormatLossSummary(cashLoss, $"taken ({pct}%)", combatDrugList);
         UpdateCombatUI();
 
         OnPlayerArrested?.Invoke();
@@ -875,6 +884,28 @@ public class CopEncounterUIManager : MonoBehaviour
                 // already maxed
                 break;
         }
+    }
+
+    private string BuildDrugConfiscationList()
+    {
+        var drugs = new List<string>();
+        foreach (var item in PlayerStats.Instance.inventory)
+        {
+            if (item.Type == ItemType.Drug && item.Amount > 0)
+                drugs.Add($"{item.Name} x{item.Amount}");
+        }
+        return drugs.Count > 0 ? string.Join(", ", drugs) : null;
+    }
+
+    private string FormatLossSummary(int cashLost, string cashLabel, string drugList)
+    {
+        var parts = new List<string>();
+        if (cashLost > 0)
+            parts.Add($"${cashLost:N0} {cashLabel}");
+        if (drugList != null)
+            parts.Add($"Drugs seized: {drugList}");
+        if (parts.Count == 0) return "";
+        return "\n<color=#FF4444>" + string.Join("\n", parts) + "</color>";
     }
 
     private void HandleArrest()
