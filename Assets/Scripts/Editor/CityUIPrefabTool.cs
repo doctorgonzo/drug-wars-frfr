@@ -222,24 +222,25 @@ public static class CityUIPrefabTool
             if (tooltipUI != null)
             {
                 var tso = new SerializedObject(tooltipUI);
-                // TooltipPanel prefab instance — find by name in scene
                 var tooltipPanelRoot = FindRootByName("TooltipPanel");
                 if (tooltipPanelRoot != null)
                 {
-                    var innerPanel = FindDeepGO(tooltipPanelRoot, "TooltipPanel");
-                    if (innerPanel != null && innerPanel != tooltipPanelRoot)
-                        wired += Wire(tso, "tooltipPanel", innerPanel, log);
-                    else
-                        wired += Wire(tso, "tooltipPanel", tooltipPanelRoot, log);
-                    wired += Wire(tso, "itemNameText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerName"), log);
-                    wired += Wire(tso, "itemDescriptionText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerDescription"), log);
-                }
-                // canvasRectTransform must be the TooltipCanvas (the canvas the tooltip renders on)
-                if (tooltipPanelRoot != null)
-                {
-                    var tooltipCanvas = FindDeepTransform(tooltipPanelRoot, "TooltipCanvas");
-                    if (tooltipCanvas != null)
-                        wired += Wire(tso, "canvasRectTransform", tooltipCanvas.GetComponent<RectTransform>(), log);
+                    // Hierarchy: TooltipPanel(root) → TooltipCanvas → TooltipPanel(inner)
+                    var tooltipCanvasT = FindDeepTransform(tooltipPanelRoot, "TooltipCanvas");
+                    if (tooltipCanvasT != null)
+                    {
+                        // canvasRectTransform = TooltipCanvas (the ScreenSpaceOverlay canvas)
+                        wired += Wire(tso, "canvasRectTransform", tooltipCanvasT.GetComponent<RectTransform>(), log);
+
+                        // tooltipPanel = the inner TooltipPanel (direct child of TooltipCanvas)
+                        var innerPanel = tooltipCanvasT.Find("TooltipPanel");
+                        if (innerPanel != null)
+                            wired += Wire(tso, "tooltipPanel", innerPanel.gameObject, log);
+
+                        // Text fields are children of the inner TooltipPanel
+                        wired += Wire(tso, "itemNameText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerName"), log);
+                        wired += Wire(tso, "itemDescriptionText", FindDeep<TMP_Text>(tooltipPanelRoot, "DealerDescription"), log);
+                    }
                 }
                 tso.ApplyModifiedProperties();
                 log.AppendLine("  TooltipUI: done");
