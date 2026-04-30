@@ -21,8 +21,11 @@ public class GameSessionManager : MonoBehaviour
 
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
+    // Day index of each dealer's last restock, keyed by Dealer SO instance ID.
+    private readonly Dictionary<int, int> dealerLastRestockDay = new Dictionary<int, int>();
 
     private int _pendingLoadDay = 0;
+    private bool _gameTimeSubscribed = false;
 
     private void Awake()
     {
@@ -34,11 +37,62 @@ public class GameSessionManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         InitializeAllDealers();
+        SceneManager.sceneLoaded += EnsureGameTimeSubscriptionOnSceneLoad;
+        TryEnsureGameTimeSubscription();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= EnsureGameTimeSubscriptionOnSceneLoad;
+        if (_gameTimeSubscribed && GameTime.Instance != null)
+            GameTime.Instance.DayChanged -= HandleDayChanged;
+    }
+
+    private void EnsureGameTimeSubscriptionOnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        TryEnsureGameTimeSubscription();
+    }
+
+    private void TryEnsureGameTimeSubscription()
+    {
+        if (_gameTimeSubscribed) return;
+        var gt = GameTime.Instance ?? FindObjectOfType<GameTime>();
+        if (gt != null)
+        {
+            gt.DayChanged += HandleDayChanged;
+            _gameTimeSubscribed = true;
+        }
+    }
+
+    private void HandleDayChanged(GameTime.GameDateTime dt)
+    {
+        if (allCitiesInGame == null) return;
+        foreach (City city in allCitiesInGame)
+        {
+            if (city == null || city.Dealers == null) continue;
+            foreach (Dealer dealer in city.Dealers)
+            {
+                if (dealer == null) continue;
+                int interval = dealer.restockIntervalDays;
+                if (interval <= 0) continue;
+
+                int key = dealer.GetInstanceID();
+                if (!dealerLastRestockDay.TryGetValue(key, out int lastDay))
+                    lastDay = dt.day;
+
+                if (dt.day - lastDay >= interval)
+                {
+                    InitializeDealerInventory(dealer);
+                    dealerLastRestockDay[key] = dt.day;
+                }
+            }
+        }
     }
 
     private void InitializeAllDealers()
     {
         dealerInventories.Clear();
+        dealerLastRestockDay.Clear();
         if (allCitiesInGame == null) return;
 
         foreach (City city in allCitiesInGame)
@@ -128,7 +182,12 @@ public class GameSessionManager : MonoBehaviour
             foreach (Dealer dealer in city.Dealers)
             {
                 if (dealer == null) continue;
-                var state = new SavedDealerState { dealerName = dealer.Name };
+                int dealerKey = dealer.GetInstanceID();
+                var state = new SavedDealerState
+                {
+                    dealerName = dealer.Name,
+                    lastRestockDay = dealerLastRestockDay.TryGetValue(dealerKey, out int last) ? last : 0
+                };
                 foreach (var item in GetRuntimeInventory(dealer))
                     state.inventory.Add(ItemToSaved(item));
                 data.dealerStates.Add(state);
@@ -206,6 +265,7 @@ public class GameSessionManager : MonoBehaviour
                     foreach (var si in savedState.inventory)
                         list.Add(SavedToItem(si, templateInventories));
                     dealerInventories[key] = list;
+                    dealerLastRestockDay[key] = savedState.lastRestockDay;
                 }
                 else
                 {

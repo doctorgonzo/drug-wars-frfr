@@ -8,7 +8,7 @@ public static class CityEventManager
 
     public const float LockdownPriceMult = 0.55f;
     public const float LockdownHeatMult  = 2.0f;
-    public const float FestivalSellMult  = 2.0f;
+    public const float FestivalSellMult  = 1.4f;
     public const float ShortagePriceMult = 1.8f;
     public const float ShortageHeatMult  = 1.3f;
 

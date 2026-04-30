@@ -22,6 +22,9 @@ public class Dealer : ScriptableObject
     public Item[] Inventory;
     public List<ItemPriceModifier> priceModifiers;
 
+    [Tooltip("How often (in days) this dealer restocks their inventory. Set 0 to disable.")]
+    public int restockIntervalDays = 3;
+
     // Re-rolled each visit; applies a ±20% swing on top of all other price factors.
     [System.NonSerialized] public float VisitMultiplier = 1f;
 

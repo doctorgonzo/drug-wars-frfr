@@ -48,7 +48,6 @@ public partial class PlayerStats
     public void InitializeDebt()
     {
         Debt = startingDebt;
-        ApplyDailyInterest();
     }
 
     public void ApplyDailyInterest()

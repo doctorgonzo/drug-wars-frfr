@@ -62,6 +62,9 @@ public class CopEncounterUIManager : MonoBehaviour
     private bool _searchPrerolled;  // true when RollOpening pre-computed a search result we haven't used yet
     private int _haggleCount;
     [SerializeField] private int maxHaggles = 3;
+    [SerializeField] private int maxFailedPayAttempts = 4;
+    private int _failedPayAttempts;
+    private string _lastBribeLine;
     private CopStance activeStance;        // starts as opening.stance, escalates on fail
     private float hostilityRunPenalty = 0f; // reduces run chance after each failed try
     [SerializeField] private float hostilityPenaltyPerFail = 0.12f; // 12% per fail feels punchy
@@ -149,6 +152,8 @@ public class CopEncounterUIManager : MonoBehaviour
         activeStance = opening.stance;
         hostilityRunPenalty = 0f;
         _haggleCount = 0;
+        _failedPayAttempts = 0;
+        _lastBribeLine = null;
         _searchPrerolled = opening.opening == CopOpeningAction.Search;
         rng = seededRng ?? new System.Random();
 
@@ -192,19 +197,17 @@ public class CopEncounterUIManager : MonoBehaviour
         float riskBribeMult = 1f + currentSeed.contrabandRiskLevel * 0.5f;
         askAmount = Mathf.RoundToInt(rawAsk * riskBribeMult);
 
-        bribeAskText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"That heat isn't cheap to forget. {Money(askAmount)} and you walk.")}\"";
-        bribeHintText.text = $"You have {Money(playerCash)}.";
-
-        // Configure slider/input to player cash
-        bribeSlider.minValue = 0;
-        bribeSlider.maxValue = Mathf.Max(askAmount, playerCash);
-        bribeSlider.wholeNumbers = true;
-        bribeSlider.value = Mathf.Min(askAmount, playerCash);
-
-        bribeInput.text = Mathf.Min(askAmount, playerCash).ToString();
-
+        // Wire listeners once per panel show
         bribeSlider.onValueChanged.RemoveAllListeners();
-        bribeSlider.onValueChanged.AddListener(v => bribeInput.text = ((int)v).ToString());
+        bribeSlider.onValueChanged.AddListener(v => bribeInput.SetTextWithoutNotify(((int)v).ToString()));
+
+        bribeInput.onValueChanged.RemoveAllListeners();
+        bribeInput.onValueChanged.AddListener(s =>
+        {
+            if (!int.TryParse(s, out var amt)) amt = 0;
+            amt = Mathf.Clamp(amt, 0, SafeGetCash());
+            bribeSlider.SetValueWithoutNotify(amt);
+        });
 
         bribeInput.onEndEdit.RemoveAllListeners();
         bribeInput.onEndEdit.AddListener(s =>
@@ -212,18 +215,54 @@ public class CopEncounterUIManager : MonoBehaviour
             if (!int.TryParse(s, out var amt)) amt = 0;
             amt = Mathf.Clamp(amt, 0, SafeGetCash());
             bribeSlider.value = amt;
-            bribeInput.text = amt.ToString();
+            bribeInput.SetTextWithoutNotify(amt.ToString());
         });
 
-        // Buttons
         bribePayButton.onClick.RemoveAllListeners();
-        bribePayButton.onClick.AddListener(() => OnBribePayClicked((int)bribeSlider.value));
+        bribePayButton.onClick.AddListener(() => OnBribePayClicked(GetCurrentBribeOffer()));
 
         bribeHaggleButton.onClick.RemoveAllListeners();
         bribeHaggleButton.onClick.AddListener(OnBribeHaggleClicked);
 
         bribeRefuseButton.onClick.RemoveAllListeners();
         bribeRefuseButton.onClick.AddListener(OnBribeRefuseClicked);
+
+        // Initial demand line goes to the outer dialogue area
+        copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesDemandBribe, $"That heat isn't cheap to forget. {Money(askAmount)} and you walk.")}\"";
+        RefreshBribePanelUI();
+    }
+
+    // Pull the offer from the input field first (most recent typing wins), fall back to slider.
+    private int GetCurrentBribeOffer()
+    {
+        if (int.TryParse(bribeInput.text, out var amt))
+            return Mathf.Clamp(amt, 0, SafeGetCash());
+        return Mathf.Clamp((int)bribeSlider.value, 0, SafeGetCash());
+    }
+
+    // Refresh the *informational* panel UI: current ask, cash hint, slider/input bounds.
+    // Dialogue (bribeAskText is a header in the panel; copDialogueText is the outer area)
+    // is set by the caller for each branch.
+    private void RefreshBribePanelUI()
+    {
+        int playerCash = SafeGetCash();
+        bribeAskText.text = $"<b>{currentCop.displayName} demands {Money(askAmount)}</b>";
+        bribeHintText.text = $"You have {Money(playerCash)}.";
+
+        bribeSlider.minValue = 0;
+        bribeSlider.maxValue = Mathf.Max(1, playerCash);
+        bribeSlider.wholeNumbers = true;
+        int defaultOffer = Mathf.Min(askAmount, playerCash);
+        bribeSlider.SetValueWithoutNotify(defaultOffer);
+        bribeInput.SetTextWithoutNotify(defaultOffer.ToString());
+    }
+
+    // RandomLine that avoids repeating the last bribe line so back-to-back dialogue doesn't look stuck.
+    private string PickBribeLine(string[] pool, string fallback)
+    {
+        string picked = RandomLine(pool, fallback, _lastBribeLine);
+        _lastBribeLine = picked;
+        return picked;
     }
 
     private void OnBribePayClicked(int offer)
@@ -231,12 +270,13 @@ public class CopEncounterUIManager : MonoBehaviour
         int cash = SafeGetCash();
         offer = Mathf.Clamp(offer, 0, cash);
 
-        // Compute adequacy: same idea as earlier — adequate if >= ask * minFraction
         float minFrac = currentCop.minBribeFraction;
         bool adequate = offer >= Mathf.CeilToInt(askAmount * minFrac);
+        bool overpay  = offer >= askAmount;
 
-        // Chance to accept = corruption +/- jitter
+        // Overpay sharply boosts acceptance — a stubborn cop shouldn't reject more than asked
         float acceptChance = Mathf.Clamp01(currentCop.corruption + UnityEngine.Random.Range(-currentCop.bribeAcceptanceJitter, currentCop.bribeAcceptanceJitter));
+        if (overpay) acceptChance = Mathf.Max(acceptChance, 0.9f);
         bool accepted = adequate && (rng.NextDouble() < acceptChance);
 
         if (accepted)
@@ -247,33 +287,41 @@ public class CopEncounterUIManager : MonoBehaviour
             return;
         }
 
-        // Not accepted — handle based on adequacy
-        if (adequate)
+        // Cop's patience runs out after too many failed pay attempts
+        _failedPayAttempts++;
+        if (_failedPayAttempts >= maxFailedPayAttempts)
         {
-            // Adequate offer but cop refused (low corruption/bad luck): ask for a bit more instead of escalating
-            int playerCash = SafeGetCash();
-            int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), Mathf.Max(askAmount, offer + Mathf.RoundToInt((askAmount - offer) * 0.5f)));
-            askAmount = newAsk;
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, "Done playing games.")}\"";
+            bribePanel.SetActive(false);
+            bool goesViolent = rng.NextDouble() < (0.3 + currentCop.violence * 0.4);
+            if (goesViolent) StartCombat();
+            else PerformSearch();
+            return;
+        }
 
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, $"I need a little more to forget this. {Money(newAsk)}.")}\"";
-            bribeHintText.text = $"You have {Money(playerCash)}.";
-            bribeSlider.maxValue = Mathf.Max(newAsk, playerCash);
-            bribeSlider.value = Mathf.Min(newAsk, playerCash);
-            bribeInput.text = bribeSlider.value.ToString();
+        if (overpay)
+        {
+            // Player paid more than asked — don't raise the ask, the cop is just being difficult
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, "Even that's not enough today.")}\"";
+        }
+        else if (adequate)
+        {
+            // Adequate but unlucky roll — small bump to the ask
+            int playerCash = SafeGetCash();
+            int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), askAmount + Mathf.RoundToInt((askAmount - offer) * 0.5f));
+            askAmount = Mathf.Max(askAmount, newAsk);
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, $"I need a little more to forget this. {Money(askAmount)}.")}\"";
         }
         else
         {
-            // Inadequate offer — demand more (counter-offer)
+            // Inadequate offer — counter-offer goes up
             int playerCash = SafeGetCash();
-            int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), Mathf.Max(askAmount, offer + Mathf.RoundToInt((askAmount - offer) * 0.7f)));
-            askAmount = newAsk;
-
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, $"Not enough. Make it {Money(newAsk)}.")}\"";
-            bribeHintText.text = $"You have {Money(playerCash)}.";
-            bribeSlider.maxValue = Mathf.Max(newAsk, playerCash);
-            bribeSlider.value = Mathf.Min(newAsk, playerCash);
-            bribeInput.text = bribeSlider.value.ToString();
+            int newAsk = Mathf.Min(currentCop.ComputeBribeDemand(playerCash), askAmount + Mathf.RoundToInt((askAmount - offer) * 0.7f));
+            askAmount = Mathf.Max(askAmount, newAsk);
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, $"Not enough. Make it {Money(askAmount)}.")}\"";
         }
+
+        RefreshBribePanelUI();
     }
 
     private void OnBribeHaggleClicked()
@@ -283,8 +331,9 @@ public class CopEncounterUIManager : MonoBehaviour
         // Out of haggle attempts — cop loses patience and goes straight to search/attack
         if (_haggleCount > maxHaggles)
         {
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "Enough stalling.")}\"";
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, "Enough stalling.")}\"";
             bribeHaggleButton.interactable = false;
+            bribePanel.SetActive(false);
             bool goesViolent = rng.NextDouble() < (0.3 + currentCop.violence * 0.4);
             if (goesViolent) StartCombat();
             else PerformSearch();
@@ -294,25 +343,22 @@ public class CopEncounterUIManager : MonoBehaviour
         // Lower ask if cop is corrupt/friendly; raise if honest/hostile
         float haggle = Mathf.Lerp(0.85f, 0.60f, currentCop.corruption);
         int playerCash = SafeGetCash();
-        int newAsk = Mathf.Clamp(Mathf.RoundToInt(askAmount * haggle), 10, playerCash);
+        int newAsk = Mathf.Clamp(Mathf.RoundToInt(askAmount * haggle), 10, Mathf.Max(10, playerCash));
         if (newAsk < askAmount)
         {
             askAmount = newAsk;
             string lastChance = _haggleCount >= maxHaggles ? " Last chance." : "";
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesDemandBribe, $"Fine. {Money(newAsk)}.{lastChance}")}\"";
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesDemandBribe, $"Fine. {Money(newAsk)}.{lastChance}")}\"";
             if (_haggleCount >= maxHaggles)
                 bribeHaggleButton.interactable = false;
         }
         else
         {
-            askAmount = Mathf.Min(playerCash, askAmount + Mathf.RoundToInt(askAmount * 0.10f));
-            copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesRejectBribe, "You're wasting my time. Price just went up.")}\"";
+            askAmount = askAmount + Mathf.RoundToInt(askAmount * 0.10f);
+            copDialogueText.text = $"{currentCop.displayName}: \"{PickBribeLine(currentCop.linesRejectBribe, "You're wasting my time. Price just went up.")}\"";
         }
 
-        bribeSlider.maxValue = Mathf.Max(askAmount, playerCash);
-        bribeSlider.value = Mathf.Min(askAmount, playerCash);
-        bribeInput.text = bribeSlider.value.ToString();
-        bribeHintText.text = $"You have {Money(playerCash)}.";
+        RefreshBribePanelUI();
     }
 
     private void OnBribeRefuseClicked()
@@ -959,12 +1005,17 @@ public class CopEncounterUIManager : MonoBehaviour
             OnEncounterResolved?.Invoke();
     }
 
-    private string RandomLine(string[] pool, string fallback)
+    private string RandomLine(string[] pool, string fallback, string avoidLine = null)
     {
         if (pool != null && pool.Length > 0)
         {
-            int i = UnityEngine.Random.Range(0, pool.Length);
-            if (!string.IsNullOrWhiteSpace(pool[i])) return pool[i];
+            for (int attempt = 0; attempt < 4; attempt++)
+            {
+                int i = UnityEngine.Random.Range(0, pool.Length);
+                if (string.IsNullOrWhiteSpace(pool[i])) continue;
+                if (avoidLine != null && pool[i] == avoidLine && pool.Length > 1) continue;
+                return pool[i];
+            }
         }
         return fallback;
     }
