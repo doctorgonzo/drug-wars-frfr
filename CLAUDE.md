@@ -183,6 +183,14 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Festival sell multiplier nerf:** `CityEventManager.FestivalSellMult` 2.0× → 1.4×. Crack on a Baghdad festival/boom day previously cleared $3k+; now caps around ~$1,375. File: `CityEventManager.cs`
 - **No day-1 interest:** `PlayerStats.InitializeDebt()` no longer calls `ApplyDailyInterest()`. Player starts at exactly $50,000 debt instead of $52,500. Interest still kicks in on the first `DayChanged` event. File: `PlayerStats.Progression.cs`
 
+### Cheat Menu (dev/test)
+- **`CheatMenu.cs`** — auto-spawned at game start via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`, no Editor wiring required. DontDestroyOnLoad. Press **Esc** anywhere to toggle.
+- **Buttons:** `+ $10,000 CASH`, `DROP HEAT TO 0`, `QUICK START (skip intro)`, Close.
+- **Quick Start:** bootstraps a default character (name "TEST", first trenchcoat/weapon/sprite from `GameSessionManager`), resets run stats, initializes debt, and loads Milwaukee directly — bypasses Intro and CharCreation.
+- **`GameSessionManager` getters:** added `AllTrenchcoats`, `AllWeapons`, `PlayerSprites`, `AllCities`, `FindCityByName(name)` so the cheat menu can resolve defaults without rewiring SOs.
+- **All UI is built from code** — Canvas + dimmer + panel + buttons all instantiated in `BuildUI()`. Sorting order 32000 puts it above all gameplay UI.
+- **To exclude from release builds:** wrap the `Bootstrap()` method (and `Update()` ESC handler) in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`.
+
 ### Endgame Stats & Leaderboard
 - **Per-run stats tracker** — `PlayerStats.RunStats.cs` partial class. Counters for money flow (sales revenue, drug spend, equipment, travel, interest, debt paid, fines, confiscation, combat loss, bribes, borrowed), drug stats (qty bought/sold, biggest single sale, favorite drug by qty), combat outcomes (wins, losses, escapes, successful bribes), peak heat, unique cities (`HashSet<string>`), day-debt-cleared, and total clicks. `ResetRunStats()` called from `CharCreationUI.HandleContinue` for every new run. **New file:** `PlayerStats.RunStats.cs`
 - **Click counting** — `PlayerStats.Update()` increments `TotalClicks` on every `Input.GetMouseButtonDown(0)`. PlayerStats is `DontDestroyOnLoad` so this works across scenes.

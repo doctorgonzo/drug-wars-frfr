@@ -19,6 +19,12 @@ public class GameSessionManager : MonoBehaviour
     [Tooltip("Player character sprites in the same order as CharCreationUI.charSprites.")]
     [SerializeField] private Sprite[] playerSprites;
 
+    public IReadOnlyList<Trenchcoat> AllTrenchcoats => allTrenchcoats;
+    public IReadOnlyList<Weapon> AllWeapons => allWeapons;
+    public IReadOnlyList<Sprite> PlayerSprites => playerSprites;
+    public IReadOnlyList<City> AllCities => allCitiesInGame;
+    public City FindCityByName(string name) => allCitiesInGame?.FirstOrDefault(c => c != null && c.Name == name);
+
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
     // Day index of each dealer's last restock, keyed by Dealer SO instance ID.
