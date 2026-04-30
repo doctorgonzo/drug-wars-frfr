@@ -348,6 +348,7 @@ public class CopEncounterUIManager : MonoBehaviour
         switch (outcome)
         {
             case SearchOutcome.Steal:
+            {
                 int actualSteal = Mathf.Min(steal, SafeGetCash());
                 SpendPlayerCash?.Invoke(actualSteal);
                 OnCopStoleCash?.Invoke(actualSteal);
@@ -355,16 +356,19 @@ public class CopEncounterUIManager : MonoBehaviour
                     FormatLossSummary(actualSteal, “confiscated”, null);
                 EndEncounter(success: false);
                 break;
+            }
 
             case SearchOutcome.Arrest:
+            {
                 int arrestFine = Mathf.RoundToInt(PlayerStats.Instance.PlayerWallet * 0.20f);
                 string searchDrugList = BuildDrugConfiscationList();
                 SpendPlayerCash?.Invoke(arrestFine);
                 OnPlayerArrested?.Invoke();
-                copDialogueText.text = $"{currentCop.displayName}: \"{RandomLine(currentCop.linesArrest, "You’re under arrest.")}\"" +
-                    FormatLossSummary(arrestFine, "fine (20%)", searchDrugList);
+                copDialogueText.text = $”{currentCop.displayName}: \”{RandomLine(currentCop.linesArrest, “You’re under arrest.”)}\”” +
+                    FormatLossSummary(arrestFine, “fine (20%)”, searchDrugList);
                 EndEncounter(success: false);
                 break;
+            }
 
             default:
                 // None (no contraband and not corrupt enough to steal)
