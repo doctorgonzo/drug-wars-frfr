@@ -19,6 +19,14 @@ public class GameSessionManager : MonoBehaviour
     [Tooltip("Player character sprites in the same order as CharCreationUI.charSprites.")]
     [SerializeField] private Sprite[] playerSprites;
 
+    // Wipe per-run runtime state and rebuild dealer inventories from their templates. Used when
+    // starting a fresh run so leftover stock and stale restock timers from the previous run
+    // don't carry into the new one.
+    public void ResetForNewRun()
+    {
+        InitializeAllDealers();
+    }
+
     public IReadOnlyList<Trenchcoat> AllTrenchcoats => allTrenchcoats;
     public IReadOnlyList<Weapon> AllWeapons => allWeapons;
     public IReadOnlyList<Sprite> PlayerSprites => playerSprites;

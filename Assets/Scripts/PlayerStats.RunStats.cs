@@ -127,8 +127,35 @@ public partial class PlayerStats
         }
     }
 
+    // Default starting wallet on a fresh run. Inspector value on PlayerStats.Economy is only
+    // applied at first instantiation; this constant is what every subsequent reset uses.
+    private const int DefaultStartingWallet = 10000;
+
     public void ResetRunStats()
     {
+        // Money / inventory / equipment / heat — clean slate
+        PlayerWallet = DefaultStartingWallet;
+        if (inventory != null)
+        {
+            inventory.Clear();
+            NotifyInventoryChanged();
+        }
+        CurrentHeat = 0f;
+        CurrentTrench = null;
+        CurrentWeapon = null;
+        if (LastSeenBuyPrice != null) LastSeenBuyPrice.Clear();
+        Debt = 0; // re-initialized by InitializeDebt() right after this call
+
+        // World time
+        if (GameTime.Instance != null) GameTime.Instance.ResetToStart();
+        PriceService.InGameDay = 1;
+
+        // Dealer runtime inventories — rebuild from templates so the previous run's stock is gone
+        if (GameSessionManager.Instance != null) GameSessionManager.Instance.ResetForNewRun();
+
+        // Daily-tip cache uses RunSeed + day, both about to change; invalidate to be safe
+        DailyTipService.InvalidateCache();
+
         ResetCityHeat();
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;

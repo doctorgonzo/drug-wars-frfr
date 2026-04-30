@@ -104,6 +104,14 @@ public class GameTime : MonoBehaviour
         timeScale = Mathf.Max(0.0001f, newScale);
     }
 
+    // Reset to the configured start day/hour. Used when starting a fresh run after a win/loss
+    // (the GameTime singleton persists across scene loads, so its day counter has to be reset
+    // explicitly or it'll carry the previous run's day count into the new one).
+    public void ResetToStart()
+    {
+        SetTime(new GameDateTime(startDay, startHour, startMinute, startSecond), invokeEvents: false);
+    }
+
     public void SetTime(GameDateTime t, bool invokeEvents = true)
     {
         Day = Mathf.Max(1, t.day);

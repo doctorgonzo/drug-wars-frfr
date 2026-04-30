@@ -46,6 +46,12 @@ public class CharCreationUI : MonoBehaviour
         curTrenchIndex = 0;
         curWeaponIndex = 0;
 
+        // Reset the persistent PlayerStats singleton to a fresh-run baseline before we read
+        // PlayerWallet — otherwise leftover cash from a previous run leaks into the gear filter
+        // and the player ends a "new" run still sitting on $50k.
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.ResetRunStats();
+
         int startingCash = PlayerStats.Instance.PlayerWallet;
         trenchcoats = trenchcoats.Where(t => t != null && t.Cost <= startingCash).ToArray();
         weapons = weapons.Where(w => w != null && w.Cost <= startingCash).ToArray();
