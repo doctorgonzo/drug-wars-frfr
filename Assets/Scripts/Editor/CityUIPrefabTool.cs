@@ -20,6 +20,7 @@ public static class CityUIPrefabTool
         "TravelManager",
         "MarketNewsTicker",
         "EquipmentShop",
+        "TravelUIParent",
     };
 
     private static readonly string[] CitySceneNames =
