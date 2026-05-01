@@ -30,19 +30,9 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     private GameObject _sellAllButton;
 
-    // Contract banner — shown alongside dealer items when this dealer has an offer/active contract.
-    // Lives inside the dealer panel's horizontal layout, sized as a tall narrow column matching
-    // the dealer items' shape. Uses fixed font sizes (no rich-text autosize tricks) since narrow
-    // layouts confuse TMP's autosize and produce gigantic title text.
-    private GameObject _contractBanner;
-    private TMP_Text _contractTitleText;
-    private TMP_Text _contractDetailText;
-    private TMP_Text _contractPaymentText;
-    private TMP_Text _contractAdvanceText;
-    private Button _contractAcceptBtn;
-    private Button _contractDeclineBtn;
-    private Button _contractDeliverBtn;
-    private bool _subscribedToInventoryChanges;
+    // Contract banner now lives on its own overlay canvas (ContractBannerUI singleton)
+    // because the dealer panel's layout doesn't accommodate odd-shaped extra children
+    // cleanly. We just notify ShowFor/HideIfFor on panel open/close.
 
     private int GetShiftClickAmount() =>
         (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? shiftClickAmount : 1;
@@ -121,9 +111,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             child.gameObject.SetActive(false);
         }
 
-        // Hide our contract banner — dealerInfoPanel is shared, and another dealer's panel
-        // taking over would otherwise see our banner as a sibling.
-        if (_contractBanner != null) _contractBanner.SetActive(false);
+        // Tell the shared contract banner to hide if it's tracking us.
+        ContractBannerUI.Instance?.HideIfFor(dealer);
     }
 
     private GameObject GetPooledItem(List<GameObject> pool, Transform parent)
@@ -165,8 +154,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
                 PlayerStats.Instance.LastSeenBuyPrice[item.Name] = dealer.GetModifiedBuyPrice(item);
         }
 
-        UpdateContractBanner();
-        TrySubscribeInventoryChanges();
+        // Hand off to the shared contract banner overlay (separate canvas).
+        ContractBannerUI.Instance?.ShowFor(dealer);
     }
 
     private void ReturnDealerItems()
@@ -256,237 +245,11 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     }
 
     // ------------------------------------------------------------------
-    //  Contract banner (procedural UI; lives at the top of the dealer panel)
+    //  Contract banner has moved to ContractBannerUI singleton overlay.
+    //  PopulateDealerPanel calls ContractBannerUI.Instance?.ShowFor(dealer)
+    //  and ReturnAllToPool calls HideIfFor(dealer). All UI building, click
+    //  handling, and inventory-change refresh logic lives in that class.
     // ------------------------------------------------------------------
-
-    private void EnsureContractBanner()
-    {
-        if (_contractBanner != null) return;
-        if (dealerInfoPanel == null) return;
-
-        _contractBanner = new GameObject("ContractBanner");
-        _contractBanner.transform.SetParent(dealerInfoPanel.transform, false);
-
-        // Sized as a tall narrow column to match dealer items' shape. Don't claim flexible
-        // width — the dealer panel's HLG already squeezes us narrow; we just want to be
-        // tall enough that 5 stacked rows fit cleanly.
-        var rect = _contractBanner.AddComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(220, 240);
-
-        var le = _contractBanner.AddComponent<LayoutElement>();
-        le.preferredWidth = 220;
-        le.minWidth = 200;
-        le.preferredHeight = 240;
-        le.minHeight = 200;
-        le.flexibleWidth = 0;
-        le.flexibleHeight = 0;
-
-        var bg = _contractBanner.AddComponent<Image>();
-        bg.color = new Color(0.15f, 0.18f, 0.30f, 0.98f);
-
-        var vlg = _contractBanner.AddComponent<VerticalLayoutGroup>();
-        vlg.padding = new RectOffset(10, 10, 10, 10);
-        vlg.spacing = 4;
-        vlg.childAlignment = TextAnchor.MiddleCenter;
-        vlg.childForceExpandWidth = true;
-        vlg.childForceExpandHeight = false;
-        vlg.childControlWidth = true;
-        vlg.childControlHeight = true;
-
-        // 4 text rows + 1 button row, fixed sizes (no autosize — confuses TMP in narrow layouts)
-        _contractTitleText   = AddBannerRow(_contractBanner.transform, "Title",   28, 22, FontStyles.Bold,    new Color(1f, 0.85f, 0.20f));
-        _contractDetailText  = AddBannerRow(_contractBanner.transform, "Detail",  46, 14, FontStyles.Normal,  Color.white);
-        _contractPaymentText = AddBannerRow(_contractBanner.transform, "Payment", 28, 18, FontStyles.Bold,    new Color(0.55f, 1f, 0.55f));
-        _contractAdvanceText = AddBannerRow(_contractBanner.transform, "Advance", 22, 11, FontStyles.Italic,  new Color(0.85f, 0.85f, 0.70f));
-
-        // Button row
-        var btnRow = new GameObject("Buttons");
-        btnRow.transform.SetParent(_contractBanner.transform, false);
-        btnRow.AddComponent<RectTransform>();
-        var rowLE = btnRow.AddComponent<LayoutElement>();
-        rowLE.preferredHeight = 32;
-        rowLE.minHeight = 32;
-        var hlg = btnRow.AddComponent<HorizontalLayoutGroup>();
-        hlg.spacing = 4;
-        hlg.padding = new RectOffset(0, 0, 0, 0);
-        hlg.childAlignment = TextAnchor.MiddleCenter;
-        hlg.childForceExpandWidth = true;
-        hlg.childForceExpandHeight = true;
-        hlg.childControlWidth = true;
-        hlg.childControlHeight = true;
-
-        _contractAcceptBtn  = BuildBannerButton(btnRow.transform, "ACCEPT",  new Color(0.20f, 0.55f, 0.20f), OnAcceptContract);
-        _contractDeclineBtn = BuildBannerButton(btnRow.transform, "DECLINE", new Color(0.45f, 0.45f, 0.45f), OnDeclineContract);
-        _contractDeliverBtn = BuildBannerButton(btnRow.transform, "DELIVER", new Color(0.85f, 0.65f, 0.15f), OnDeliverContract);
-    }
-
-    private TMP_Text AddBannerRow(Transform parent, string goName, int height, int fontSize, FontStyles style, Color color)
-    {
-        var go = new GameObject(goName);
-        go.transform.SetParent(parent, false);
-        go.AddComponent<RectTransform>();
-        var le = go.AddComponent<LayoutElement>();
-        le.preferredHeight = height;
-        le.minHeight = height;
-        var t = go.AddComponent<TextMeshProUGUI>();
-        t.text = "";
-        t.alignment = TextAlignmentOptions.Center;
-        t.color = color;
-        t.fontStyle = style;
-        t.fontSize = fontSize;
-        t.enableAutoSizing = false;
-        t.enableWordWrapping = true;
-        t.richText = true;
-        return t;
-    }
-
-    private Button BuildBannerButton(Transform parent, string label, Color color, System.Action onClick)
-    {
-        var go = new GameObject($"Btn_{label}");
-        go.transform.SetParent(parent, false);
-        go.AddComponent<RectTransform>();
-        var img = go.AddComponent<Image>();
-        img.color = color;
-        var btn = go.AddComponent<Button>();
-        var colors = btn.colors;
-        colors.highlightedColor = new Color(color.r * 1.2f, color.g * 1.2f, color.b * 1.2f, 1f);
-        colors.pressedColor = new Color(color.r * 0.7f, color.g * 0.7f, color.b * 0.7f, 1f);
-        btn.colors = colors;
-        btn.onClick.AddListener(() => onClick?.Invoke());
-
-        var textGO = new GameObject("Label");
-        textGO.transform.SetParent(go.transform, false);
-        var textRect = textGO.AddComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.sizeDelta = Vector2.zero;
-        var t = textGO.AddComponent<TextMeshProUGUI>();
-        t.text = label;
-        t.alignment = TextAlignmentOptions.Center;
-        t.color = Color.white;
-        t.fontStyle = FontStyles.Bold;
-        t.fontSize = 9;
-        return btn;
-    }
-
-    private void UpdateContractBanner()
-    {
-        if (dealer == null) return;
-        var cm = ContractManager.Instance;
-        if (cm == null)
-        {
-            if (_contractBanner != null) _contractBanner.SetActive(false);
-            return;
-        }
-
-        var offer = cm.GetOfferForDealer(dealer);
-        var active = cm.GetActiveContractForDealer(dealer);
-
-        if (offer == null && active == null)
-        {
-            if (_contractBanner != null) _contractBanner.SetActive(false);
-            return;
-        }
-
-        EnsureContractBanner();
-        _contractBanner.SetActive(true);
-        _contractBanner.transform.SetAsFirstSibling();
-
-        int currentDay = GameTime.Instance != null ? GameTime.Instance.Day : 1;
-
-        if (offer != null)
-        {
-            int daysLeft = Mathf.Max(0, offer.deadlineDay - currentDay);
-            int advance = Mathf.RoundToInt(offer.totalPayment * 0.5f);
-            _contractTitleText.text   = "JOB OFFER";
-            _contractDetailText.text  = $"{offer.drugName} × {offer.quantityRequired}\nin {daysLeft}d";
-            _contractPaymentText.text = $"${offer.totalPayment:N0}";
-            _contractAdvanceText.text = $"${advance:N0} advance";
-            _contractAcceptBtn.gameObject.SetActive(true);
-            _contractDeclineBtn.gameObject.SetActive(true);
-            _contractDeliverBtn.gameObject.SetActive(false);
-        }
-        else
-        {
-            int daysLeft = active.deadlineDay - currentDay;
-            var item = PlayerStats.Instance?.inventory
-                .FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == active.drugName);
-            int playerHas = item != null ? item.Amount : 0;
-            bool canDeliver = playerHas >= active.quantityRequired;
-
-            string deadlineStr = daysLeft <= 0
-                ? "<color=#FF4444>OVERDUE</color>"
-                : $"{daysLeft}d left";
-            string ownStr = canDeliver
-                ? $"<color=#44FF44>{playerHas}/{active.quantityRequired} ready</color>"
-                : $"have {playerHas}/{active.quantityRequired}";
-
-            _contractTitleText.text   = "DELIVER";
-            _contractDetailText.text  = $"{active.drugName} × {active.quantityRequired}\n{deadlineStr}";
-            _contractPaymentText.text = $"${active.RemainingPayment:N0}";
-            _contractAdvanceText.text = ownStr;
-            _contractAcceptBtn.gameObject.SetActive(false);
-            _contractDeclineBtn.gameObject.SetActive(false);
-            _contractDeliverBtn.gameObject.SetActive(true);
-            _contractDeliverBtn.interactable = canDeliver;
-        }
-    }
-
-    private void OnAcceptContract()
-    {
-        if (dealer == null || ContractManager.Instance == null) return;
-        if (ContractManager.Instance.AcceptOffer(dealer))
-        {
-            cityUIHandler?.UpdateWalletDisplay();
-            UpdateContractBanner();
-            ShowFeedback("CONTRACT ACCEPTED");
-            if (JuiceFX.Instance != null && cityUIHandler != null)
-                JuiceFX.Instance.CoinBurstAtUI(cityUIHandler.WalletRect, 12, new Color(1f, 0.85f, 0.2f));
-        }
-    }
-
-    private void OnDeclineContract()
-    {
-        if (dealer == null || ContractManager.Instance == null) return;
-        ContractManager.Instance.DeclineOffer(dealer);
-        UpdateContractBanner();
-    }
-
-    private void OnDeliverContract()
-    {
-        if (dealer == null || ContractManager.Instance == null) return;
-        if (ContractManager.Instance.TryDeliver(dealer))
-        {
-            cityUIHandler?.UpdateWalletDisplay();
-            PopulatePlayerPanel();
-            UpdateContractBanner();
-            ShowFeedback("CONTRACT COMPLETE");
-            if (JuiceFX.Instance != null && cityUIHandler != null)
-                JuiceFX.Instance.CoinBurstAtUI(cityUIHandler.WalletRect, 30, new Color(1f, 0.85f, 0.2f));
-        }
-    }
-
-    private void TrySubscribeInventoryChanges()
-    {
-        if (_subscribedToInventoryChanges) return;
-        if (PlayerStats.Instance == null) return;
-        PlayerStats.Instance.OnInventoryChanged += OnInventoryChangedRefreshBanner;
-        _subscribedToInventoryChanges = true;
-    }
-
-    private void OnInventoryChangedRefreshBanner()
-    {
-        // Refresh button-enabled state when player inventory changes mid-session (e.g., they
-        // just bought enough of the contract drug from this same dealer).
-        if (_contractBanner != null && _contractBanner.activeInHierarchy)
-            UpdateContractBanner();
-    }
-
-    private void OnDestroy()
-    {
-        if (_subscribedToInventoryChanges && PlayerStats.Instance != null)
-            PlayerStats.Instance.OnInventoryChanged -= OnInventoryChangedRefreshBanner;
-    }
 
     private void SellAll()
     {

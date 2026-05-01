@@ -271,7 +271,10 @@ public class StashPanelUI : MonoBehaviour
         colVlg.childForceExpandWidth = true;
         colVlg.childForceExpandHeight = false;
         colVlg.childControlWidth = true;
-        colVlg.childControlHeight = false;
+        // Same childControlHeight bug as the inner contentVlg — without this, the column's
+        // VLG ignores Header's preferredHeight=44 and Scroll's flexibleHeight=1, so they
+        // render at default sizeDelta (100,100) and the scroll viewport collapses.
+        colVlg.childControlHeight = true;
 
         // Column header
         var head = new GameObject("Head");
