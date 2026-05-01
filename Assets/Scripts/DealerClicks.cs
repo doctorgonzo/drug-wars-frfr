@@ -30,9 +30,15 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     private GameObject _sellAllButton;
 
-    // Contract banner — shown above dealer items when this dealer has an offer/active contract.
+    // Contract banner — shown alongside dealer items when this dealer has an offer/active contract.
+    // Lives inside the dealer panel's horizontal layout, sized as a tall narrow column matching
+    // the dealer items' shape. Uses fixed font sizes (no rich-text autosize tricks) since narrow
+    // layouts confuse TMP's autosize and produce gigantic title text.
     private GameObject _contractBanner;
-    private TMP_Text _contractText;
+    private TMP_Text _contractTitleText;
+    private TMP_Text _contractDetailText;
+    private TMP_Text _contractPaymentText;
+    private TMP_Text _contractAdvanceText;
     private Button _contractAcceptBtn;
     private Button _contractDeclineBtn;
     private Button _contractDeliverBtn;
@@ -261,57 +267,77 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         _contractBanner = new GameObject("ContractBanner");
         _contractBanner.transform.SetParent(dealerInfoPanel.transform, false);
 
+        // Sized as a tall narrow column to match dealer items' shape. Don't claim flexible
+        // width — the dealer panel's HLG already squeezes us narrow; we just want to be
+        // tall enough that 5 stacked rows fit cleanly.
         var rect = _contractBanner.AddComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(0, 60);
-
-        var bg = _contractBanner.AddComponent<Image>();
-        bg.color = new Color(0.15f, 0.18f, 0.30f, 0.95f);
+        rect.sizeDelta = new Vector2(220, 240);
 
         var le = _contractBanner.AddComponent<LayoutElement>();
-        le.preferredHeight = 60;
-        le.minHeight = 60;
+        le.preferredWidth = 220;
+        le.minWidth = 200;
+        le.preferredHeight = 240;
+        le.minHeight = 200;
+        le.flexibleWidth = 0;
+        le.flexibleHeight = 0;
+
+        var bg = _contractBanner.AddComponent<Image>();
+        bg.color = new Color(0.15f, 0.18f, 0.30f, 0.98f);
 
         var vlg = _contractBanner.AddComponent<VerticalLayoutGroup>();
-        vlg.padding = new RectOffset(6, 6, 4, 4);
-        vlg.spacing = 3;
+        vlg.padding = new RectOffset(10, 10, 10, 10);
+        vlg.spacing = 4;
         vlg.childAlignment = TextAnchor.MiddleCenter;
         vlg.childForceExpandWidth = true;
         vlg.childForceExpandHeight = false;
         vlg.childControlWidth = true;
-        vlg.childControlHeight = false;
+        vlg.childControlHeight = true;
 
-        // Description text
-        var textGO = new GameObject("Text");
-        textGO.transform.SetParent(_contractBanner.transform, false);
-        textGO.AddComponent<RectTransform>();
-        var textLE = textGO.AddComponent<LayoutElement>();
-        textLE.preferredHeight = 28;
-        _contractText = textGO.AddComponent<TextMeshProUGUI>();
-        _contractText.alignment = TextAlignmentOptions.Center;
-        _contractText.color = Color.white;
-        _contractText.enableAutoSizing = true;
-        _contractText.fontSizeMin = 8;
-        _contractText.fontSizeMax = 14;
-        _contractText.fontStyle = FontStyles.Bold;
-        _contractText.richText = true;
+        // 4 text rows + 1 button row, fixed sizes (no autosize — confuses TMP in narrow layouts)
+        _contractTitleText   = AddBannerRow(_contractBanner.transform, "Title",   28, 22, FontStyles.Bold,    new Color(1f, 0.85f, 0.20f));
+        _contractDetailText  = AddBannerRow(_contractBanner.transform, "Detail",  46, 14, FontStyles.Normal,  Color.white);
+        _contractPaymentText = AddBannerRow(_contractBanner.transform, "Payment", 28, 18, FontStyles.Bold,    new Color(0.55f, 1f, 0.55f));
+        _contractAdvanceText = AddBannerRow(_contractBanner.transform, "Advance", 22, 11, FontStyles.Italic,  new Color(0.85f, 0.85f, 0.70f));
 
-        // Buttons row
+        // Button row
         var btnRow = new GameObject("Buttons");
         btnRow.transform.SetParent(_contractBanner.transform, false);
         btnRow.AddComponent<RectTransform>();
         var rowLE = btnRow.AddComponent<LayoutElement>();
-        rowLE.preferredHeight = 22;
-        rowLE.minHeight = 22;
+        rowLE.preferredHeight = 32;
+        rowLE.minHeight = 32;
         var hlg = btnRow.AddComponent<HorizontalLayoutGroup>();
-        hlg.spacing = 5;
-        hlg.padding = new RectOffset(2, 2, 0, 0);
+        hlg.spacing = 4;
+        hlg.padding = new RectOffset(0, 0, 0, 0);
         hlg.childAlignment = TextAnchor.MiddleCenter;
         hlg.childForceExpandWidth = true;
         hlg.childForceExpandHeight = true;
+        hlg.childControlWidth = true;
+        hlg.childControlHeight = true;
 
         _contractAcceptBtn  = BuildBannerButton(btnRow.transform, "ACCEPT",  new Color(0.20f, 0.55f, 0.20f), OnAcceptContract);
         _contractDeclineBtn = BuildBannerButton(btnRow.transform, "DECLINE", new Color(0.45f, 0.45f, 0.45f), OnDeclineContract);
         _contractDeliverBtn = BuildBannerButton(btnRow.transform, "DELIVER", new Color(0.85f, 0.65f, 0.15f), OnDeliverContract);
+    }
+
+    private TMP_Text AddBannerRow(Transform parent, string goName, int height, int fontSize, FontStyles style, Color color)
+    {
+        var go = new GameObject(goName);
+        go.transform.SetParent(parent, false);
+        go.AddComponent<RectTransform>();
+        var le = go.AddComponent<LayoutElement>();
+        le.preferredHeight = height;
+        le.minHeight = height;
+        var t = go.AddComponent<TextMeshProUGUI>();
+        t.text = "";
+        t.alignment = TextAlignmentOptions.Center;
+        t.color = color;
+        t.fontStyle = style;
+        t.fontSize = fontSize;
+        t.enableAutoSizing = false;
+        t.enableWordWrapping = true;
+        t.richText = true;
+        return t;
     }
 
     private Button BuildBannerButton(Transform parent, string label, Color color, System.Action onClick)
@@ -372,9 +398,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         {
             int daysLeft = Mathf.Max(0, offer.deadlineDay - currentDay);
             int advance = Mathf.RoundToInt(offer.totalPayment * 0.5f);
-            _contractText.text =
-                $"<color=#FFD700>JOB OFFER</color>  {offer.drugName} × {offer.quantityRequired}  in {daysLeft}d\n" +
-                $"<size=85%>${offer.totalPayment:N0}  (${advance:N0} advance)</size>";
+            _contractTitleText.text   = "JOB OFFER";
+            _contractDetailText.text  = $"{offer.drugName} × {offer.quantityRequired}\nin {daysLeft}d";
+            _contractPaymentText.text = $"${offer.totalPayment:N0}";
+            _contractAdvanceText.text = $"${advance:N0} advance";
             _contractAcceptBtn.gameObject.SetActive(true);
             _contractDeclineBtn.gameObject.SetActive(true);
             _contractDeliverBtn.gameObject.SetActive(false);
@@ -392,11 +419,12 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
                 : $"{daysLeft}d left";
             string ownStr = canDeliver
                 ? $"<color=#44FF44>{playerHas}/{active.quantityRequired} ready</color>"
-                : $"{playerHas}/{active.quantityRequired}";
+                : $"have {playerHas}/{active.quantityRequired}";
 
-            _contractText.text =
-                $"<color=#FFD700>DELIVER</color>  {active.drugName} × {active.quantityRequired}  {deadlineStr}\n" +
-                $"<size=85%>{ownStr} — final ${active.RemainingPayment:N0}</size>";
+            _contractTitleText.text   = "DELIVER";
+            _contractDetailText.text  = $"{active.drugName} × {active.quantityRequired}\n{deadlineStr}";
+            _contractPaymentText.text = $"${active.RemainingPayment:N0}";
+            _contractAdvanceText.text = ownStr;
             _contractAcceptBtn.gameObject.SetActive(false);
             _contractDeclineBtn.gameObject.SetActive(false);
             _contractDeliverBtn.gameObject.SetActive(true);
