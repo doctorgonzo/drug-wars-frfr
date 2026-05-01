@@ -131,9 +131,12 @@ public class ContractBannerUI : MonoBehaviour
         else
         {
             int daysLeft = active.deadlineDay - currentDay;
-            var item = PlayerStats.Instance?.inventory
-                .FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == active.drugName);
-            int playerHas = item != null ? item.Amount : 0;
+            // Sum across all quality stacks — contracts accept any quality.
+            int playerHas = PlayerStats.Instance != null
+                ? PlayerStats.Instance.inventory
+                    .Where(i => i.Type == ItemType.Drug && i.Name == active.drugName)
+                    .Sum(i => i.Amount)
+                : 0;
             bool canDeliver = playerHas >= active.quantityRequired;
             string deadlineStr = daysLeft <= 0
                 ? "<color=#FF4444>OVERDUE</color>"

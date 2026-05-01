@@ -76,7 +76,7 @@ public class StashService : MonoBehaviour
         if (actual <= 0) return 0;
 
         var stash = GetOrCreateStash(cityName);
-        var existing = stash.FirstOrDefault(i => i != null && i.Name == playerItem.Name && i.Type == playerItem.Type);
+        var existing = stash.FirstOrDefault(i => i != null && i.MatchesStack(playerItem));
         if (existing != null)
         {
             // Weighted-average the avg purchase price across the merged stack
@@ -111,15 +111,16 @@ public class StashService : MonoBehaviour
         int actual = Mathf.Min(amount, stashItem.Amount);
         if (actual <= 0) return 0;
 
-        // Drugs are slot-bound — don't pull more than the trenchcoat fits.
+        // Drugs are slot-bound — don't pull more than the trenchcoat fits. Slot math is
+        // per-quality, so a Pure withdrawal only reserves slots against existing Pure stacks.
         if (stashItem.Type == ItemType.Drug)
         {
-            int maxBuyable = ps.GetMaxBuyableAmount(stashItem.Name, stashItem.UnitsPerSlot, stashItem.RiskTier);
+            int maxBuyable = ps.GetMaxBuyableAmount(stashItem.Name, stashItem.Quality, stashItem.UnitsPerSlot, stashItem.RiskTier);
             actual = Mathf.Min(actual, maxBuyable);
             if (actual <= 0) return 0;
         }
 
-        var existing = ps.inventory.FirstOrDefault(i => i != null && i.Name == stashItem.Name && i.Type == stashItem.Type);
+        var existing = ps.inventory.FirstOrDefault(i => i != null && i.MatchesStack(stashItem));
         if (existing != null)
         {
             int oldQty = existing.Amount;

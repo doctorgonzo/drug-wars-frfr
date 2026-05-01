@@ -187,7 +187,8 @@ public class ContractManager : MonoBehaviour
         return true;
     }
 
-    // True iff the player has enough of the requested drug to deliver right now.
+    // True iff the player has enough of the requested drug to deliver right now. Sums across
+    // every quality stack — contracts accept Cut/Standard/Pure interchangeably.
     public bool CanDeliver(Dealer dealer, out Contract contract, out int playerHas)
     {
         playerHas = 0;
@@ -195,11 +196,10 @@ public class ContractManager : MonoBehaviour
         if (contract == null) return false;
         if (PlayerStats.Instance == null) return false;
 
-        // Copy to a local — C# disallows capturing out parameters inside lambdas.
         var c = contract;
-        var item = PlayerStats.Instance.inventory
-            .FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == c.drugName);
-        playerHas = item != null ? item.Amount : 0;
+        playerHas = PlayerStats.Instance.inventory
+            .Where(i => i.Type == ItemType.Drug && i.Name == c.drugName)
+            .Sum(i => i.Amount);
         return playerHas >= contract.quantityRequired;
     }
 
@@ -208,12 +208,22 @@ public class ContractManager : MonoBehaviour
         if (!CanDeliver(dealer, out var contract, out _)) return false;
         var ps = PlayerStats.Instance;
 
-        // Local copy for lambda capture (out params can't be captured).
+        // Consume from cheapest quality first — keep the Pure for buyers who pay quality
+        // premiums, sacrifice the Cut to fulfill flat-rate contracts.
         var c = contract;
-        var item = ps.inventory.FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == c.drugName);
-        if (item == null) return false;
-
-        item.ChangeAmount(-contract.quantityRequired);
+        int remaining = contract.quantityRequired;
+        var stacks = ps.inventory
+            .Where(i => i.Type == ItemType.Drug && i.Name == c.drugName && i.Amount > 0)
+            .OrderBy(i => (int)i.Quality)
+            .ToList();
+        foreach (var stack in stacks)
+        {
+            if (remaining <= 0) break;
+            int take = Mathf.Min(stack.Amount, remaining);
+            stack.ChangeAmount(-take);
+            remaining -= take;
+        }
+        if (remaining > 0) return false; // shouldn't happen — CanDeliver guard
         ps.inventory.RemoveAll(i => i.Amount <= 0);
 
         int finalPayment = contract.RemainingPayment;

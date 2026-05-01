@@ -113,7 +113,7 @@ public class InventoryItemUI : MonoBehaviour
         if (boundItem != null && boundItem.Type == ItemType.Drug && boundItem.Quality != DrugQuality.Standard)
         {
             string label = boundItem.Quality == DrugQuality.Pure ? "PURE" : "CUT";
-            qualityPrefix = $"<color={DrugQualityX.BadgeHex(boundItem.Quality)}>[{label}]</color> ";
+            qualityPrefix = $"<size=65%><color={DrugQualityX.BadgeHex(boundItem.Quality)}>[{label}]</color></size> ";
         }
 
         if (avgPaid <= 0) return $"{qualityPrefix}Sell: ${sellPrice:N0}";
@@ -132,7 +132,7 @@ public class InventoryItemUI : MonoBehaviour
         if (item.Type == ItemType.Drug && item.Quality != DrugQuality.Standard)
         {
             string label = item.Quality == DrugQuality.Pure ? "PURE" : "CUT";
-            qualityPrefix = $"<color={DrugQualityX.BadgeHex(item.Quality)}>[{label}]</color> ";
+            qualityPrefix = $"<size=65%><color={DrugQualityX.BadgeHex(item.Quality)}>[{label}]</color></size> ";
         }
 
         if (PlayerStats.Instance != null &&

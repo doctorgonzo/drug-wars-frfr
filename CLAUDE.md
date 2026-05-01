@@ -477,15 +477,35 @@ Two interlocking systems that turn each transaction into a tradeoff between safe
 **Reset:** `ResetForNewRun` clears `dealerLifetimeBusiness` so each run starts from Stranger. Quality is per-instance, so it resets implicitly when inventories rebuild.
 
 **UI:**
-  - `InventoryItemUI` price line prefixes `[CUT]` (grey) or `[PURE]` (gold) — Standard is implicit. Tooltip surfaces a one-line quality summary plus the effective units-per-slot at current trenchcoat.
+  - `InventoryItemUI` price line prefixes `[CUT]` (grey) or `[PURE]` (gold) — Standard is implicit. Tags wrapped in `<size=65%>` so the dollar amount stays the focal point. Tooltip surfaces a one-line quality summary plus the effective units-per-slot at current trenchcoat.
   - `InventoryTabUI` colors the row label with the quality color.
   - `DealerClicks.OnPointerEnter` (dealer hover) shows `● TIER — perks` with progress toward the next threshold (`Business: $X / $Y for next tier`).
   - `CopEncounterUIManager.BuildDrugConfiscationList` uses `DisplayName` so seized lists show "Pure Crack x3, Cut Weed x12".
+
+**Dealer panel layout — runtime scroll + grid (`DealerClicks.GetDealerItemsParent`):** The original `DealerInfoPanel` is just an `Image` with no `ScrollRect` and no `LayoutGroup` — fine for the pre-quality 3-row case, broken once each drug spawns up to three quality stacks. On first populate, `DealerClicks` installs runtime scroll capability if not already present:
+  - `ScrollRect` + `Viewport` (`RectMask2D`) + `ScrollContent` child built directly under `DealerInfoPanel`.
+  - `ScrollContent` uses a `GridLayoutGroup` (cellSize `160×120`, spacing `8`, `Constraint.Flexible`) so items wrap across the panel width instead of stacking in one column. The DealerItem prefab's stretched `(0,0)-(1,1)` anchors get overridden by the grid's per-cell sizing, so `ClearLayoutOverrides` strips any `LayoutElement` left over from prior layouts but otherwise the grid handles everything.
+  - All four item-parenting paths in `DealerClicks` (`PopulateDealerPanel`, `ReturnDealerItems`, `ReturnAllToPool`, `OnPlayerSellClicked`'s new-stack branch) route through `GetDealerItemsParent()` instead of `dealerInfoPanel.transform` directly.
+  - `LayoutRebuilder.ForceRebuildLayoutImmediate` on populate so the layout is correct on the first frame the panel is visible.
+  - Scroll position resets to the top on every `PopulateDealerPanel`.
+  - Idempotent: if the panel is later given a `ScrollRect` in the editor, `GetDealerItemsParent` picks up the existing setup instead of installing its own.
+
+**Buy-failure feedback now floats at the cursor (`JuiceFX.ToastAtMouse`).** The old `ShowFeedback` wrote into a tiny `statusText` label inside the dealer panel — easy to miss when you're focused on the click target. New flow: failure messages spawn a one-shot dark-bubble toast on JuiceFX's overlay canvas, anchored 24px above `Input.mousePosition`, fade-in (80ms) → hold + drift up (1.1s) → fade-out (250ms), then auto-destroy. Three call sites in `DealerClicks.OnPlusClicked`:
+  - `Trenchcoat full!` (red) — no slots left.
+  - `Only room for X more` (amber) — partial buy proceeds with `amountToBuy` clamped.
+  - `Need $X` (red) — cash short; no buy.
+
+  `ShowMouseToast(message, color)` is the helper; falls back to the legacy in-panel `statusText` if `JuiceFX.Instance` is null (shouldn't happen — JuiceFX auto-spawns at game start).
+
+**Cross-system integration (Stash + Contracts):**
+  - `StashService.Deposit/Withdraw` use `MatchesStack(other)` for stack lookups — Pure and Cut stash slots stay independent and don't merge into the player's Standard pile (or vice versa). `Withdraw` passes `stashItem.Quality` to `GetMaxBuyableAmount` so per-quality slot reservations are respected.
+  - `ContractManager.CanDeliver/TryDeliver` sum across all quality stacks of the requested drug — contracts accept any quality interchangeably. `TryDeliver` consumes cheapest-quality-first (Cut → Standard → Pure) so the player's premium product is preserved for buyers who pay quality premiums. Same logic in `ContractBannerUI`'s "have X / Y" indicator.
 
 **Decision tensions this creates:**
   - Carry Pure for capital efficiency (more profit per slot, less heat) vs. Cut for volume (cheap entry, but heavy and loud) vs. Standard for everything in between.
   - Build rep with one dealer (loyalty perks, Pure access) vs. spread buys across cities for price arbitrage (no Pure, but the best buy price each day).
   - Pure-Standard-Cut of the same drug are *different stacks* — the player has to make a slot decision per-quality, not per-drug.
+  - Contracts at fixed prices favor dumping Cut (saves Pure for premium sales) — contracts become a sink for the noisy bulk product.
 
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
@@ -526,7 +546,7 @@ Two interlocking systems that turn each transaction into a tradeoff between safe
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
 - **Auto-spawned, code-built UI managers** (no Editor wiring required, all bootstrapped via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]` and persisted with `DontDestroyOnLoad`):
   - **`CheatMenu`** — Esc toggles a debug overlay with `+ $10k`, `Drop heat`, `Quick Start`. Sorting order 32000.
-  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances. Animation routines null-check the target every frame so destroyed-mid-animation refs don't throw `MissingReferenceException`.
+  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches, `ToastAtMouse` (cursor-anchored failure-feedback bubbles, used by `DealerClicks` for "Need $X" / "Trenchcoat full!" / "Only room for X more"). Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances. Animation routines null-check the target every frame so destroyed-mid-animation refs don't throw `MissingReferenceException`.
   - **`RunSummaryUI`** — auto-spawns on YouWin/GameOver scene load and builds the full endgame screen + leaderboard from code if no hand-wired instance is in the scene. `isVictory` derived from active scene name.
   - **`AchievementManager`** — evaluates Inspector-defined `Achievement` SOs against `PlayerStats` on every stat change. Unlocks persisted in `PlayerPrefs["Achievements_v1"]`. Gold toast + optional coin burst on unlock.
   - **`StashPanelUI`** — `S` hotkey toggles the per-city stash window. Sorting order 4000.

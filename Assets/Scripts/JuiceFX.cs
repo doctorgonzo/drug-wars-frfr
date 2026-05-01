@@ -179,6 +179,107 @@ public class JuiceFX : MonoBehaviour
         rt.localScale = baseScale;
     }
 
+    // Briefly shows a centered, dark-backgrounded label near the mouse cursor — used for
+    // failure feedback ("Not enough cash!", "Trenchcoat full") that should stay close to
+    // the click instead of buried inside whichever panel the user just interacted with.
+    public void ToastAtMouse(string message, Color? textColor = null, float hold = 1.1f)
+    {
+        StartCoroutine(MouseToastRoutine(message, textColor ?? new Color(1f, 0.8f, 0.2f), hold));
+    }
+
+    private IEnumerator MouseToastRoutine(string message, Color textColor, float hold)
+    {
+        if (_root == null) yield break;
+
+        // Build a one-shot toast bubble. Children of _root, positioned by anchoredPosition.
+        var go = new GameObject("MouseToast", typeof(RectTransform), typeof(CanvasGroup));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(_root, false);
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.zero;
+        rt.pivot = new Vector2(0.5f, 0f); // bubble sits above the cursor
+
+        var bgGO = new GameObject("BG", typeof(RectTransform), typeof(Image));
+        var bgRT = bgGO.GetComponent<RectTransform>();
+        bgRT.SetParent(rt, false);
+        bgRT.anchorMin = Vector2.zero;
+        bgRT.anchorMax = Vector2.one;
+        bgRT.offsetMin = new Vector2(-12f, -8f);
+        bgRT.offsetMax = new Vector2(12f, 8f);
+        var bg = bgGO.GetComponent<Image>();
+        bg.color = new Color(0.05f, 0.05f, 0.05f, 0.92f);
+        bg.raycastTarget = false;
+
+        var textGO = new GameObject("Text", typeof(RectTransform));
+        var textRT = textGO.GetComponent<RectTransform>();
+        textRT.SetParent(rt, false);
+        var text = textGO.AddComponent<TextMeshProUGUI>();
+        text.text = message;
+        text.color = textColor;
+        text.alignment = TextAlignmentOptions.Center;
+        text.enableAutoSizing = false;
+        text.fontSize = 18f;
+        text.fontStyle = FontStyles.Bold;
+        text.raycastTarget = false;
+        text.enableWordWrapping = false;
+
+        // Size the bubble to its text. Force a layout pass so preferred values are valid.
+        text.ForceMeshUpdate();
+        Vector2 textSize = new Vector2(text.preferredWidth, text.preferredHeight);
+        rt.sizeDelta = textSize;
+        textRT.anchorMin = Vector2.zero;
+        textRT.anchorMax = Vector2.one;
+        textRT.offsetMin = Vector2.zero;
+        textRT.offsetMax = Vector2.zero;
+
+        // Position above the cursor with a small offset so the text doesn't sit under the pointer.
+        Vector2 mouse = Input.mousePosition;
+        rt.position = new Vector3(mouse.x, mouse.y + 24f, 0f);
+
+        var cg = go.GetComponent<CanvasGroup>();
+        cg.blocksRaycasts = false;
+        cg.interactable = false;
+
+        // Quick fade-in
+        const float fadeIn = 0.08f;
+        float t = 0f;
+        while (t < fadeIn)
+        {
+            t += Time.unscaledDeltaTime;
+            if (go == null) yield break;
+            cg.alpha = Mathf.Clamp01(t / fadeIn);
+            yield return null;
+        }
+        cg.alpha = 1f;
+
+        // Hold + drift up slightly
+        Vector3 startPos = rt.position;
+        t = 0f;
+        while (t < hold)
+        {
+            t += Time.unscaledDeltaTime;
+            if (go == null) yield break;
+            rt.position = startPos + Vector3.up * (Mathf.Lerp(0f, 14f, t / hold));
+            yield return null;
+        }
+
+        // Fade-out
+        const float fadeOut = 0.25f;
+        t = 0f;
+        Vector3 holdPos = rt.position;
+        while (t < fadeOut)
+        {
+            t += Time.unscaledDeltaTime;
+            if (go == null) yield break;
+            float p = Mathf.Clamp01(t / fadeOut);
+            cg.alpha = 1f - p;
+            rt.position = holdPos + Vector3.up * (12f * p);
+            yield return null;
+        }
+
+        if (go != null) Destroy(go);
+    }
+
     // Animates an integer counter from -> to over duration, formatting as "{prefix}{value:N0}{suffix}".
     public void TweenIntegerText(TMP_Text label, int from, int to, string prefix, string suffix, float duration = 0.45f)
     {
