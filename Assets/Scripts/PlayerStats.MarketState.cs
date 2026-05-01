@@ -73,6 +73,23 @@ public partial class PlayerStats
         _marketSaturation.Clear();
     }
 
+    // Iterate all (city|drug → saturation) pairs. Used by the news ticker to surface
+    // saturation events as they emerge during play.
+    public IEnumerable<KeyValuePair<string, float>> AllMarketSaturation() => _marketSaturation;
+
+    // Split a saturation key back into its (city, drug) parts.
+    public static bool TryParseMarketKey(string key, out string city, out string drug)
+    {
+        city = "";
+        drug = "";
+        if (string.IsNullOrEmpty(key)) return false;
+        int idx = key.IndexOf('|');
+        if (idx <= 0 || idx >= key.Length - 1) return false;
+        city = key.Substring(0, idx);
+        drug = key.Substring(idx + 1);
+        return true;
+    }
+
     // Save/load — written into RunStatsSnapshot's parallel lists.
     internal void CaptureMarketSaturation(List<string> keys, List<float> values)
     {

@@ -357,6 +357,13 @@ Two interlocking changes to fix the "buy 20 crack in Milwaukee, fly to Miami, wi
   - `GameSessionManager.HandleDayChanged` calls `DecayMarketSaturation` next to `DecayAllCityHeat`.
   - `RunStatsSnapshot.marketSaturationKeys/Values` parallel lists persist saturation across save/load (same pattern as cityHeat).
 
+**News ticker feedback.** `MarketNewsTicker.CheckAndShowEvents` was rewritten to rebuild its message list every loop iteration (was a one-shot at scene load). New `AppendSaturationMessages` adds a tier-coded line per (current city, drug) where saturation has crossed a threshold:
+  - `≥ 0.4` → `<color=#FFD700>SLOWING</color> — buyers getting picky`
+  - `≥ 0.7` → `<color=#FF8800>SATURATED</color> — prices tumbling`
+  - `≥ 1.0` → `<color=#FF4444>FLOODED</color> — buyers paying scraps`
+
+Player sees these within ~one full ticker cycle of selling, so the price drop has narrative cover. Ticker panel auto-hides during silent periods (no events, no tips, no saturation) and re-activates when a message appears. Required new `PlayerStats.AllMarketSaturation()` enumerable + `TryParseMarketKey` static helper to walk the saturation dictionary from outside.
+
 **Sample math** — 20 crack at perfect-storm stacked Miami, no prior sales:
   - Pre-fix: ~$2,500/unit avg → $50,000 revenue → debt cleared in one trip.
   - With cap only: $1,800/unit cap → $36,000 revenue → 70% of debt in one trip.
