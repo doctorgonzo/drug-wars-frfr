@@ -86,7 +86,11 @@ public class GameSessionManager : MonoBehaviour
     {
         // Decay per-city heat memory once per day so hot cities cool off if the player avoids them.
         if (PlayerStats.Instance != null)
+        {
             PlayerStats.Instance.DecayAllCityHeat();
+            // Decay market saturation so cities recover demand for drugs the player flooded yesterday.
+            PlayerStats.Instance.DecayMarketSaturation();
+        }
 
         if (allCitiesInGame == null) return;
         foreach (City city in allCitiesInGame)

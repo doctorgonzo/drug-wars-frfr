@@ -246,11 +246,16 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         foreach (var playerItem in drugsToSell)
         {
-            int sellPrice = dealer.GetModifiedSellPrice(playerItem);
-            int lineValue = sellPrice * playerItem.Amount;
+            int qty = playerItem.Amount;
+            int lineValue = dealer.GetSellRevenueForBatch(playerItem, qty);
+            int avgUnitPrice = qty > 0 ? lineValue / qty : 0;
             totalValue += lineValue;
-            totalProfit += (sellPrice - playerItem.AvgPurchasePrice) * playerItem.Amount;
-            PlayerStats.Instance.RecordDrugSell(playerItem.Name, playerItem.Amount, lineValue);
+            totalProfit += (avgUnitPrice - playerItem.AvgPurchasePrice) * qty;
+            PlayerStats.Instance.RecordDrugSell(playerItem.Name, qty, lineValue);
+
+            // Bump market saturation so subsequent sales of this drug at this city see lower prices.
+            string sellCityName = PlayerStats.Instance?.CurrentCity?.Name ?? "";
+            PlayerStats.Instance?.BumpMarketSaturation(sellCityName, playerItem.Name, qty, playerItem.RiskTier);
 
             ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.Name == playerItem.Name);
             if (dealerItem == null)
@@ -262,14 +267,14 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (heatManager != null)
             {
                 float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm);
+                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * qty * _hm);
                 heatManager.AddHeat(sellHeat);
                 if (PlayerStats.Instance?.CurrentCity != null)
                     PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
             }
 
-            dealerItem.ChangeAmount(playerItem.Amount);
-            playerItem.ChangeAmount(-playerItem.Amount);
+            dealerItem.ChangeAmount(qty);
+            playerItem.ChangeAmount(-qty);
         }
 
         PlayerStats.Instance.inventory.RemoveAll(i => i.Amount <= 0);
@@ -312,12 +317,17 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             dealerItemUIMap[dealerItem] = newDealerItemUI;
         }
 
-        int sellPrice = dealer.GetModifiedSellPrice(playerItem);
-        int totalValue = sellPrice * amountToSell;
-        int totalProfit = (sellPrice - playerItem.AvgPurchasePrice) * amountToSell;
+        int totalValue = dealer.GetSellRevenueForBatch(playerItem, amountToSell);
+        int avgSellPrice = amountToSell > 0 ? totalValue / amountToSell : 0;
+        int totalProfit = (avgSellPrice - playerItem.AvgPurchasePrice) * amountToSell;
         PlayerStats.Instance.PlayerWallet += totalValue;
         if (playerItem.Type == ItemType.Drug)
+        {
             PlayerStats.Instance.RecordDrugSell(playerItem.Name, amountToSell, totalValue);
+            // Bump saturation so the next sale of this drug here is cheaper.
+            string sellCityName = PlayerStats.Instance.CurrentCity?.Name ?? "";
+            PlayerStats.Instance.BumpMarketSaturation(sellCityName, playerItem.Name, amountToSell, playerItem.RiskTier);
+        }
         cityUIHandler.UpdateWalletDisplay();
         playerItem.ChangeAmount(-amountToSell);
 

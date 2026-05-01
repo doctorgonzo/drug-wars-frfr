@@ -331,6 +331,37 @@ File: `RunSummaryUI.cs`
   - "Speed Run" — Stat: `DayDebtCleared`, Comparison: `<=`, Threshold: `10`
   - "Leather Up" — Stat: `OwnsTrenchcoat`, RequiredItemName: `Leather`
 
+### Market Saturation + Sell-Price Cap
+Two interlocking changes to fix the "buy 20 crack in Milwaukee, fly to Miami, win in one trip" exploit. Together they convert one-shot wins into 2–3 trip routes and make trenchcoat upgrades / multi-city play actually matter.
+
+**Hard ceiling on sell price.** `Dealer.ComputeBaseSellPriceF()` clamps the post-multiplier sell price at `item.Cost × 3.0` for drugs. Stops the perfect-storm stack (boom + festival + favorite × 2.0 + hot tip × 1.45 + volatility × 1.2 on top of buy-side inflation) from running 6–10× base. Drugs only — equipment isn't event-multiplied so it doesn't need the cap. Constant `MaxSellPriceBaseMult` in `Dealer.cs`.
+
+**Per-(city, drug) market saturation.** New partial `PlayerStats.MarketState.cs` tracks how flooded each city's market is for each drug. Selling N units bumps the saturation for that city+drug pair; saturation decays 40% per day. The displayed sell price reflects *current* saturation — the 1st unit fetches full price, the 20th fetches less. Per-unit bump scales with risk tier:
+
+  | RiskTier | Drug | Bump/unit | Floor (mult=0.30) at |
+  |---|---|---|---|
+  | 0 (Safe) | Weed/Shrooms | 0.005 | ~200 units |
+  | 1 (Medium) | LSD/Ecstasy | 0.015 | ~67 units |
+  | 2 (Hard) | Crack/Heroin | 0.030 | ~33 units |
+
+  Mult formula: `max(0.30, 1 - 0.7 × saturation)`. Decay: `× 0.6` daily (40% recovery). Floored at 0.30 so dumping a wagon-load of crack still pays *something* — just badly.
+
+**Two pricing APIs on `Dealer`:**
+  - `GetModifiedSellPrice(item)` — per-unit price at current saturation. Used for UI display + per-unit profit calc. Naturally drops as the player sells.
+  - `GetSellRevenueForBatch(item, amount)` — total revenue for a batch sale, using the average mult between start and end saturation. The 20th crack is priced *lower* than the 1st within the same transaction, so even a single big "Sell All" sees diminishing returns.
+
+`DealerClicks.SellAll` and `OnPlayerSellClicked` now call `GetSellRevenueForBatch` then `PlayerStats.BumpMarketSaturation(city, drug, qty, riskTier)`. The bump grows the saturation so the *next* sale (same day, same city, same drug) is more penalized.
+
+**Reset / persistence:**
+  - `PlayerStats.ResetMarketState()` called from `ResetRunStats()`.
+  - `GameSessionManager.HandleDayChanged` calls `DecayMarketSaturation` next to `DecayAllCityHeat`.
+  - `RunStatsSnapshot.marketSaturationKeys/Values` parallel lists persist saturation across save/load (same pattern as cityHeat).
+
+**Sample math** — 20 crack at perfect-storm stacked Miami, no prior sales:
+  - Pre-fix: ~$2,500/unit avg → $50,000 revenue → debt cleared in one trip.
+  - With cap only: $1,800/unit cap → $36,000 revenue → 70% of debt in one trip.
+  - With cap + saturation (avg mult ~0.79 across the batch): ~$1,422/unit avg → $28,440 → 57% of debt. Player needs at least one more trip — and saturation in Miami is now 0.6, so the next 20 crack sale tomorrow there starts at mult 0.36, forcing a different city.
+
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
 
@@ -352,12 +383,12 @@ File: `RunSummaryUI.cs`
 ---
 
 ## Architecture Notes
-- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs` (Awake + singleton), `.Identity.cs` (name, sprite), `.Equipment.cs` (trenchcoat, weapon), `.Economy.cs` (wallet, inventory, slot math, slot helpers), `.Progression.cs` (heat, debt, day-limit, cop counters), `.RunStats.cs` (per-run counters, click tracking, leaderboard snapshot, **`ResetRunStats()` does the full new-run wipe**), `.CityHeat.cs` (per-city heat memory, decay, arrival application).
+- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs` (Awake + singleton), `.Identity.cs` (name, sprite), `.Equipment.cs` (trenchcoat, weapon), `.Economy.cs` (wallet, inventory, slot math, slot helpers), `.Progression.cs` (heat, debt, day-limit, cop counters), `.RunStats.cs` (per-run counters, click tracking, leaderboard snapshot, **`ResetRunStats()` does the full new-run wipe**), `.CityHeat.cs` (per-city heat memory, decay, arrival application), `.MarketState.cs` (per-city per-drug saturation that diminishes sell prices on bulk dumps).
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
 - **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime. Restock state (`dealerLastRestockDay`) also lives in `GameSessionManager`, keyed by SO instance ID, persisted via `SavedDealerState.lastRestockDay`.
 - **Price system:**
   - **Buy:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × daily volatility × market event × visit multiplier (±20%) × city event (Lockdown/Shortage on drugs) × **daily tip `DealBuy` mult** (when today's tip points at this city + drug).
-  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug) × **daily tip `HotSell` mult** (when today's tip points here).
+  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug) × **daily tip `HotSell` mult** (when today's tip points here), then **clamped to `item.Cost × 3.0` for drugs**, then multiplied by **current market saturation mult** (per city, per drug). For a multi-unit batch, use `GetSellRevenueForBatch(item, amount)` which averages the saturation mult across the bump curve.
   - **Note:** `favoriteDrugDemandMultiplier` lives on the SELL side. It used to be on the buy side, which inflated buy prices in the favorite-drug city while sellRatio cancelled out the boost on sell — making "2.0x demand" cities pay-as-usual to sell into and 2× expensive to source from. Moved to sell so the UI label ("2.0x demand") translates to a real 2× sell-price boost.
 - **Daily tip events:** `DailyTipService.GetTodaysTip()` deterministically rolls one tip per `(RunSeed, InGameDay)` (65% chance of any tip). `DealBuy` discounts a target city's buy price for a target drug; `HotSell` premiums a target city's sell price. `MarketNewsTicker` shows the headline. Cache invalidated on `ResetRunStats`.
 - **City heat memory:** `PlayerStats.CityHeat.cs` tracks per-city heat in a `Dictionary<string, float>`. Selling bumps it via `BumpCityHeat(cityName, heatAmount)` (called from `DealerClicks` SellAll and per-item sell). `GameSessionManager.HandleDayChanged` decays all entries by 8/day. `TravelManager` calls `ApplyCityHeatOnArrival` on travel — boosts player heat by `cityHeat × 0.35`. Persisted via `RunStatsSnapshot.cityHeatNames/cityHeatValues`.

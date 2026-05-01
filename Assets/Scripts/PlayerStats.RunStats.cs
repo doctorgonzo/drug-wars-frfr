@@ -165,6 +165,7 @@ public partial class PlayerStats
         DailyTipService.InvalidateCache();
 
         ResetCityHeat();
+        ResetMarketState();
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;
@@ -225,9 +226,12 @@ public partial class PlayerStats
             drugSaleNames = new List<string>(_drugSoldByName.Keys),
             drugSaleCounts = new List<int>(_drugSoldByName.Values),
             cityHeatNames = new List<string>(),
-            cityHeatValues = new List<float>()
+            cityHeatValues = new List<float>(),
+            marketSaturationKeys = new List<string>(),
+            marketSaturationValues = new List<float>()
         };
         CaptureCityHeat(snap.cityHeatNames, snap.cityHeatValues);
+        CaptureMarketSaturation(snap.marketSaturationKeys, snap.marketSaturationValues);
         return snap;
     }
 
@@ -268,6 +272,7 @@ public partial class PlayerStats
         }
 
         RestoreCityHeat(s.cityHeatNames, s.cityHeatValues);
+        RestoreMarketSaturation(s.marketSaturationKeys, s.marketSaturationValues);
     }
 }
 
@@ -300,4 +305,6 @@ public class RunStatsSnapshot
     public List<int> drugSaleCounts = new List<int>();
     public List<string> cityHeatNames = new List<string>();
     public List<float> cityHeatValues = new List<float>();
+    public List<string> marketSaturationKeys = new List<string>();
+    public List<float> marketSaturationValues = new List<float>();
 }
