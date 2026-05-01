@@ -167,7 +167,7 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **TimeText not updating in non-Milwaukee cities:** `GameTime.AssignTimeText()` used `GameObject.Find("TimeText")` which returns null when the parent (`Content_Stats` inside `TabbedPanel`) starts inactive. Replaced with `Resources.FindObjectsOfTypeAll<TMP_Text>()` filtered by `SceneManager.GetActiveScene()`. Also writes the current time string immediately on assignment so there's no 1-frame stale gap after travel. File: `GameTime.cs`
 
 ### Dealer Restock System
-- **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 3, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
+- **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 2, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
 - **GameSessionManager hook:** Subscribes to `GameTime.DayChanged` lazily (via `SceneManager.sceneLoaded` since `GameTime.Instance` may not exist when `GameSessionManager.Awake()` runs). Tracks per-dealer last-restock day in `Dictionary<int, int> dealerLastRestockDay` keyed by SO instance ID.
 - **Save/load support:** `SavedDealerState.lastRestockDay` persists the timer across saves. Old saves without the field default to 0 (graceful fallback — dealer restocks on next day-change after load).
 
