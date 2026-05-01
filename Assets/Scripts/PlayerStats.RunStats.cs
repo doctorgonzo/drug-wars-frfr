@@ -158,16 +158,21 @@ public partial class PlayerStats
         if (GameTime.Instance != null) GameTime.Instance.ResetToStart();
         PriceService.InGameDay = 1;
 
-        // Dealer runtime inventories — rebuild from templates so the previous run's stock is gone
-        if (GameSessionManager.Instance != null) GameSessionManager.Instance.ResetForNewRun();
-
         // Daily-tip cache uses RunSeed + day, both about to change; invalidate to be safe
         DailyTipService.InvalidateCache();
 
         ResetCityHeat();
         ResetMarketState();
+        // Clear contract/stash state BEFORE GameSessionManager.ResetForNewRun() — the latter
+        // seeds initial contract offers as part of its rebuild, and we don't want those
+        // wiped immediately after.
         ContractManager.Instance?.ResetForNewRun();
         StashService.Instance?.ResetForNewRun();
+
+        // Dealer runtime inventories rebuilt + initial contract offers seeded so the player
+        // sees them from day 1 instead of waiting `restockIntervalDays` for the first restock.
+        if (GameSessionManager.Instance != null) GameSessionManager.Instance.ResetForNewRun();
+
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;

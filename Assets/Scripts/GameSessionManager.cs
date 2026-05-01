@@ -24,10 +24,19 @@ public class GameSessionManager : MonoBehaviour
 
     // Wipe per-run runtime state and rebuild dealer inventories from their templates. Used when
     // starting a fresh run so leftover stock and stale restock timers from the previous run
-    // don't carry into the new one.
+    // don't carry into the new one. Also seeds initial contract offers — without this the
+    // player would have to wait `restockIntervalDays` for the first contract to surface.
     public void ResetForNewRun()
     {
         InitializeAllDealers();
+
+        if (ContractManager.Instance == null || allCitiesInGame == null) return;
+        foreach (City city in allCitiesInGame)
+        {
+            if (city?.Dealers == null) continue;
+            foreach (Dealer dealer in city.Dealers)
+                if (dealer != null) ContractManager.Instance.OnDealerRestocked(dealer);
+        }
     }
 
     public IReadOnlyList<Trenchcoat> AllTrenchcoats => allTrenchcoats;
@@ -154,7 +163,13 @@ public class GameSessionManager : MonoBehaviour
 
                 int key = dealer.GetInstanceID();
                 if (!dealerLastRestockDay.TryGetValue(key, out int lastDay))
+                {
+                    // Defensive fallback if InitializeAllDealers somehow missed this dealer
+                    // (e.g., dealer added at runtime). Record without restocking.
                     lastDay = dt.day;
+                    dealerLastRestockDay[key] = lastDay;
+                    continue;
+                }
 
                 if (dt.day - lastDay >= interval)
                 {
@@ -173,13 +188,22 @@ public class GameSessionManager : MonoBehaviour
         dealerLastRestockDay.Clear();
         if (allCitiesInGame == null) return;
 
+        // Seed lastRestockDay = today for every dealer so HandleDayChanged has something
+        // to compare against. Without this, the dictionary stays empty and the
+        // "if (!TryGetValue) lastDay = dt.day" default re-defaults every day, so
+        // dt.day - lastDay is always 0 and restocks never fire.
+        int currentDay = GameTime.Instance != null ? GameTime.Instance.Day : 1;
+
         foreach (City city in allCitiesInGame)
         {
             if (city.Dealers == null) continue;
             foreach (Dealer dealer in city.Dealers)
             {
                 if (dealer != null)
+                {
                     InitializeDealerInventory(dealer);
+                    dealerLastRestockDay[dealer.GetInstanceID()] = currentDay;
+                }
             }
         }
     }

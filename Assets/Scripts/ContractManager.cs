@@ -91,6 +91,7 @@ public class ContractManager : MonoBehaviour
             state = ContractState.Offered,
         };
 
+        Debug.Log($"[ContractManager] {dealer.Name} offers {qty}× {drug.Name} for ${payment:N0} in {days}d");
         OnContractsChanged?.Invoke();
     }
 
