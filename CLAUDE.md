@@ -305,6 +305,32 @@ File: `RunSummaryUI.cs`
 - **`PriceService.InGameDay = 1`** and **`DailyTipService.InvalidateCache()`** also reset so daily price hashes and the cached tip start fresh.
 - **`CharCreationUI.Start`** now calls `ResetRunStats()` *before* reading `PlayerWallet` for the gear-affordability filter. Otherwise leftover cash leaked into "can I afford this trenchcoat?" and the player ended a "new" run still sitting on the previous wallet.
 
+### Achievement System
+- **`Achievement.cs`** — ScriptableObject (`Drug Wars/Achievement` create menu). Each SO defines one achievement entirely from the Inspector:
+  - `Title`, `Description`, `Icon` (display)
+  - `Stat` (enum: `PlayerWallet`, `NetWorth`, `TotalSalesRevenue`, `CombatWins`, `UniqueCitiesVisited`, `OwnsTrenchcoat`, `OwnsWeapon`, `DayDebtCleared`, plus ~20 others covering all RunStats and Progression counters)
+  - `Comparison` (enum: `GreaterThanOrEqual`, `LessThanOrEqual`, `Equal`)
+  - `Threshold` (float — the numeric target)
+  - `RequiredItemName` (string — for `OwnsTrenchcoat`/`OwnsWeapon` stats, matches against `Item.Name`)
+  - `CashReward` (int — bonus cash on unlock, 0 = none)
+  - `IsSecret` (bool — hidden until unlocked), `SortOrder` (int)
+  - `Id` is the SO asset name (used as persistence key)
+- **`AchievementManager.cs`** — auto-spawned via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`, `DontDestroyOnLoad`. No Editor wiring required.
+  - Loads achievement list from `GameSessionManager.AllAchievements` (Inspector array on GSM, same pattern as `allTrenchcoats`/`allWeapons`)
+  - Subscribes to `OnWalletChanged`, `OnInventoryChanged`, `OnDebtChanged`, and new `PlayerStats.OnRunStatRecorded` static event
+  - On any stat change, evaluates all locked achievements against current `PlayerStats`; skips non-gameplay scenes (Startup/Intro/CharCreation/GameOver/YouWin)
+  - Reentrancy guard (`_checking` flag) prevents recursive evaluation when a cash reward triggers `OnWalletChanged`
+  - Toast queue drains sequentially with 3.5s spacing. Gold color `(1, 0.85, 0.2)`. Shows "ACHIEVEMENT UNLOCKED!\n{Title}" + cash reward if any. Coin burst via `JuiceFX` on cash rewards.
+  - Persistence: `PlayerPrefs["Achievements_v1"]` stores JSON list of unlocked achievement IDs. Survives across runs (unlocked = permanent).
+  - Public API: `IsUnlocked(Achievement)`, `IsUnlocked(string id)`, `UnlockedCount`, `TotalCount`, `GetAll()`, `GetUnlocked()`, `ResetAll()`, `ReloadAchievements()`
+- **`PlayerStats.RunStats.cs`** — added `public static event Action OnRunStatRecorded`. Fired from every `Record*()` method after the stat changes.
+- **`GameSessionManager.cs`** — added `Achievement[] achievements` SerializeField + `IReadOnlyList<Achievement> AllAchievements` getter.
+- **Inspector setup:** Create Achievement SOs via right-click → Drug Wars → Achievement. Drag into `GameSessionManager.achievements` array. Example achievements:
+  - "First Blood" — Stat: `CombatWins`, Comparison: `>=`, Threshold: `1`
+  - "Globe Trotter" — Stat: `UniqueCitiesVisited`, Comparison: `>=`, Threshold: `6`
+  - "Speed Run" — Stat: `DayDebtCleared`, Comparison: `<=`, Threshold: `10`
+  - "Leather Up" — Stat: `OwnsTrenchcoat`, RequiredItemName: `Leather`
+
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
 
@@ -346,6 +372,7 @@ File: `RunSummaryUI.cs`
   - **`CheatMenu`** — Esc toggles a debug overlay with `+ $10k`, `Drop heat`, `Quick Start`. Sorting order 32000.
   - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances.
   - **`RunSummaryUI`** — auto-spawns on YouWin/GameOver scene load and builds the full endgame screen + leaderboard from code if no hand-wired instance is in the scene. `isVictory` derived from active scene name.
-  - All three live independently — they don't reference each other and can be removed individually with no cascade.
+  - **`AchievementManager`** — evaluates Inspector-defined `Achievement` SOs against `PlayerStats` on every stat change. Unlocks persisted in `PlayerPrefs["Achievements_v1"]`. Gold toast + optional coin burst on unlock.
+  - All four live independently — they don't reference each other and can be removed individually with no cascade.
 - **Slot capacity** is two-dimensional: `Drug.UnitsPerSlot` is the per-drug bulk; `Trenchcoat.RiskTierCapacityMultipliers[3]` scales it by the drug's `RiskTier`. Effective per-slot capacity = `UnitsPerSlot × Trenchcoat.GetCapacityMultiplier(riskTier)`. `PlayerStats.GetEffectiveUnitsPerSlot(item)` is the single source of truth for slot math.
 - **`ResetRunStats()` is the canonical "new run" entry point.** Called from `CharCreationUI.Start` (early, before the gear-affordability filter), `CharCreationUI.HandleContinue` (idempotent), and `CheatMenu.QuickStart`. Wipes wallet → `$10,000`, inventory, heat, equipment, debt, `LastSeenBuyPrice`, all per-run stat counters, all city heat. Also resets `GameTime` to start, `PriceService.InGameDay = 1`, dealer runtime inventories (via `GameSessionManager.ResetForNewRun()`), and the `DailyTipService` cache.

@@ -19,6 +19,9 @@ public class GameSessionManager : MonoBehaviour
     [Tooltip("Player character sprites in the same order as CharCreationUI.charSprites.")]
     [SerializeField] private Sprite[] playerSprites;
 
+    [Tooltip("All Achievement SOs. Create via right-click → Drug Wars → Achievement, then drag here.")]
+    [SerializeField] private Achievement[] achievements;
+
     // Wipe per-run runtime state and rebuild dealer inventories from their templates. Used when
     // starting a fresh run so leftover stock and stale restock timers from the previous run
     // don't carry into the new one.
@@ -32,6 +35,7 @@ public class GameSessionManager : MonoBehaviour
     public IReadOnlyList<Sprite> PlayerSprites => playerSprites;
     public IReadOnlyList<City> AllCities => allCitiesInGame;
     public City FindCityByName(string name) => allCitiesInGame?.FirstOrDefault(c => c != null && c.Name == name);
+    public IReadOnlyList<Achievement> AllAchievements => achievements;
 
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();

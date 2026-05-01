@@ -53,12 +53,15 @@ public partial class PlayerStats
             TotalClicks++;
     }
 
+    public static event System.Action OnRunStatRecorded;
+
     // ---- Public increment API ----
     public void RecordDrugBuy(int qty, int totalCost)
     {
         if (qty <= 0) return;
         TotalDrugsBought += qty;
         TotalDrugSpend += totalCost;
+        OnRunStatRecorded?.Invoke();
     }
 
     public void RecordDrugSell(string drugName, int qty, int totalRevenue)
@@ -72,41 +75,46 @@ public partial class PlayerStats
             _drugSoldByName.TryGetValue(drugName, out int prev);
             _drugSoldByName[drugName] = prev + qty;
         }
+        OnRunStatRecorded?.Invoke();
     }
 
-    public void RecordEquipmentBuy(int cost) { if (cost > 0) TotalEquipmentSpend += cost; }
-    public void RecordInterestPaid(int amount) { if (amount > 0) TotalInterestPaid += amount; }
-    public void RecordDebtPaid(int amount) { if (amount > 0) TotalDebtPaid += amount; }
-    public void RecordCashConfiscated(int amount) { if (amount > 0) TotalConfiscatedCash += amount; }
-    public void RecordFinePaid(int amount) { if (amount > 0) TotalFinesPaid += amount; }
-    public void RecordCombatCashLoss(int amount) { if (amount > 0) TotalCombatCashLoss += amount; }
+    public void RecordEquipmentBuy(int cost) { if (cost > 0) { TotalEquipmentSpend += cost; OnRunStatRecorded?.Invoke(); } }
+    public void RecordInterestPaid(int amount) { if (amount > 0) { TotalInterestPaid += amount; OnRunStatRecorded?.Invoke(); } }
+    public void RecordDebtPaid(int amount) { if (amount > 0) { TotalDebtPaid += amount; OnRunStatRecorded?.Invoke(); } }
+    public void RecordCashConfiscated(int amount) { if (amount > 0) { TotalConfiscatedCash += amount; OnRunStatRecorded?.Invoke(); } }
+    public void RecordFinePaid(int amount) { if (amount > 0) { TotalFinesPaid += amount; OnRunStatRecorded?.Invoke(); } }
+    public void RecordCombatCashLoss(int amount) { if (amount > 0) { TotalCombatCashLoss += amount; OnRunStatRecorded?.Invoke(); } }
     public void RecordBribePaid(int amount)
     {
         if (amount <= 0) return;
         TotalBribesPaid += amount;
         TimesBribedSuccessfully++;
+        OnRunStatRecorded?.Invoke();
     }
-    public void RecordTravelSpend(int amount) { if (amount > 0) TotalTravelSpend += amount; }
-    public void RecordBorrowed(int amount) { if (amount > 0) TotalBorrowed += amount; }
+    public void RecordTravelSpend(int amount) { if (amount > 0) { TotalTravelSpend += amount; OnRunStatRecorded?.Invoke(); } }
+    public void RecordBorrowed(int amount) { if (amount > 0) { TotalBorrowed += amount; OnRunStatRecorded?.Invoke(); } }
 
-    public void RecordCombatWin() { CombatWins++; }
-    public void RecordCombatLoss() { CombatLosses++; }
-    public void RecordEscape() { TimesEscaped++; }
+    public void RecordCombatWin() { CombatWins++; OnRunStatRecorded?.Invoke(); }
+    public void RecordCombatLoss() { CombatLosses++; OnRunStatRecorded?.Invoke(); }
+    public void RecordEscape() { TimesEscaped++; OnRunStatRecorded?.Invoke(); }
 
     public void RecordHeatSample(float heat)
     {
-        if (heat > PeakHeat) PeakHeat = heat;
+        if (heat > PeakHeat) { PeakHeat = heat; OnRunStatRecorded?.Invoke(); }
     }
 
     public void RecordCityVisited(string cityName)
     {
         if (!string.IsNullOrEmpty(cityName))
+        {
             _visitedCityNames.Add(cityName);
+            OnRunStatRecorded?.Invoke();
+        }
     }
 
     public void RecordDayDebtCleared(int day)
     {
-        if (DayDebtCleared < 0) DayDebtCleared = day;
+        if (DayDebtCleared < 0) { DayDebtCleared = day; OnRunStatRecorded?.Invoke(); }
     }
 
     public string FavoriteDrug
