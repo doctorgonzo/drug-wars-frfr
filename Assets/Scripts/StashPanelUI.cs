@@ -162,7 +162,7 @@ public class StashPanelUI : MonoBehaviour
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(720, 520);
+        panelRect.sizeDelta = new Vector2(1440, 1040);
         var panelImg = _panel.AddComponent<Image>();
         panelImg.color = new Color(0.10f, 0.11f, 0.16f, 0.98f);
 
@@ -188,16 +188,16 @@ public class StashPanelUI : MonoBehaviour
         header.transform.SetParent(parent, false);
         header.AddComponent<RectTransform>();
         var le = header.AddComponent<LayoutElement>();
-        le.preferredHeight = 56;
-        le.minHeight = 56;
+        le.preferredHeight = 80;
+        le.minHeight = 80;
         var img = header.AddComponent<Image>();
         img.color = new Color(0.16f, 0.18f, 0.28f, 1f);
 
         var hlg = header.AddComponent<HorizontalLayoutGroup>();
-        hlg.padding = new RectOffset(16, 8, 0, 0);
+        hlg.padding = new RectOffset(24, 12, 0, 0);
         hlg.childAlignment = TextAnchor.MiddleLeft;
         hlg.childForceExpandHeight = true;
-        hlg.spacing = 8;
+        hlg.spacing = 12;
 
         // Title
         var titleGO = new GameObject("Title");
@@ -209,17 +209,17 @@ public class StashPanelUI : MonoBehaviour
         _headerText.text = "STASH";
         _headerText.color = new Color(1f, 0.86f, 0.45f);
         _headerText.fontStyle = FontStyles.Bold;
-        _headerText.fontSize = 22;
+        _headerText.fontSize = 32;
         _headerText.alignment = TextAlignmentOptions.MidlineLeft;
 
         // Close button
         var closeGO = new GameObject("Close");
         closeGO.transform.SetParent(header.transform, false);
         var closeRect = closeGO.AddComponent<RectTransform>();
-        closeRect.sizeDelta = new Vector2(40, 40);
+        closeRect.sizeDelta = new Vector2(56, 56);
         var closeLE = closeGO.AddComponent<LayoutElement>();
-        closeLE.preferredWidth = 40;
-        closeLE.minWidth = 40;
+        closeLE.preferredWidth = 56;
+        closeLE.minWidth = 56;
         var closeImg = closeGO.AddComponent<Image>();
         closeImg.color = new Color(0.45f, 0.18f, 0.18f);
         var closeBtn = closeGO.AddComponent<Button>();
@@ -235,7 +235,7 @@ public class StashPanelUI : MonoBehaviour
         closeLabel.alignment = TextAlignmentOptions.Center;
         closeLabel.color = Color.white;
         closeLabel.fontStyle = FontStyles.Bold;
-        closeLabel.fontSize = 22;
+        closeLabel.fontSize = 30;
     }
 
     private void BuildBody(Transform parent)
@@ -244,7 +244,7 @@ public class StashPanelUI : MonoBehaviour
         body.transform.SetParent(parent, false);
         body.AddComponent<RectTransform>();
         var bodyLE = body.AddComponent<LayoutElement>();
-        bodyLE.preferredHeight = 420;
+        bodyLE.preferredHeight = 940;
         bodyLE.flexibleHeight = 1;
         var bodyHLG = body.AddComponent<HorizontalLayoutGroup>();
         bodyHLG.padding = new RectOffset(16, 16, 12, 12);
@@ -278,8 +278,8 @@ public class StashPanelUI : MonoBehaviour
         head.transform.SetParent(col.transform, false);
         head.AddComponent<RectTransform>();
         var headLE = head.AddComponent<LayoutElement>();
-        headLE.preferredHeight = 28;
-        headLE.minHeight = 28;
+        headLE.preferredHeight = 44;
+        headLE.minHeight = 44;
         var headImg = head.AddComponent<Image>();
         headImg.color = headerTint;
         var headTextGO = new GameObject("HeadText");
@@ -293,7 +293,7 @@ public class StashPanelUI : MonoBehaviour
         headText.alignment = TextAlignmentOptions.Center;
         headText.color = Color.white;
         headText.fontStyle = FontStyles.Bold;
-        headText.fontSize = 13;
+        headText.fontSize = 20;
 
         // Scroll view
         var scrollGO = new GameObject("Scroll");
@@ -328,12 +328,16 @@ public class StashPanelUI : MonoBehaviour
         contentRect.pivot = new Vector2(0.5f, 1);
         contentRect.sizeDelta = new Vector2(0, 0);
         var contentVlg = contentGO.AddComponent<VerticalLayoutGroup>();
-        contentVlg.padding = new RectOffset(6, 6, 6, 6);
-        contentVlg.spacing = 4;
+        contentVlg.padding = new RectOffset(8, 8, 8, 8);
+        contentVlg.spacing = 6;
         contentVlg.childForceExpandWidth = true;
         contentVlg.childForceExpandHeight = false;
         contentVlg.childControlWidth = true;
-        contentVlg.childControlHeight = false;
+        // childControlHeight MUST be true — otherwise ContentSizeFitter can't compute the
+        // preferred content height from each row's LayoutElement, content collapses to ~0px,
+        // rows render but are invisible/unclickable. Same root cause as the RunSummaryUI
+        // invisibility bug.
+        contentVlg.childControlHeight = true;
         contentGO.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         sr.content = contentRect;
 
@@ -346,8 +350,8 @@ public class StashPanelUI : MonoBehaviour
         footer.transform.SetParent(parent, false);
         footer.AddComponent<RectTransform>();
         var le = footer.AddComponent<LayoutElement>();
-        le.preferredHeight = 44;
-        le.minHeight = 44;
+        le.preferredHeight = 64;
+        le.minHeight = 64;
         var img = footer.AddComponent<Image>();
         img.color = new Color(0.16f, 0.18f, 0.28f, 1f);
 
@@ -356,12 +360,12 @@ public class StashPanelUI : MonoBehaviour
         var textRect = textGO.AddComponent<RectTransform>();
         textRect.anchorMin = Vector2.zero;
         textRect.anchorMax = Vector2.one;
-        textRect.sizeDelta = new Vector2(-20, 0);
+        textRect.sizeDelta = new Vector2(-32, 0);
         textRect.anchoredPosition = Vector2.zero;
         _footerText = textGO.AddComponent<TextMeshProUGUI>();
         _footerText.alignment = TextAlignmentOptions.Center;
         _footerText.color = new Color(0.85f, 0.85f, 0.9f);
-        _footerText.fontSize = 12;
+        _footerText.fontSize = 18;
         _footerText.text = "";
     }
 
@@ -429,13 +433,13 @@ public class StashPanelUI : MonoBehaviour
         go.transform.SetParent(parent, false);
         go.AddComponent<RectTransform>();
         var le = go.AddComponent<LayoutElement>();
-        le.preferredHeight = 28;
+        le.preferredHeight = 44;
         var t = go.AddComponent<TextMeshProUGUI>();
         t.text = text;
         t.color = new Color(0.6f, 0.6f, 0.65f);
         t.fontStyle = FontStyles.Italic;
         t.alignment = TextAlignmentOptions.Center;
-        t.fontSize = 11;
+        t.fontSize = 16;
     }
 
     private void BuildPlayerRow(ItemInstance item, string cityName)
@@ -472,15 +476,20 @@ public class StashPanelUI : MonoBehaviour
         row.transform.SetParent(parent, false);
         row.AddComponent<RectTransform>();
         var le = row.AddComponent<LayoutElement>();
-        le.preferredHeight = 30;
-        le.minHeight = 30;
+        le.preferredHeight = 48;
+        le.minHeight = 48;
         var img = row.AddComponent<Image>();
         img.color = new Color(0.18f, 0.20f, 0.26f, 1f);
         var hlg = row.AddComponent<HorizontalLayoutGroup>();
-        hlg.padding = new RectOffset(8, 6, 2, 2);
-        hlg.spacing = 6;
+        hlg.padding = new RectOffset(12, 10, 4, 4);
+        hlg.spacing = 10;
         hlg.childAlignment = TextAnchor.MiddleLeft;
+        // Explicit flags — defaults vary by Unity version, and getting these wrong
+        // produces invisible/clipped rows.
         hlg.childForceExpandHeight = true;
+        hlg.childForceExpandWidth = false;
+        hlg.childControlWidth = true;
+        hlg.childControlHeight = true;
         return row;
     }
 
@@ -494,7 +503,7 @@ public class StashPanelUI : MonoBehaviour
         var t = go.AddComponent<TextMeshProUGUI>();
         t.text = text;
         t.color = Color.white;
-        t.fontSize = 13;
+        t.fontSize = 20;
         t.alignment = TextAlignmentOptions.MidlineLeft;
         return t;
     }
@@ -505,8 +514,8 @@ public class StashPanelUI : MonoBehaviour
         go.transform.SetParent(parent, false);
         go.AddComponent<RectTransform>();
         var le = go.AddComponent<LayoutElement>();
-        le.preferredWidth = 70;
-        le.minWidth = 60;
+        le.preferredWidth = 110;
+        le.minWidth = 90;
         var img = go.AddComponent<Image>();
         img.color = color;
         var btn = go.AddComponent<Button>();
@@ -527,7 +536,7 @@ public class StashPanelUI : MonoBehaviour
         t.alignment = TextAlignmentOptions.Center;
         t.color = Color.white;
         t.fontStyle = FontStyles.Bold;
-        t.fontSize = 11;
+        t.fontSize = 16;
 
         return btn;
     }
