@@ -170,6 +170,8 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 2, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
 - **GameSessionManager hook:** Subscribes to `GameTime.DayChanged` lazily (via `SceneManager.sceneLoaded` since `GameTime.Instance` may not exist when `GameSessionManager.Awake()` runs). Tracks per-dealer last-restock day in `Dictionary<int, int> dealerLastRestockDay` keyed by SO instance ID.
 - **Save/load support:** `SavedDealerState.lastRestockDay` persists the timer across saves. Old saves without the field default to 0 (graceful fallback — dealer restocks on next day-change after load).
+- **Latent bug fix:** `HandleDayChanged`'s "first time we see this dealer" path defaulted `lastDay = dt.day` LOCALLY but never wrote it back to the dictionary, so subsequent day-changes re-defaulted to "today" forever and `dt.day - lastDay` was always 0. Restocks have been silently broken since the system was added (and contract offers, which depend on restocks, never fired). Fixed by seeding `dealerLastRestockDay[id] = currentDay` for every dealer in `InitializeAllDealers`. Defensive write-back also added in `HandleDayChanged` for any dealer added at runtime.
+- **Initial contract offers:** `ResetForNewRun` now also calls `ContractManager.OnDealerRestocked(dealer)` for every dealer right after rebuilding inventories, so the player sees offers from day 1 instead of waiting `restockIntervalDays` for the first restock. `ResetRunStats` is ordered so `ContractManager.ResetForNewRun` runs BEFORE `GameSessionManager.ResetForNewRun` — otherwise the latter's seeded offers would be wiped immediately after.
 
 ### Bribe System Overhaul (Round 2)
 - **Header text always reflects current ask:** `bribeAskText` now shows `"<b>{cop} demands ${X}</b>"` and is refreshed on every state change via `RefreshBribePanelUI()`. Previously stuck on the initial demand line during counter-offers (the "silent rejection" bug).
@@ -382,12 +384,13 @@ A dealer occasionally offers a fixed-price/quantity job: *"Bring me 50 Weed in 3
 
 **`Dealer.ComputeBaseSellPriceF`** — applies `ContractManager.GetSellRatioPenaltyMult(this)` to `dealerSellRatio` before the rest of the chain. Failure penalty is dealer-specific; other dealers in the same city are unaffected.
 
-**Dealer panel UI** (in `DealerClicks.cs`) — procedural banner pinned to the top of the dealer info panel:
-  - **Offer state:** `JOB OFFER  Weed × 50  in 3d / $4,500 ($2,250 advance)` + `[ACCEPT] [DECLINE]`
-  - **Active state:** `DELIVER  Weed × 50  3d left / 23/50 — final $2,250` + `[DELIVER]` (disabled until the player has the full quantity)
-  - **Overdue:** banner shows `<color=#FF4444>OVERDUE</color>` until the day-rollover marks it Failed and clears the banner.
+**`ContractBannerUI.cs`** — auto-spawned overlay singleton, no Editor wiring. Lives on its own `ScreenSpaceOverlay` Canvas at sortingOrder 4500, positioned 16px below the top-center of the screen (420×220, fixed font sizes — no autosize, which was confusing TMP in narrow layouts and producing gigantic title text). DealerClicks doesn't own banner UI itself anymore — `PopulateDealerPanel` calls `ContractBannerUI.Instance?.ShowFor(dealer)` and `ReturnAllToPool` calls `HideIfFor(dealer)`. One shared banner services every dealer in every city, fully decoupled from the dealer panel's internal layout (which can't accommodate odd-shaped extra children without overlapping siblings).
 
-DealerClicks subscribes to `PlayerStats.OnInventoryChanged` so the DELIVER button enables in real time when the player buys enough of the requested drug from this same dealer.
+  - **Offer state:** `JOB OFFER • Daryl` / `Weed × 50    in 3d` / `$4,500` (green) / `$2,250 advance` (italic) / `[ACCEPT] [DECLINE]`
+  - **Active state:** `DELIVER • Daryl` / `Weed × 50    3d left` / `$2,250` (final payment) / `23/50 ready` (green if full, otherwise `have 23/50`) / `[DELIVER]` (disabled until the player has the full quantity)
+  - **Overdue:** detail row shows `<color=#FF4444>OVERDUE</color>` until the day-rollover marks it Failed and the banner hides.
+
+ContractBannerUI subscribes to `ContractManager.OnContractsChanged` and `PlayerStats.OnInventoryChanged` so the DELIVER button enables in real time when the player buys enough of the requested drug, and so the banner refreshes if a deadline expires while it's open.
 
 **Design tensions the system creates:**
   - Big contracts force trenchcoat upgrades — Tan tan can't hold 50 crack (capped at ~22 hard-tier units).
@@ -410,12 +413,14 @@ Per-city stash that holds drugs outside the trenchcoat. Stashed inventory:
   - `ResetForNewRun` wipes all stashes, called from `PlayerStats.ResetRunStats`
   - `CaptureSnapshot/RestoreSnapshot` persist via `RunStatsSnapshot.stashes`. Restore resolves item templates through new `GameSessionManager.ResolveItemByName` (searches trenchcoats, weapons, then every dealer's SO `Inventory[]`) so sprite/heat/riskTier/etc. carry across saves.
 
-**`StashPanelUI.cs`** — auto-spawned UI manager, no Editor wiring. Hotkey **S** toggles the panel (gated against typing in InputFields and against non-city scenes). Built procedurally:
+**`StashPanelUI.cs`** — auto-spawned UI manager, no Editor wiring. Hotkey **S** toggles the panel (gated against typing in InputFields and against non-city scenes). Built procedurally at 1440×1040 on its own canvas (sortingOrder 4000):
   - Header: "STASH IN MILWAUKEE" + close ✕
   - Body: two-column layout — `YOUR INVENTORY` (left, with `[STASH] [ALL]` per drug) and `STASH HERE` (right, with `[TAKE] [ALL]` per drug)
   - Footer: "Trenchcoat: 18/22 slots used • Stash here: 8 units • shift+click for ×10"
   - Backdrop dim closes on click. Auto-closes on scene load.
   - Subscribes to `PlayerStats.OnInventoryChanged` and `StashService.OnStashChanged` for live refresh.
+
+**Layout gotcha (recurring):** Both `VerticalLayoutGroup` instances in `BuildColumn` (the outer `colVlg` and the inner scroll-content `contentVlg`) MUST have `childControlHeight = true`. Without it, `ContentSizeFitter` can't compute preferred heights from `LayoutElement` values, scroll content collapses to ~0px, and rows render but are invisible/unclickable. Same root cause as the original `RunSummaryUI` invisibility bug — three separate fixes for the same flag pattern across the codebase now.
 
 **Decision tensions this creates:**
   - **Pre-travel:** carry inventory at risk vs stash for safety vs sell now at a saturated discount. Three-way fork.
@@ -468,9 +473,13 @@ Per-city stash that holds drugs outside the trenchcoat. Stashed inventory:
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
 - **Auto-spawned, code-built UI managers** (no Editor wiring required, all bootstrapped via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]` and persisted with `DontDestroyOnLoad`):
   - **`CheatMenu`** — Esc toggles a debug overlay with `+ $10k`, `Drop heat`, `Quick Start`. Sorting order 32000.
-  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances.
+  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances. Animation routines null-check the target every frame so destroyed-mid-animation refs don't throw `MissingReferenceException`.
   - **`RunSummaryUI`** — auto-spawns on YouWin/GameOver scene load and builds the full endgame screen + leaderboard from code if no hand-wired instance is in the scene. `isVictory` derived from active scene name.
   - **`AchievementManager`** — evaluates Inspector-defined `Achievement` SOs against `PlayerStats` on every stat change. Unlocks persisted in `PlayerPrefs["Achievements_v1"]`. Gold toast + optional coin burst on unlock.
-  - All four live independently — they don't reference each other and can be removed individually with no cascade.
+  - **`StashPanelUI`** — `S` hotkey toggles the per-city stash window. Sorting order 4000.
+  - **`ContractBannerUI`** — top-center notification banner shown while a dealer panel is open, if that dealer has an offer or active contract. Sorting order 4500. Driven by `DealerClicks.ShowFor/HideIfFor`.
+  - **`ContractManager`** — non-UI singleton; rolls offers on dealer restock, ticks deadlines on `DayChanged`, manages failure penalties.
+  - **`StashService`** — non-UI singleton; per-city `Dictionary<string, List<ItemInstance>>` with deposit/withdraw API.
+  - All eight live independently — they don't reference each other and can be removed individually with no cascade.
 - **Slot capacity** is two-dimensional: `Drug.UnitsPerSlot` is the per-drug bulk; `Trenchcoat.RiskTierCapacityMultipliers[3]` scales it by the drug's `RiskTier`. Effective per-slot capacity = `UnitsPerSlot × Trenchcoat.GetCapacityMultiplier(riskTier)`. `PlayerStats.GetEffectiveUnitsPerSlot(item)` is the single source of truth for slot math.
 - **`ResetRunStats()` is the canonical "new run" entry point.** Called from `CharCreationUI.Start` (early, before the gear-affordability filter), `CharCreationUI.HandleContinue` (idempotent), and `CheatMenu.QuickStart`. Wipes wallet → `$10,000`, inventory, heat, equipment, debt, `LastSeenBuyPrice`, all per-run stat counters, all city heat. Also resets `GameTime` to start, `PriceService.InGameDay = 1`, dealer runtime inventories (via `GameSessionManager.ResetForNewRun()`), and the `DailyTipService` cache.
