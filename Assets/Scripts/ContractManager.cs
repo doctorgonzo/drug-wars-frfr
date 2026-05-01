@@ -157,8 +157,11 @@ public class ContractManager : MonoBehaviour
         contract = GetActiveContractForDealer(dealer);
         if (contract == null) return false;
         if (PlayerStats.Instance == null) return false;
+
+        // Copy to a local — C# disallows capturing out parameters inside lambdas.
+        var c = contract;
         var item = PlayerStats.Instance.inventory
-            .FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == contract.drugName);
+            .FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == c.drugName);
         playerHas = item != null ? item.Amount : 0;
         return playerHas >= contract.quantityRequired;
     }
@@ -168,7 +171,9 @@ public class ContractManager : MonoBehaviour
         if (!CanDeliver(dealer, out var contract, out _)) return false;
         var ps = PlayerStats.Instance;
 
-        var item = ps.inventory.FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == contract.drugName);
+        // Local copy for lambda capture (out params can't be captured).
+        var c = contract;
+        var item = ps.inventory.FirstOrDefault(i => i.Type == ItemType.Drug && i.Name == c.drugName);
         if (item == null) return false;
 
         item.ChangeAmount(-contract.quantityRequired);

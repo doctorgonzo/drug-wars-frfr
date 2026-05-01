@@ -167,6 +167,7 @@ public partial class PlayerStats
         ResetCityHeat();
         ResetMarketState();
         ContractManager.Instance?.ResetForNewRun();
+        StashService.Instance?.ResetForNewRun();
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;
@@ -232,7 +233,10 @@ public partial class PlayerStats
             marketSaturationValues = new List<float>(),
             contracts = ContractManager.Instance != null
                 ? ContractManager.Instance.CaptureSnapshot()
-                : new ContractsSnapshot()
+                : new ContractsSnapshot(),
+            stashes = StashService.Instance != null
+                ? StashService.Instance.CaptureSnapshot()
+                : new StashesSnapshot()
         };
         CaptureCityHeat(snap.cityHeatNames, snap.cityHeatValues);
         CaptureMarketSaturation(snap.marketSaturationKeys, snap.marketSaturationValues);
@@ -278,6 +282,7 @@ public partial class PlayerStats
         RestoreCityHeat(s.cityHeatNames, s.cityHeatValues);
         RestoreMarketSaturation(s.marketSaturationKeys, s.marketSaturationValues);
         ContractManager.Instance?.RestoreSnapshot(s.contracts);
+        StashService.Instance?.RestoreSnapshot(s.stashes);
     }
 }
 
@@ -313,4 +318,5 @@ public class RunStatsSnapshot
     public List<string> marketSaturationKeys = new List<string>();
     public List<float> marketSaturationValues = new List<float>();
     public ContractsSnapshot contracts = new ContractsSnapshot();
+    public StashesSnapshot stashes = new StashesSnapshot();
 }

@@ -49,6 +49,41 @@ public class GameSessionManager : MonoBehaviour
         return null;
     }
 
+    // Build an ItemInstance from a name + type, copying sprite/heat/risk/etc. from the
+    // matching SO template. Used by StashService.RestoreSnapshot and other systems that
+    // reload items from saved data without a dealer-template dictionary in scope.
+    public ItemInstance ResolveItemByName(string itemName, ItemType itemType)
+    {
+        if (string.IsNullOrEmpty(itemName)) return null;
+
+        if (itemType == ItemType.Weapon && allWeapons != null)
+        {
+            foreach (var w in allWeapons)
+                if (w != null && w.Name == itemName) return new ItemInstance(w);
+        }
+        if (itemType == ItemType.Trenchcoat && allTrenchcoats != null)
+        {
+            foreach (var t in allTrenchcoats)
+                if (t != null && t.Name == itemName) return new ItemInstance(t);
+        }
+        // Drugs: search every dealer's SO Inventory[] (the template, never mutated).
+        if (allCitiesInGame != null)
+        {
+            foreach (var city in allCitiesInGame)
+            {
+                if (city?.Dealers == null) continue;
+                foreach (var dealer in city.Dealers)
+                {
+                    if (dealer?.Inventory == null) continue;
+                    foreach (var asset in dealer.Inventory)
+                        if (asset != null && asset.Name == itemName && asset.Type == itemType)
+                            return new ItemInstance(asset);
+                }
+            }
+        }
+        return null;
+    }
+
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
     // Day index of each dealer's last restock, keyed by Dealer SO instance ID.

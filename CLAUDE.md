@@ -395,6 +395,40 @@ DealerClicks subscribes to `PlayerStats.OnInventoryChanged` so the DELIVER butto
   - Cross-city contracts mean travel costs + days lost. Offer in Milwaukee for crack delivery means sourcing crack elsewhere then carrying it back through cop encounters.
   - Failed contracts make a dealer permanently worse for 10 days — the player has to either avoid them or eat -15% sell prices.
 
+### Stash / Safehouse System
+Per-city stash that holds drugs outside the trenchcoat. Stashed inventory:
+  - Doesn't count toward trenchcoat slot capacity (carry limits become a *movement* decision, not a hoarding one)
+  - Invisible to cops — confiscation only touches `PlayerStats.inventory`
+  - Only accessible from the city where it was deposited (commits the player to returning)
+
+**`StashService.cs`** — auto-spawned singleton, `Dictionary<string cityName, List<ItemInstance>>`. Public API:
+  - `GetStash(city)`, `GetTotalUnitsStashed(city)`, `AllStashes()` — read
+  - `Deposit(city, playerItem, amount)` / `Withdraw(city, stashItem, amount)` — mutation, returns actual amount moved
+  - `Withdraw` caps at trenchcoat capacity for drugs (uses `PlayerStats.GetMaxBuyableAmount` to respect slot math)
+  - Both `Deposit` and `Withdraw` weighted-average `AvgPurchasePrice` across merged stacks so profit math stays honest
+  - `OnStashChanged` event fires after every mutation
+  - `ResetForNewRun` wipes all stashes, called from `PlayerStats.ResetRunStats`
+  - `CaptureSnapshot/RestoreSnapshot` persist via `RunStatsSnapshot.stashes`. Restore resolves item templates through new `GameSessionManager.ResolveItemByName` (searches trenchcoats, weapons, then every dealer's SO `Inventory[]`) so sprite/heat/riskTier/etc. carry across saves.
+
+**`StashPanelUI.cs`** — auto-spawned UI manager, no Editor wiring. Hotkey **S** toggles the panel (gated against typing in InputFields and against non-city scenes). Built procedurally:
+  - Header: "STASH IN MILWAUKEE" + close ✕
+  - Body: two-column layout — `YOUR INVENTORY` (left, with `[STASH] [ALL]` per drug) and `STASH HERE` (right, with `[TAKE] [ALL]` per drug)
+  - Footer: "Trenchcoat: 18/22 slots used • Stash here: 8 units • shift+click for ×10"
+  - Backdrop dim closes on click. Auto-closes on scene load.
+  - Subscribes to `PlayerStats.OnInventoryChanged` and `StashService.OnStashChanged` for live refresh.
+
+**Decision tensions this creates:**
+  - **Pre-travel:** carry inventory at risk vs stash for safety vs sell now at a saturated discount. Three-way fork.
+  - **Panic-stash:** about to trigger a cop encounter? Stash anything illegal on the same panel before the encounter spawns.
+  - **Map memory:** cities you've visited become asset locations. Combined with contracts, you might *deliberately* stash crack in the city that has a Mr. Wong contract pending.
+  - **Forced returns:** a stash in Milwaukee gives you a reason to revisit even when its market is saturated.
+
+**Tuning levers if it's too generous in playtest** (currently all defaults, no friction):
+  - Daily storage fee per city
+  - Theft chance per stack per day (% to lose contents if abandoned)
+  - Heat penalty on deposit (someone sees you stash)
+  - Per-city max stash size (forces "which city is my main stash")
+
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
 
