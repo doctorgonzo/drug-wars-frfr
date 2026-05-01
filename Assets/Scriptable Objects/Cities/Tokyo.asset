@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fec0aeeb1d8c5a4aa135da57a4daf34, type: 3}
   m_Name: Tokyo
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   Name: Tokyo
   Description: The neon jungle
   Image: {fileID: 0}
@@ -30,8 +30,8 @@ MonoBehaviour:
     sellPriceRatio: 0.6
     dailyVolatility: 0.3
     boomChance: 0.15
-    boomMultiplier: 1.8
-    bustChance: 0.05
+    boomMultiplier: 1.21
+    bustChance: 0.07
     bustMultiplier: 0.3
   drugBonuses:
   - drugName: Heroin

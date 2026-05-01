@@ -30,6 +30,10 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     private GameObject _sellAllButton;
 
+    // Contract banner now lives on its own overlay canvas (ContractBannerUI singleton)
+    // because the dealer panel's layout doesn't accommodate odd-shaped extra children
+    // cleanly. We just notify ShowFor/HideIfFor on panel open/close.
+
     private int GetShiftClickAmount() =>
         (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? shiftClickAmount : 1;
 
@@ -111,6 +115,9 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (ui != null) ui.Teardown();
             child.gameObject.SetActive(false);
         }
+
+        // Tell the shared contract banner to hide if it's tracking us.
+        ContractBannerUI.Instance?.HideIfFor(dealer);
     }
 
     private GameObject GetPooledItem(List<GameObject> pool, Transform parent)
@@ -151,6 +158,9 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (item.Type == ItemType.Drug)
                 PlayerStats.Instance.LastSeenBuyPrice[BuildPriceKey(item)] = dealer.GetModifiedBuyPrice(item);
         }
+
+        // Hand off to the shared contract banner overlay (separate canvas).
+        ContractBannerUI.Instance?.ShowFor(dealer);
     }
 
     private void ReturnDealerItems()
@@ -239,6 +249,13 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         label.fontSize = 10;
     }
 
+    // ------------------------------------------------------------------
+    //  Contract banner has moved to ContractBannerUI singleton overlay.
+    //  PopulateDealerPanel calls ContractBannerUI.Instance?.ShowFor(dealer)
+    //  and ReturnAllToPool calls HideIfFor(dealer). All UI building, click
+    //  handling, and inventory-change refresh logic lives in that class.
+    // ------------------------------------------------------------------
+
     private void SellAll()
     {
         var drugsToSell = PlayerStats.Instance.inventory
@@ -251,11 +268,16 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         foreach (var playerItem in drugsToSell)
         {
-            int sellPrice = dealer.GetModifiedSellPrice(playerItem);
-            int lineValue = sellPrice * playerItem.Amount;
+            int qty = playerItem.Amount;
+            int lineValue = dealer.GetSellRevenueForBatch(playerItem, qty);
+            int avgUnitPrice = qty > 0 ? lineValue / qty : 0;
             totalValue += lineValue;
-            totalProfit += (sellPrice - playerItem.AvgPurchasePrice) * playerItem.Amount;
-            PlayerStats.Instance.RecordDrugSell(playerItem.Name, playerItem.Amount, lineValue);
+            totalProfit += (avgUnitPrice - playerItem.AvgPurchasePrice) * qty;
+            PlayerStats.Instance.RecordDrugSell(playerItem.Name, qty, lineValue);
+
+            // Bump market saturation so subsequent sales of this drug at this city see lower prices.
+            string sellCityName = PlayerStats.Instance?.CurrentCity?.Name ?? "";
+            PlayerStats.Instance?.BumpMarketSaturation(sellCityName, playerItem.Name, qty, playerItem.RiskTier);
 
             ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.MatchesStack(playerItem));
             if (dealerItem == null)
@@ -268,14 +290,14 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             {
                 float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
                 float qHeat = DrugQualityX.HeatPerUnitMult(playerItem.Quality);
-                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm * qHeat);
+                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * qty * _hm * qHeat);
                 heatManager.AddHeat(sellHeat);
                 if (PlayerStats.Instance?.CurrentCity != null)
                     PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
             }
 
-            dealerItem.ChangeAmount(playerItem.Amount);
-            playerItem.ChangeAmount(-playerItem.Amount);
+            dealerItem.ChangeAmount(qty);
+            playerItem.ChangeAmount(-qty);
         }
 
         PlayerStats.Instance.inventory.RemoveAll(i => i.Amount <= 0);
@@ -320,12 +342,17 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             dealerItemUIMap[dealerItem] = newDealerItemUI;
         }
 
-        int sellPrice = dealer.GetModifiedSellPrice(playerItem);
-        int totalValue = sellPrice * amountToSell;
-        int totalProfit = (sellPrice - playerItem.AvgPurchasePrice) * amountToSell;
+        int totalValue = dealer.GetSellRevenueForBatch(playerItem, amountToSell);
+        int avgSellPrice = amountToSell > 0 ? totalValue / amountToSell : 0;
+        int totalProfit = (avgSellPrice - playerItem.AvgPurchasePrice) * amountToSell;
         PlayerStats.Instance.PlayerWallet += totalValue;
         if (playerItem.Type == ItemType.Drug)
+        {
             PlayerStats.Instance.RecordDrugSell(playerItem.Name, amountToSell, totalValue);
+            // Bump saturation so the next sale of this drug here is cheaper.
+            string sellCityName = PlayerStats.Instance.CurrentCity?.Name ?? "";
+            PlayerStats.Instance.BumpMarketSaturation(sellCityName, playerItem.Name, amountToSell, playerItem.RiskTier);
+        }
         if (GameSessionManager.Instance != null)
             GameSessionManager.Instance.AddDealerBusiness(dealer, totalValue);
         cityUIHandler.UpdateWalletDisplay();

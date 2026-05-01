@@ -161,6 +161,7 @@ public class JuiceFX : MonoBehaviour
         while (t < half)
         {
             t += Time.unscaledDeltaTime;
+            if (rt == null) yield break;
             rt.localScale = Vector3.Lerp(baseScale, peak, t / half);
             yield return null;
         }
@@ -170,9 +171,11 @@ public class JuiceFX : MonoBehaviour
         while (t < settle)
         {
             t += Time.unscaledDeltaTime;
+            if (rt == null) yield break;
             rt.localScale = Vector3.Lerp(peak, baseScale, t / settle);
             yield return null;
         }
+        if (rt == null) yield break;
         rt.localScale = baseScale;
     }
 
@@ -195,6 +198,7 @@ public class JuiceFX : MonoBehaviour
         while (t < duration)
         {
             t += Time.unscaledDeltaTime;
+            if (label == null) yield break;
             float u = Mathf.Clamp01(t / duration);
             // Ease-out cubic
             float eased = 1f - Mathf.Pow(1f - u, 3f);
@@ -202,6 +206,7 @@ public class JuiceFX : MonoBehaviour
             label.text = $"{prefix}{v:N0}{suffix}";
             yield return null;
         }
+        if (label == null) yield break;
         label.text = $"{prefix}{to:N0}{suffix}";
     }
 

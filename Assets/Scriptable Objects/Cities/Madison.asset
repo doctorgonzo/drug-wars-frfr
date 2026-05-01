@@ -28,8 +28,8 @@ MonoBehaviour:
     buyPriceMultiplier: 1.09
     sellPriceRatio: 0.573
     dailyVolatility: 0.382
-    boomChance: 0.311
-    boomMultiplier: 1.53
+    boomChance: 0.258
+    boomMultiplier: 1.14
     bustChance: 0.163
     bustMultiplier: 0.3
   drugBonuses:

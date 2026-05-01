@@ -1265,6 +1265,8 @@ MonoBehaviour:
   - {fileID: 6916507504320922074, guid: 60781531574fa044b9fa9544519e9961, type: 3}
   - {fileID: 6833041306909522587, guid: 2e5481cb9bd278e4cbc27737901817e1, type: 3}
   - {fileID: -3777727041246650567, guid: 080a2737e3b2a7a4898b090e59f3a266, type: 3}
+  achievements:
+  - {fileID: 11400000, guid: e29cdb4dbcdb34bc88e54cf32c050675, type: 2}
 --- !u!4 &487234795
 Transform:
   m_ObjectHideFlags: 0
@@ -3374,7 +3376,7 @@ MonoBehaviour:
   - {fileID: 202068851}
   - {fileID: 894118539}
   graphicsDropdown: {fileID: 1197232456}
-  continueButton: {fileID: 0}
+  continueButton: {fileID: 315914241}
   newGameSceneName: Intro
 --- !u!1 &1853592221
 GameObject:

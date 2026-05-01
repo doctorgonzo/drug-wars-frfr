@@ -167,9 +167,11 @@ Unity game inspired by the classic Drug Wars. Players buy/sell drugs across citi
 - **TimeText not updating in non-Milwaukee cities:** `GameTime.AssignTimeText()` used `GameObject.Find("TimeText")` which returns null when the parent (`Content_Stats` inside `TabbedPanel`) starts inactive. Replaced with `Resources.FindObjectsOfTypeAll<TMP_Text>()` filtered by `SceneManager.GetActiveScene()`. Also writes the current time string immediately on assignment so there's no 1-frame stale gap after travel. File: `GameTime.cs`
 
 ### Dealer Restock System
-- **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 3, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
+- **Per-dealer restock interval:** New `restockIntervalDays` int field on `Dealer.cs` (default 2, Inspector-tweakable; 0 disables). Dealer inventories rebuild from their template `Inventory[]` when `currentDay - lastRestockDay >= interval`.
 - **GameSessionManager hook:** Subscribes to `GameTime.DayChanged` lazily (via `SceneManager.sceneLoaded` since `GameTime.Instance` may not exist when `GameSessionManager.Awake()` runs). Tracks per-dealer last-restock day in `Dictionary<int, int> dealerLastRestockDay` keyed by SO instance ID.
 - **Save/load support:** `SavedDealerState.lastRestockDay` persists the timer across saves. Old saves without the field default to 0 (graceful fallback — dealer restocks on next day-change after load).
+- **Latent bug fix:** `HandleDayChanged`'s "first time we see this dealer" path defaulted `lastDay = dt.day` LOCALLY but never wrote it back to the dictionary, so subsequent day-changes re-defaulted to "today" forever and `dt.day - lastDay` was always 0. Restocks have been silently broken since the system was added (and contract offers, which depend on restocks, never fired). Fixed by seeding `dealerLastRestockDay[id] = currentDay` for every dealer in `InitializeAllDealers`. Defensive write-back also added in `HandleDayChanged` for any dealer added at runtime.
+- **Initial contract offers:** `ResetForNewRun` now also calls `ContractManager.OnDealerRestocked(dealer)` for every dealer right after rebuilding inventories, so the player sees offers from day 1 instead of waiting `restockIntervalDays` for the first restock. `ResetRunStats` is ordered so `ContractManager.ResetForNewRun` runs BEFORE `GameSessionManager.ResetForNewRun` — otherwise the latter's seeded offers would be wiped immediately after.
 
 ### Bribe System Overhaul (Round 2)
 - **Header text always reflects current ask:** `bribeAskText` now shows `"<b>{cop} demands ${X}</b>"` and is refreshed on every state change via `RefreshBribePanelUI()`. Previously stuck on the initial demand line during counter-offers (the "silent rejection" bug).
@@ -331,6 +333,160 @@ File: `RunSummaryUI.cs`
   - "Speed Run" — Stat: `DayDebtCleared`, Comparison: `<=`, Threshold: `10`
   - "Leather Up" — Stat: `OwnsTrenchcoat`, RequiredItemName: `Leather`
 
+### Market Saturation + Sell-Price Cap
+Two interlocking changes to fix the "buy 20 crack in Milwaukee, fly to Miami, win in one trip" exploit. Together they convert one-shot wins into 2–3 trip routes and make trenchcoat upgrades / multi-city play actually matter.
+
+**Hard ceiling on sell price.** `Dealer.ComputeBaseSellPriceF()` clamps the post-multiplier sell price at `item.Cost × 3.0` for drugs. Stops the perfect-storm stack (boom + festival + favorite × 2.0 + hot tip × 1.45 + volatility × 1.2 on top of buy-side inflation) from running 6–10× base. Drugs only — equipment isn't event-multiplied so it doesn't need the cap. Constant `MaxSellPriceBaseMult` in `Dealer.cs`.
+
+**Per-(city, drug) market saturation.** New partial `PlayerStats.MarketState.cs` tracks how flooded each city's market is for each drug. Selling N units bumps the saturation for that city+drug pair; saturation decays 40% per day. The displayed sell price reflects *current* saturation — the 1st unit fetches full price, the 20th fetches less. Per-unit bump scales with risk tier:
+
+  | RiskTier | Drug | Bump/unit | Floor (mult=0.30) at |
+  |---|---|---|---|
+  | 0 (Safe) | Weed/Shrooms | 0.005 | ~200 units |
+  | 1 (Medium) | LSD/Ecstasy | 0.015 | ~67 units |
+  | 2 (Hard) | Crack/Heroin | 0.030 | ~33 units |
+
+  Mult formula: `max(0.30, 1 - 0.7 × saturation)`. Decay: `× 0.6` daily (40% recovery). Floored at 0.30 so dumping a wagon-load of crack still pays *something* — just badly.
+
+**Two pricing APIs on `Dealer`:**
+  - `GetModifiedSellPrice(item)` — per-unit price at current saturation. Used for UI display + per-unit profit calc. Naturally drops as the player sells.
+  - `GetSellRevenueForBatch(item, amount)` — total revenue for a batch sale, using the average mult between start and end saturation. The 20th crack is priced *lower* than the 1st within the same transaction, so even a single big "Sell All" sees diminishing returns.
+
+`DealerClicks.SellAll` and `OnPlayerSellClicked` now call `GetSellRevenueForBatch` then `PlayerStats.BumpMarketSaturation(city, drug, qty, riskTier)`. The bump grows the saturation so the *next* sale (same day, same city, same drug) is more penalized.
+
+**Reset / persistence:**
+  - `PlayerStats.ResetMarketState()` called from `ResetRunStats()`.
+  - `GameSessionManager.HandleDayChanged` calls `DecayMarketSaturation` next to `DecayAllCityHeat`.
+  - `RunStatsSnapshot.marketSaturationKeys/Values` parallel lists persist saturation across save/load (same pattern as cityHeat).
+
+**News ticker feedback.** `MarketNewsTicker.CheckAndShowEvents` was rewritten to rebuild its message list every loop iteration (was a one-shot at scene load). New `AppendSaturationMessages` adds a tier-coded line per (current city, drug) where saturation has crossed a threshold:
+  - `≥ 0.4` → `<color=#FFD700>SLOWING</color> — buyers getting picky`
+  - `≥ 0.7` → `<color=#FF8800>SATURATED</color> — prices tumbling`
+  - `≥ 1.0` → `<color=#FF4444>FLOODED</color> — buyers paying scraps`
+
+Player sees these within ~one full ticker cycle of selling, so the price drop has narrative cover. Ticker panel auto-hides during silent periods (no events, no tips, no saturation) and re-activates when a message appears. Required new `PlayerStats.AllMarketSaturation()` enumerable + `TryParseMarketKey` static helper to walk the saturation dictionary from outside.
+
+**Sample math** — 20 crack at perfect-storm stacked Miami, no prior sales:
+  - Pre-fix: ~$2,500/unit avg → $50,000 revenue → debt cleared in one trip.
+  - With cap only: $1,800/unit cap → $36,000 revenue → 70% of debt in one trip.
+  - With cap + saturation (avg mult ~0.79 across the batch): ~$1,422/unit avg → $28,440 → 57% of debt. Player needs at least one more trip — and saturation in Miami is now 0.6, so the next 20 crack sale tomorrow there starts at mult 0.36, forcing a different city.
+
+### Dealer Contracts
+A dealer occasionally offers a fixed-price/quantity job: *"Bring me 50 Weed in 3 days for $4,500. Half up front."* Locks the player into a route under deadline pressure, hands them an advance to invest, penalizes failure. Drives decisions on every visit — accept and reshape your plan, or decline and stay flexible.
+
+**`Contract.cs`** — runtime data class, `[Serializable]` for JsonUtility persistence. Dealer reference stored by name (resolved through `GameSessionManager.FindDealerByName` at load time since SO refs don't serialize through JSON). State enum: `Offered → Accepted → Completed/Failed`. Sister type `ContractsSnapshot` holds parallel arrays for offers + active contracts + failure penalties.
+
+**`ContractManager.cs`** — auto-spawned via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`, `DontDestroyOnLoad`, no Editor wiring. Responsibilities:
+  - **Offer generation:** `OnDealerRestocked` rolls a 35% chance to issue a contract. Quantity scales with risk tier — Safe 30–60, Medium 15–30, Hard 8–18. Days 2–4. Payment = `baseCost × qty × random(1.4, 2.2)`. If the dealer already has an active contract with the player, no new offer until it resolves.
+  - **Drug pool — exclude what the dealer already sells:** Pool is built from drugs found in OTHER dealers' template inventories across all cities, excluding by name anything in this dealer's own inventory. So Mr. Wong (sells crack/heroin) only ever offers contracts for weed/shrooms/LSD/ecstasy — drugs the player has to source elsewhere and bring to him. Was the opposite before — picking from the dealer's own inventory turned every contract into a "buy from this dealer, sell back to this dealer" no-op. Helper: `GameSessionManager.FindCityOfDealer(dealer)`.
+  - **One contract per city:** Before rolling, walks `city.Dealers` and bails if any other dealer in the same city already has an offer or active accepted contract. First dealer to restock in a city claims the slot until that contract resolves. Prevents 2 simultaneous offers in cities with 2 dealers.
+  - **Player actions:** `AcceptOffer` pays 50% advance immediately. `DeclineOffer` clears the slot until next restock. `TryDeliver` deducts the drug from inventory + pays the remainder (no saturation bump — contracts are private deals at fixed prices, that's the whole point).
+  - **Failure:** `OnDayChanged` (called from `GameSessionManager.HandleDayChanged`) marks contracts past their deadline as Failed and applies a -15% sellRatio penalty at that dealer for 10 days. Player keeps the advance.
+  - **Persistence:** `CaptureSnapshot/RestoreSnapshot` survive save/load via `RunStatsSnapshot.contracts`. `ResetForNewRun` wipes all contract state, called from `PlayerStats.ResetRunStats`.
+
+**`Dealer.ComputeBaseSellPriceF`** — applies `ContractManager.GetSellRatioPenaltyMult(this)` to `dealerSellRatio` before the rest of the chain. Failure penalty is dealer-specific; other dealers in the same city are unaffected.
+
+**`ContractBannerUI.cs`** — auto-spawned overlay singleton, no Editor wiring. Lives on its own `ScreenSpaceOverlay` Canvas at sortingOrder 4500, positioned 16px below the top-center of the screen (630×330, fixed font sizes — no autosize, which was confusing TMP in narrow layouts and producing gigantic title text). Sized up 50% from the original 420×220 so it's legible without crowding text. Title 24pt, detail 22pt, payment 30pt, advance 16pt, button label 22pt; row heights 32–44px, button row 54px. DealerClicks doesn't own banner UI itself anymore — `PopulateDealerPanel` calls `ContractBannerUI.Instance?.ShowFor(dealer)` and `ReturnAllToPool` calls `HideIfFor(dealer)`. One shared banner services every dealer in every city, fully decoupled from the dealer panel's internal layout (which can't accommodate odd-shaped extra children without overlapping siblings).
+
+  - **Offer state:** `JOB OFFER • Daryl` / `Weed × 50    in 3d` / `$4,500` (green) / `$2,250 advance` (italic) / `[ACCEPT] [DECLINE]`
+  - **Active state:** `DELIVER • Daryl` / `Weed × 50    3d left` / `$2,250` (final payment) / `23/50 ready` (green if full, otherwise `have 23/50`) / `[DELIVER]` (disabled until the player has the full quantity)
+  - **Overdue:** detail row shows `<color=#FF4444>OVERDUE</color>` until the day-rollover marks it Failed and the banner hides.
+
+ContractBannerUI subscribes to `ContractManager.OnContractsChanged` and `PlayerStats.OnInventoryChanged` so the DELIVER button enables in real time when the player buys enough of the requested drug, and so the banner refreshes if a deadline expires while it's open.
+
+**Design tensions the system creates:**
+  - Big contracts force trenchcoat upgrades — Tan tan can't hold 50 crack (capped at ~22 hard-tier units).
+  - Contract drug becomes a no-saturation channel — bypasses the public market saturation system, but locks the price.
+  - Cross-city contracts mean travel costs + days lost. Offer in Milwaukee for crack delivery means sourcing crack elsewhere then carrying it back through cop encounters.
+  - Failed contracts make a dealer permanently worse for 10 days — the player has to either avoid them or eat -15% sell prices.
+
+### Stash / Safehouse System
+Per-city stash that holds drugs outside the trenchcoat. Stashed inventory:
+  - Doesn't count toward trenchcoat slot capacity (carry limits become a *movement* decision, not a hoarding one)
+  - Invisible to cops — confiscation only touches `PlayerStats.inventory`
+  - Only accessible from the city where it was deposited (commits the player to returning)
+
+**`StashService.cs`** — auto-spawned singleton, `Dictionary<string cityName, List<ItemInstance>>`. Public API:
+  - `GetStash(city)`, `GetTotalUnitsStashed(city)`, `AllStashes()` — read
+  - `Deposit(city, playerItem, amount)` / `Withdraw(city, stashItem, amount)` — mutation, returns actual amount moved
+  - `Withdraw` caps at trenchcoat capacity for drugs (uses `PlayerStats.GetMaxBuyableAmount` to respect slot math)
+  - Both `Deposit` and `Withdraw` weighted-average `AvgPurchasePrice` across merged stacks so profit math stays honest
+  - `OnStashChanged` event fires after every mutation
+  - `ResetForNewRun` wipes all stashes, called from `PlayerStats.ResetRunStats`
+  - `CaptureSnapshot/RestoreSnapshot` persist via `RunStatsSnapshot.stashes`. Restore resolves item templates through new `GameSessionManager.ResolveItemByName` (searches trenchcoats, weapons, then every dealer's SO `Inventory[]`) so sprite/heat/riskTier/etc. carry across saves.
+
+**`StashPanelUI.cs`** — auto-spawned UI manager, no Editor wiring. Hotkey **S** toggles the panel (gated against typing in InputFields and against non-city scenes). Built procedurally on its own canvas (sortingOrder 4000), sized via stretching anchors `(0.03, 0.03) → (0.97, 0.97)` so it fills 94% of the screen at any resolution (was a fixed 1440×1040 — looked tiny on high-DPI displays under `ConstantPixelSize`):
+  - Header (100px, 40pt title): "STASH IN MILWAUKEE" + close ✕ (70×70)
+  - Body: two-column layout — `YOUR INVENTORY` (left, `[STASH] [ALL]` per drug) and `STASH HERE` (right, `[TAKE] [ALL]` per drug). Column header 56px/26pt, rows 64px/26pt label + 140px buttons (20pt).
+  - Footer (80px, 22pt): "Trenchcoat: 18/22 slots used • Stash here: 8 units • shift+click for ×10"
+  - Backdrop dim closes on click. Auto-closes on scene load.
+  - Subscribes to `PlayerStats.OnInventoryChanged` and `StashService.OnStashChanged` for live refresh.
+
+**Mask → RectMask2D fix (the "stash items invisible" bug):** Original viewport setup was `Image (no sprite, alpha 0.001) + Mask (showMaskGraphic = false)`. With no sprite assigned, the Image renders empty geometry, so `Mask` had no shape to clip to and clipped *every* child to nothing — rows were being created and laid out correctly, then clipped invisibly. Replaced with `RectMask2D` (clips by rect, no graphic needed); kept the alpha-0.001 Image as a raycast target so scrolling still works. Lesson: when using `Mask` for clipping, the source `Graphic` MUST have a sprite or visible geometry — for ScrollRect viewports, prefer `RectMask2D`.
+
+**Layout gotcha (recurring, separate issue):** Both `VerticalLayoutGroup` instances in `BuildColumn` (the outer `colVlg` and the inner scroll-content `contentVlg`) MUST have `childControlHeight = true`. Without it, `ContentSizeFitter` can't compute preferred heights from `LayoutElement` values, scroll content collapses to ~0px. Same root cause as the original `RunSummaryUI` invisibility bug.
+
+**Decision tensions this creates:**
+  - **Pre-travel:** carry inventory at risk vs stash for safety vs sell now at a saturated discount. Three-way fork.
+  - **Panic-stash:** about to trigger a cop encounter? Stash anything illegal on the same panel before the encounter spawns.
+  - **Map memory:** cities you've visited become asset locations. Combined with contracts, you might *deliberately* stash crack in the city that has a Mr. Wong contract pending.
+  - **Forced returns:** a stash in Milwaukee gives you a reason to revisit even when its market is saturated.
+
+**Tuning levers if it's too generous in playtest** (currently all defaults, no friction):
+  - Daily storage fee per city
+  - Theft chance per stack per day (% to lose contents if abandoned)
+  - Heat penalty on deposit (someone sees you stash)
+  - Per-city max stash size (forces "which city is my main stash")
+
+### Drug Quality Tiers + Dealer Reputation
+Two interlocking systems that turn each transaction into a tradeoff between safety, capital, slot density, and dealer relationships.
+
+**Drug quality tiers (`DrugQuality.cs` enum + `DrugQualityX` static helpers):** Cut / Standard / Pure. Each scales a multiplier stack on `ItemInstance`:
+
+  | Quality | Buy mult | Sell mult | Slot density | Heat per unit |
+  |---|---|---|---|---|
+  | Cut | 0.65× | 0.85× | 1.4× (bulkier) | 1.3× (loud) |
+  | Standard | 1.0× | 1.0× | 1.0× | 1.0× |
+  | Pure | 1.6× | 1.55× | 0.8× (denser) | 0.7× (quiet) |
+
+  Pure trades hands in smaller batches (less heat, fewer slots) but demands more starting capital. Cut is the bottom-feeder option — cheap entry, heavy slot footprint, attracts cops. Stacks are keyed by `(Name, Quality)` via `ItemInstance.MatchesStack(other)`, so Pure Crack and Cut Crack are independent inventory entries with independent capital, slot, and heat profiles. Display name is "Pure Crack" / "Crack" / "Cut Crack" via `ItemInstance.DisplayName`.
+
+**Dealer reputation (`GameSessionManager.dealerLifetimeBusiness` dict, keyed by Dealer SO instance ID):** Tracks lifetime $ business (buys + sells) per dealer. Three tiers gate progressively more attractive offers:
+
+  | Tier | $ Threshold | Buy discount | Restock multiplier | Pure available |
+  |---|---|---|---|---|
+  | Stranger | $0 | 0% | 1.0× | No |
+  | Regular | $5,000 | 5% | 1.2× | Some |
+  | Trusted | $25,000 | 10% | 1.5× | Yes (dominant) |
+
+**Quality rolling on restock:** `InitializeDealerInventory` produces multiple `ItemInstance` stacks per template drug, one per available quality. Quality mix table comes from `GetQualityMixForRep(rep)` — Stranger sees `[Cut 0.5×, Standard 1.0×]`; Regular adds `Pure 0.3×`; Trusted shifts to `[Cut 0.15×, Standard 0.8×, Pure 0.9×]`. Stock multiplier from rep stacks on top.
+
+**Pricing wiring:**
+  - `Dealer.GetModifiedBuyPrice` applies quality `BuyMult` to the base cost, then `GetRepBuyDiscount(this)` for the rep tier.
+  - `Dealer.GetModifiedSellPrice` applies quality `SellMult` after the dealer's sellRatio.
+  - `DealerClicks.OnPlusClicked/OnPlayerSellClicked/SellAll` apply quality `HeatPerUnitMult` on heat generation.
+  - `PlayerStats.GetEffectiveUnitsPerSlot` multiplies the trenchcoat's RiskTier capacity multiplier by `UnitsPerSlotMult(quality)`.
+  - `PlayerStats.GetMaxBuyableAmount` and `GetSlotCostForBuy` take `(name, quality, ...)` so each quality stack reserves its own slot footprint.
+
+**Rep gain:** `GameSessionManager.AddDealerBusiness(dealer, dollars)` called from every buy + sell + sell-all path in `DealerClicks`. No special "discount on small buys" — every dollar moved counts.
+
+**Save/load:**
+  - `SavedItemInstance.qualityPlus1` — stored as `quality + 1` so 0 means "field absent in this save" (old saves load drugs as Standard, the previous single-quality assumption). Mapped back in `SavedToItem`.
+  - `SavedDealerState.lifetimeBusiness` — restored into `dealerLifetimeBusiness` on load.
+
+**Reset:** `ResetForNewRun` clears `dealerLifetimeBusiness` so each run starts from Stranger. Quality is per-instance, so it resets implicitly when inventories rebuild.
+
+**UI:**
+  - `InventoryItemUI` price line prefixes `[CUT]` (grey) or `[PURE]` (gold) — Standard is implicit. Tooltip surfaces a one-line quality summary plus the effective units-per-slot at current trenchcoat.
+  - `InventoryTabUI` colors the row label with the quality color.
+  - `DealerClicks.OnPointerEnter` (dealer hover) shows `● TIER — perks` with progress toward the next threshold (`Business: $X / $Y for next tier`).
+  - `CopEncounterUIManager.BuildDrugConfiscationList` uses `DisplayName` so seized lists show "Pure Crack x3, Cut Weed x12".
+
+**Decision tensions this creates:**
+  - Carry Pure for capital efficiency (more profit per slot, less heat) vs. Cut for volume (cheap entry, but heavy and loud) vs. Standard for everything in between.
+  - Build rep with one dealer (loyalty perks, Pure access) vs. spread buys across cities for price arbitrage (no Pure, but the best buy price each day).
+  - Pure-Standard-Cut of the same drug are *different stacks* — the player has to make a slot decision per-quality, not per-drug.
+
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
 
@@ -352,12 +508,12 @@ File: `RunSummaryUI.cs`
 ---
 
 ## Architecture Notes
-- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs` (Awake + singleton), `.Identity.cs` (name, sprite), `.Equipment.cs` (trenchcoat, weapon), `.Economy.cs` (wallet, inventory, slot math, slot helpers), `.Progression.cs` (heat, debt, day-limit, cop counters), `.RunStats.cs` (per-run counters, click tracking, leaderboard snapshot, **`ResetRunStats()` does the full new-run wipe**), `.CityHeat.cs` (per-city heat memory, decay, arrival application).
+- **PlayerStats** is a singleton (`DontDestroyOnLoad`) split across partial classes: `.cs` (Awake + singleton), `.Identity.cs` (name, sprite), `.Equipment.cs` (trenchcoat, weapon), `.Economy.cs` (wallet, inventory, slot math, slot helpers), `.Progression.cs` (heat, debt, day-limit, cop counters), `.RunStats.cs` (per-run counters, click tracking, leaderboard snapshot, **`ResetRunStats()` does the full new-run wipe**), `.CityHeat.cs` (per-city heat memory, decay, arrival application), `.MarketState.cs` (per-city per-drug saturation that diminishes sell prices on bulk dumps).
 - **Items** use `ScriptableObject` templates (`Item`, `Drug`, `Weapon`, `Trenchcoat`) with `ItemInstance` runtime copies
 - **Dealers** are ScriptableObjects with `RuntimeInventory` (List<ItemInstance>) managed by `GameSessionManager` at runtime. Restock state (`dealerLastRestockDay`) also lives in `GameSessionManager`, keyed by SO instance ID, persisted via `SavedDealerState.lastRestockDay`.
 - **Price system:**
   - **Buy:** `Dealer.GetModifiedBuyPrice()` chains: base cost × dealer mult × city COL × city buy mult × daily volatility × market event × visit multiplier (±20%) × city event (Lockdown/Shortage on drugs) × **daily tip `DealBuy` mult** (when today's tip points at this city + drug).
-  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug) × **daily tip `HotSell` mult** (when today's tip points here).
+  - **Sell:** `Dealer.GetModifiedSellPrice()` = buy price × dealer sellRatio × **`favoriteDrugDemandMultiplier`** (when item matches the city's `FavoriteDrug`) × per-drug `drugBonuses` × `FestivalSellMult` (when a Festival event is rolling on the favorite drug) × **daily tip `HotSell` mult** (when today's tip points here), then **clamped to `item.Cost × 3.0` for drugs**, then multiplied by **current market saturation mult** (per city, per drug). For a multi-unit batch, use `GetSellRevenueForBatch(item, amount)` which averages the saturation mult across the bump curve.
   - **Note:** `favoriteDrugDemandMultiplier` lives on the SELL side. It used to be on the buy side, which inflated buy prices in the favorite-drug city while sellRatio cancelled out the boost on sell — making "2.0x demand" cities pay-as-usual to sell into and 2× expensive to source from. Moved to sell so the UI label ("2.0x demand") translates to a real 2× sell-price boost.
 - **Daily tip events:** `DailyTipService.GetTodaysTip()` deterministically rolls one tip per `(RunSeed, InGameDay)` (65% chance of any tip). `DealBuy` discounts a target city's buy price for a target drug; `HotSell` premiums a target city's sell price. `MarketNewsTicker` shows the headline. Cache invalidated on `ResetRunStats`.
 - **City heat memory:** `PlayerStats.CityHeat.cs` tracks per-city heat in a `Dictionary<string, float>`. Selling bumps it via `BumpCityHeat(cityName, heatAmount)` (called from `DealerClicks` SellAll and per-item sell). `GameSessionManager.HandleDayChanged` decays all entries by 8/day. `TravelManager` calls `ApplyCityHeatOnArrival` on travel — boosts player heat by `cityHeat × 0.35`. Persisted via `RunStatsSnapshot.cityHeatNames/cityHeatValues`.
@@ -370,9 +526,13 @@ File: `RunSummaryUI.cs`
 - **CityUI Prefab System:** City scenes share 13 prefabbed root objects (managed via `CityUIPrefabTool.cs` Editor menu). Milwaukee is the source of truth. Cross-prefab references are wired automatically by Step 4 (Auto-Wire). Per-city differences (shop inventory, spawn positions) are stored as prefab overrides.
 - **Auto-spawned, code-built UI managers** (no Editor wiring required, all bootstrapped via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]` and persisted with `DontDestroyOnLoad`):
   - **`CheatMenu`** — Esc toggles a debug overlay with `+ $10k`, `Drop heat`, `Quick Start`. Sorting order 32000.
-  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances.
+  - **`JuiceFX`** — coin particles, screen flash, number tweens, number punches. Sorting order 5000. Procedural circle sprite for coins. Pool capped at 256 instances. Animation routines null-check the target every frame so destroyed-mid-animation refs don't throw `MissingReferenceException`.
   - **`RunSummaryUI`** — auto-spawns on YouWin/GameOver scene load and builds the full endgame screen + leaderboard from code if no hand-wired instance is in the scene. `isVictory` derived from active scene name.
   - **`AchievementManager`** — evaluates Inspector-defined `Achievement` SOs against `PlayerStats` on every stat change. Unlocks persisted in `PlayerPrefs["Achievements_v1"]`. Gold toast + optional coin burst on unlock.
-  - All four live independently — they don't reference each other and can be removed individually with no cascade.
+  - **`StashPanelUI`** — `S` hotkey toggles the per-city stash window. Sorting order 4000.
+  - **`ContractBannerUI`** — top-center notification banner shown while a dealer panel is open, if that dealer has an offer or active contract. Sorting order 4500. Driven by `DealerClicks.ShowFor/HideIfFor`.
+  - **`ContractManager`** — non-UI singleton; rolls offers on dealer restock, ticks deadlines on `DayChanged`, manages failure penalties.
+  - **`StashService`** — non-UI singleton; per-city `Dictionary<string, List<ItemInstance>>` with deposit/withdraw API.
+  - All eight live independently — they don't reference each other and can be removed individually with no cascade.
 - **Slot capacity** is two-dimensional: `Drug.UnitsPerSlot` is the per-drug bulk; `Trenchcoat.RiskTierCapacityMultipliers[3]` scales it by the drug's `RiskTier`. Effective per-slot capacity = `UnitsPerSlot × Trenchcoat.GetCapacityMultiplier(riskTier)`. `PlayerStats.GetEffectiveUnitsPerSlot(item)` is the single source of truth for slot math.
 - **`ResetRunStats()` is the canonical "new run" entry point.** Called from `CharCreationUI.Start` (early, before the gear-affordability filter), `CharCreationUI.HandleContinue` (idempotent), and `CheatMenu.QuickStart`. Wipes wallet → `$10,000`, inventory, heat, equipment, debt, `LastSeenBuyPrice`, all per-run stat counters, all city heat. Also resets `GameTime` to start, `PriceService.InGameDay = 1`, dealer runtime inventories (via `GameSessionManager.ResetForNewRun()`), and the `DailyTipService` cache.

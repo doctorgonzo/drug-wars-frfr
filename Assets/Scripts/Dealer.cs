@@ -23,7 +23,7 @@ public class Dealer : ScriptableObject
     public List<ItemPriceModifier> priceModifiers;
 
     [Tooltip("How often (in days) this dealer restocks their inventory. Set 0 to disable.")]
-    public int restockIntervalDays = 3;
+    public int restockIntervalDays = 2;
 
     // Re-rolled each visit; applies a ±20% swing on top of all other price factors.
     [System.NonSerialized] public float VisitMultiplier = 1f;
@@ -111,7 +111,14 @@ public class Dealer : ScriptableObject
         return Mathf.RoundToInt(final);
     }
 
-    public int GetModifiedSellPrice(ItemInstance item)
+    // Hard ceiling on sell-side multiplier stacking. Even with boom + festival + favorite +
+    // hot tip + max volatility all aligned, the player can't sell crack at 10× base. Caps
+    // the post-multiplier sell price at this fraction of the drug's BASE cost, so buy-side
+    // inflation is also bounded.
+    private const float MaxSellPriceBaseMult = 3.0f;
+
+    // Pre-saturation per-unit sell price. All city/dealer/event multipliers, then the cap.
+    private float ComputeBaseSellPriceF(ItemInstance item)
     {
         // Start from your computed buy price for this dealer+city+day
         int modifiedBuy = GetModifiedBuyPrice(item);
@@ -119,6 +126,10 @@ public class Dealer : ScriptableObject
         // Dealer per-type sell ratio only (city factors already baked into modifiedBuy)
         ItemPriceModifier dealerMod = priceModifiers.FirstOrDefault(m => m.itemType == item.Type);
         float dealerSellRatio = dealerMod != null ? dealerMod.sellPriceRatio : 0.5f;
+
+        // Contract failure penalty: this dealer slashed the sell ratio after a missed delivery.
+        if (ContractManager.Instance != null)
+            dealerSellRatio *= ContractManager.Instance.GetSellRatioPenaltyMult(this);
 
         float sellPriceF = modifiedBuy * dealerSellRatio;
 
@@ -131,8 +142,6 @@ public class Dealer : ScriptableObject
         City sellCity = PlayerStats.Instance?.CurrentCity;
 
         // Favorite drug demand: a city's favorite drug commands a premium when sold here.
-        // (Previously applied to BUY which made the city expensive to source from; now it's a
-        // true consumer-demand boost on the sell side, matching the UI label "Xx demand".)
         if (item.Type == ItemType.Drug
             && sellCity != null
             && sellCity.FavoriteDrug != null
@@ -166,11 +175,53 @@ public class Dealer : ScriptableObject
                 sellPriceF *= tip.Multiplier;
         }
 
-        int sellPrice = Mathf.RoundToInt(sellPriceF);
+        // Hard ceiling: drug sell price can't exceed 3× base cost. Prevents perfect-storm
+        // multiplier stacks (favorite × festival × tip × boom × volatility) from breaking
+        // the economy. Applied to drugs only — equipment isn't subject to event multipliers.
+        if (item.Type == ItemType.Drug)
+        {
+            float ceiling = item.Cost * MaxSellPriceBaseMult;
+            if (sellPriceF > ceiling) sellPriceF = ceiling;
+        }
 
-        // Guard rails
-        sellPrice = Mathf.Clamp(sellPrice, 1, 999_999);
-        return sellPrice;
+        return sellPriceF;
+    }
+
+    // Per-unit sell price at CURRENT market saturation. Used for UI display and per-unit
+    // profit calc. Multi-unit sales should use GetSellRevenueForBatch — saturation grows
+    // during a sale, so the average per-unit price for a batch differs from the start price.
+    public int GetModifiedSellPrice(ItemInstance item)
+    {
+        float perUnit = ComputeBaseSellPriceF(item);
+
+        if (item.Type == ItemType.Drug && PlayerStats.Instance != null)
+        {
+            string cityName = PlayerStats.Instance.CurrentCity?.Name ?? "";
+            float sat = PlayerStats.Instance.GetMarketSaturation(cityName, item.Name);
+            perUnit *= PlayerStats.SaturationToMult(sat);
+        }
+
+        return Mathf.Clamp(Mathf.RoundToInt(perUnit), 1, 999_999);
+    }
+
+    // Total revenue for selling `amount` units in one transaction. Saturation grows during
+    // the sale; the per-unit price slides linearly from SaturationToMult(s0) toward
+    // SaturationToMult(s1). Caller is responsible for calling PlayerStats.BumpMarketSaturation
+    // afterwards to commit the saturation increase.
+    public int GetSellRevenueForBatch(ItemInstance item, int amount)
+    {
+        if (amount <= 0) return 0;
+        float perUnit = ComputeBaseSellPriceF(item);
+
+        float avgMult = 1f;
+        if (item.Type == ItemType.Drug && PlayerStats.Instance != null)
+        {
+            string cityName = PlayerStats.Instance.CurrentCity?.Name ?? "";
+            avgMult = PlayerStats.Instance.GetSaturationAverageMult(cityName, item.Name, amount, item.RiskTier);
+        }
+
+        long total = (long)Mathf.RoundToInt(perUnit * avgMult * amount);
+        return (int)Mathf.Clamp(total, 1, 999_999_999);
     }
 
     [ContextMenu("Clear Runtime Inventory")]

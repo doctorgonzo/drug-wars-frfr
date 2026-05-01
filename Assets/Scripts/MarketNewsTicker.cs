@@ -99,9 +99,33 @@ public class MarketNewsTicker : MonoBehaviour
         var city = PlayerStats.Instance?.CurrentCity;
         if (city == null) yield break;
 
+        // Rebuild the message list each full loop iteration so dynamic events (market
+        // saturation that grows as the player sells) appear within ~1 cycle of happening.
+        do
+        {
+            var messages = BuildMessages(city);
+            if (messages.Count == 0)
+            {
+                // Nothing to say right now — hide the panel and re-check shortly.
+                if (newsPanel != null && newsPanel.activeSelf) newsPanel.SetActive(false);
+                yield return new WaitForSeconds(2f);
+                continue;
+            }
+
+            if (newsPanel != null && !newsPanel.activeSelf) newsPanel.SetActive(true);
+
+            foreach (var msg in messages)
+                yield return StartCoroutine(ScrollMessage(msg));
+        } while (loopForever);
+
+        if (newsPanel != null) newsPanel.SetActive(false);
+    }
+
+    private List<string> BuildMessages(City city)
+    {
         var messages = new List<string>();
 
-        // City event — prepend so it leads the ticker
+        // City event — leads the ticker
         var cityEvt = CityEventManager.GetEventForCity(city.Name);
         if (cityEvt == CityEventManager.CityEvent.Lockdown)
         {
@@ -117,7 +141,7 @@ public class MarketNewsTicker : MonoBehaviour
             messages.Add("<color=#FF8800>SUPPLY SHORTAGE</color> — Distribution lines cut. All drug prices surging 80%. Heat risk elevated.");
         }
 
-        // Check each item type for boom/bust events
+        // Boom/bust per item type
         foreach (var mod in city.priceModifiers)
         {
             var evt = PriceService.DailyEvent(
@@ -139,7 +163,7 @@ public class MarketNewsTicker : MonoBehaviour
             }
         }
 
-        // Also check if the city's favorite drug has a demand boost (always true, but tell them)
+        // Favorite drug demand label
         if (city.FavoriteDrug != null && city.favoriteDrugDemandMultiplier > 1.1f)
         {
             messages.Add($"<color=#44FF44>HOT MARKET</color> — {city.FavoriteDrug.Name} is in high demand here!");
@@ -150,19 +174,33 @@ public class MarketNewsTicker : MonoBehaviour
         if (tip.Type != DailyTipType.None)
             messages.Add(tip.ToHeadline());
 
-        if (messages.Count == 0) yield break;
+        // Market saturation — surfaces when the player has flooded a drug's market in this city.
+        AppendSaturationMessages(messages, city);
 
-        newsPanel.SetActive(true);
+        return messages;
+    }
 
-        // Loop through messages, scrolling each across the container
-        int i = 0;
-        do
+    // Appends one message per (current city, drug) where saturation has crossed a tier
+    // threshold. Three tiers — slowing (0.4), saturated (0.7), flooded (1.0) — with
+    // distinct copy + colors so the player can read severity at a glance.
+    private void AppendSaturationMessages(List<string> messages, City city)
+    {
+        var ps = PlayerStats.Instance;
+        if (ps == null) return;
+
+        foreach (var kv in ps.AllMarketSaturation())
         {
-            yield return StartCoroutine(ScrollMessage(messages[i]));
-            i = (i + 1) % messages.Count;
-        } while (loopForever);
+            if (!PlayerStats.TryParseMarketKey(kv.Key, out string keyCity, out string drug)) continue;
+            if (keyCity != city.Name) continue;
 
-        newsPanel.SetActive(false);
+            float sat = kv.Value;
+            if (sat >= 1.0f)
+                messages.Add($"<color=#FF4444>FLOODED</color> — {city.Name} can barely move {drug} today. Buyers paying scraps.");
+            else if (sat >= 0.7f)
+                messages.Add($"<color=#FF8800>SATURATED</color> — {city.Name}'s {drug} market is saturated — prices tumbling.");
+            else if (sat >= 0.4f)
+                messages.Add($"<color=#FFD700>SLOWING</color> — {city.Name} buyers getting picky about {drug} today.");
+        }
     }
 
     private IEnumerator ScrollMessage(string message)

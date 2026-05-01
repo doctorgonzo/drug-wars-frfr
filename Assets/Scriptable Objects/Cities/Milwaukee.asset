@@ -28,8 +28,9 @@ MonoBehaviour:
   - itemType: 0
     buyPriceMultiplier: 0.44
     sellPriceRatio: 0.309
-    dailyVolatility: 0.333
+    dailyVolatility: 0.277
     boomChance: 0.159
-    boomMultiplier: 1.65
+    boomMultiplier: 1.17
     bustChance: 0.094
     bustMultiplier: 0.229
+  drugBonuses: []
