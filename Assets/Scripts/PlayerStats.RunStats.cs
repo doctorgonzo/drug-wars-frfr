@@ -158,13 +158,21 @@ public partial class PlayerStats
         if (GameTime.Instance != null) GameTime.Instance.ResetToStart();
         PriceService.InGameDay = 1;
 
-        // Dealer runtime inventories — rebuild from templates so the previous run's stock is gone
-        if (GameSessionManager.Instance != null) GameSessionManager.Instance.ResetForNewRun();
-
         // Daily-tip cache uses RunSeed + day, both about to change; invalidate to be safe
         DailyTipService.InvalidateCache();
 
         ResetCityHeat();
+        ResetMarketState();
+        // Clear contract/stash state BEFORE GameSessionManager.ResetForNewRun() — the latter
+        // seeds initial contract offers as part of its rebuild, and we don't want those
+        // wiped immediately after.
+        ContractManager.Instance?.ResetForNewRun();
+        StashService.Instance?.ResetForNewRun();
+
+        // Dealer runtime inventories rebuilt + initial contract offers seeded so the player
+        // sees them from day 1 instead of waiting `restockIntervalDays` for the first restock.
+        if (GameSessionManager.Instance != null) GameSessionManager.Instance.ResetForNewRun();
+
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;
@@ -225,9 +233,18 @@ public partial class PlayerStats
             drugSaleNames = new List<string>(_drugSoldByName.Keys),
             drugSaleCounts = new List<int>(_drugSoldByName.Values),
             cityHeatNames = new List<string>(),
-            cityHeatValues = new List<float>()
+            cityHeatValues = new List<float>(),
+            marketSaturationKeys = new List<string>(),
+            marketSaturationValues = new List<float>(),
+            contracts = ContractManager.Instance != null
+                ? ContractManager.Instance.CaptureSnapshot()
+                : new ContractsSnapshot(),
+            stashes = StashService.Instance != null
+                ? StashService.Instance.CaptureSnapshot()
+                : new StashesSnapshot()
         };
         CaptureCityHeat(snap.cityHeatNames, snap.cityHeatValues);
+        CaptureMarketSaturation(snap.marketSaturationKeys, snap.marketSaturationValues);
         return snap;
     }
 
@@ -268,6 +285,9 @@ public partial class PlayerStats
         }
 
         RestoreCityHeat(s.cityHeatNames, s.cityHeatValues);
+        RestoreMarketSaturation(s.marketSaturationKeys, s.marketSaturationValues);
+        ContractManager.Instance?.RestoreSnapshot(s.contracts);
+        StashService.Instance?.RestoreSnapshot(s.stashes);
     }
 }
 
@@ -300,4 +320,8 @@ public class RunStatsSnapshot
     public List<int> drugSaleCounts = new List<int>();
     public List<string> cityHeatNames = new List<string>();
     public List<float> cityHeatValues = new List<float>();
+    public List<string> marketSaturationKeys = new List<string>();
+    public List<float> marketSaturationValues = new List<float>();
+    public ContractsSnapshot contracts = new ContractsSnapshot();
+    public StashesSnapshot stashes = new StashesSnapshot();
 }

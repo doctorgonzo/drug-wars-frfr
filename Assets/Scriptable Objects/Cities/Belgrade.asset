@@ -28,16 +28,16 @@ MonoBehaviour:
   - itemType: 0
     buyPriceMultiplier: 1.25
     sellPriceRatio: 0.353
-    dailyVolatility: 0.462
+    dailyVolatility: 0.398
     boomChance: 0.207
-    boomMultiplier: 1.27
+    boomMultiplier: 1.07
     bustChance: 0.044
     bustMultiplier: 0.22
   drugBonuses:
   - drugName: Weed
-    sellMultiplier: 2.0
+    sellMultiplier: 2
   - drugName: Ecstasy
-    sellMultiplier: 2.0
+    sellMultiplier: 2
   - drugName: Heroin
     sellMultiplier: 1.7
   - drugName: LSD

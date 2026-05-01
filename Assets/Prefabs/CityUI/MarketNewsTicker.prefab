@@ -240,7 +240,7 @@ MonoBehaviour:
   newsText: {fileID: 3850245919316506528}
   newsPanel: {fileID: 3352703471083856353}
   tickerContainer: {fileID: 1173779927205339236}
-  scrollSpeed: 150
+  scrollSpeed: 186.3
   messageGap: 80
   loopForever: 1
   minFontSize: 12

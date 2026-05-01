@@ -25,10 +25,20 @@ public class GameSessionManager : MonoBehaviour
     // Wipe per-run runtime state and rebuild dealer inventories from their templates. Used when
     // starting a fresh run so leftover stock and stale restock timers from the previous run
     // don't carry into the new one. Reputation is also per-run — fresh dealers, fresh trust.
+    // Also seeds initial contract offers — without this the player would have to wait
+    // `restockIntervalDays` for the first contract to surface.
     public void ResetForNewRun()
     {
         dealerLifetimeBusiness.Clear();
         InitializeAllDealers();
+
+        if (ContractManager.Instance == null || allCitiesInGame == null) return;
+        foreach (City city in allCitiesInGame)
+        {
+            if (city?.Dealers == null) continue;
+            foreach (Dealer dealer in city.Dealers)
+                if (dealer != null) ContractManager.Instance.OnDealerRestocked(dealer);
+        }
     }
 
     public IReadOnlyList<Trenchcoat> AllTrenchcoats => allTrenchcoats;
@@ -37,6 +47,65 @@ public class GameSessionManager : MonoBehaviour
     public IReadOnlyList<City> AllCities => allCitiesInGame;
     public City FindCityByName(string name) => allCitiesInGame?.FirstOrDefault(c => c != null && c.Name == name);
     public IReadOnlyList<Achievement> AllAchievements => achievements;
+
+    public Dealer FindDealerByName(string dealerName)
+    {
+        if (string.IsNullOrEmpty(dealerName) || allCitiesInGame == null) return null;
+        foreach (var city in allCitiesInGame)
+        {
+            if (city?.Dealers == null) continue;
+            foreach (var d in city.Dealers)
+                if (d != null && d.Name == dealerName) return d;
+        }
+        return null;
+    }
+
+    public City FindCityOfDealer(Dealer dealer)
+    {
+        if (dealer == null || allCitiesInGame == null) return null;
+        foreach (var city in allCitiesInGame)
+        {
+            if (city?.Dealers == null) continue;
+            foreach (var d in city.Dealers)
+                if (d == dealer) return city;
+        }
+        return null;
+    }
+
+    // Build an ItemInstance from a name + type, copying sprite/heat/risk/etc. from the
+    // matching SO template. Used by StashService.RestoreSnapshot and other systems that
+    // reload items from saved data without a dealer-template dictionary in scope.
+    public ItemInstance ResolveItemByName(string itemName, ItemType itemType)
+    {
+        if (string.IsNullOrEmpty(itemName)) return null;
+
+        if (itemType == ItemType.Weapon && allWeapons != null)
+        {
+            foreach (var w in allWeapons)
+                if (w != null && w.Name == itemName) return new ItemInstance(w);
+        }
+        if (itemType == ItemType.Trenchcoat && allTrenchcoats != null)
+        {
+            foreach (var t in allTrenchcoats)
+                if (t != null && t.Name == itemName) return new ItemInstance(t);
+        }
+        // Drugs: search every dealer's SO Inventory[] (the template, never mutated).
+        if (allCitiesInGame != null)
+        {
+            foreach (var city in allCitiesInGame)
+            {
+                if (city?.Dealers == null) continue;
+                foreach (var dealer in city.Dealers)
+                {
+                    if (dealer?.Inventory == null) continue;
+                    foreach (var asset in dealer.Inventory)
+                        if (asset != null && asset.Name == itemName && asset.Type == itemType)
+                            return new ItemInstance(asset);
+                }
+            }
+        }
+        return null;
+    }
 
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
@@ -140,7 +209,14 @@ public class GameSessionManager : MonoBehaviour
     {
         // Decay per-city heat memory once per day so hot cities cool off if the player avoids them.
         if (PlayerStats.Instance != null)
+        {
             PlayerStats.Instance.DecayAllCityHeat();
+            // Decay market saturation so cities recover demand for drugs the player flooded yesterday.
+            PlayerStats.Instance.DecayMarketSaturation();
+        }
+
+        // Tick contract deadlines + drop expired failure penalties.
+        ContractManager.Instance?.OnDayChanged(dt.day);
 
         if (allCitiesInGame == null) return;
         foreach (City city in allCitiesInGame)
@@ -154,12 +230,20 @@ public class GameSessionManager : MonoBehaviour
 
                 int key = dealer.GetInstanceID();
                 if (!dealerLastRestockDay.TryGetValue(key, out int lastDay))
+                {
+                    // Defensive fallback if InitializeAllDealers somehow missed this dealer
+                    // (e.g., dealer added at runtime). Record without restocking.
                     lastDay = dt.day;
+                    dealerLastRestockDay[key] = lastDay;
+                    continue;
+                }
 
                 if (dt.day - lastDay >= interval)
                 {
                     InitializeDealerInventory(dealer);
                     dealerLastRestockDay[key] = dt.day;
+                    // Roll a new contract offer (35% chance) on every restock.
+                    ContractManager.Instance?.OnDealerRestocked(dealer);
                 }
             }
         }
@@ -171,13 +255,22 @@ public class GameSessionManager : MonoBehaviour
         dealerLastRestockDay.Clear();
         if (allCitiesInGame == null) return;
 
+        // Seed lastRestockDay = today for every dealer so HandleDayChanged has something
+        // to compare against. Without this, the dictionary stays empty and the
+        // "if (!TryGetValue) lastDay = dt.day" default re-defaults every day, so
+        // dt.day - lastDay is always 0 and restocks never fire.
+        int currentDay = GameTime.Instance != null ? GameTime.Instance.Day : 1;
+
         foreach (City city in allCitiesInGame)
         {
             if (city.Dealers == null) continue;
             foreach (Dealer dealer in city.Dealers)
             {
                 if (dealer != null)
+                {
                     InitializeDealerInventory(dealer);
+                    dealerLastRestockDay[dealer.GetInstanceID()] = currentDay;
+                }
             }
         }
     }

@@ -309,6 +309,7 @@ MonoBehaviour:
   allTrenchcoats: []
   allWeapons: []
   playerSprites: []
+  achievements: []
 --- !u!4 &162277055
 Transform:
   m_ObjectHideFlags: 0
@@ -1788,6 +1789,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ac4e2b3eb0b92418d3fad2a57654f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cityHeatGainPerHeatUnit: 0.6
+  cityHeatDecayPerDay: 8
+  cityHeatMax: 100
+  cityHeatArrivalFactor: 0.35
   playerWallet: 10000
   inventory: []
   currentTrench: {fileID: 11400000, guid: 1301acb8047cac440b5263460839cc09, type: 2}
@@ -2492,7 +2497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2347238440163586180, guid: 7bcd61fa805b946f9911b89d832f759c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 407.8196
+      value: 407.81985
       objectReference: {fileID: 0}
     - target: {fileID: 2786590216851421288, guid: 7bcd61fa805b946f9911b89d832f759c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2601,6 +2606,10 @@ PrefabInstance:
     - target: {fileID: 6404209327547414544, guid: 7bcd61fa805b946f9911b89d832f759c, type: 3}
       propertyPath: m_Name
       value: InfoCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6939003104905462136, guid: 7bcd61fa805b946f9911b89d832f759c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7385064509558546911, guid: 7bcd61fa805b946f9911b89d832f759c, type: 3}
       propertyPath: m_AnchorMax.y

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a7dab8a0af346189750d66a4603648, type: 3}
+  m_Name: TESTACH
+  m_EditorClassIdentifier: Assembly-CSharp::Achievement
+  Title: BOOM
+  Description: good work on the test
+  Icon: {fileID: 512506619223028387, guid: dc20e915d5d649a4c9db1a624a478ced, type: 3}
+  Stat: 0
+  Comparison: 0
+  Threshold: 12000
+  RequiredItemName: 
+  CashReward: 1000
+  IsSecret: 0
+  SortOrder: 0

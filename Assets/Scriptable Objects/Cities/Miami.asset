@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fec0aeeb1d8c5a4aa135da57a4daf34, type: 3}
   m_Name: Miami
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   Name: Miami
   Description: Sun, sand, and snow - not the weather kind
   Image: {fileID: 0}
@@ -30,8 +30,8 @@ MonoBehaviour:
     sellPriceRatio: 0.5
     dailyVolatility: 0.25
     boomChance: 0.12
-    boomMultiplier: 1.55
-    bustChance: 0.06
+    boomMultiplier: 1.16
+    bustChance: 0.078
     bustMultiplier: 0.45
   drugBonuses:
   - drugName: Crack
