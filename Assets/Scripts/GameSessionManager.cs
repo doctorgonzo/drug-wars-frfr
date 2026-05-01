@@ -37,6 +37,18 @@ public class GameSessionManager : MonoBehaviour
     public City FindCityByName(string name) => allCitiesInGame?.FirstOrDefault(c => c != null && c.Name == name);
     public IReadOnlyList<Achievement> AllAchievements => achievements;
 
+    public Dealer FindDealerByName(string dealerName)
+    {
+        if (string.IsNullOrEmpty(dealerName) || allCitiesInGame == null) return null;
+        foreach (var city in allCitiesInGame)
+        {
+            if (city?.Dealers == null) continue;
+            foreach (var d in city.Dealers)
+                if (d != null && d.Name == dealerName) return d;
+        }
+        return null;
+    }
+
     // Runtime dealer inventories keyed by Dealer SO instance ID.
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
     // Day index of each dealer's last restock, keyed by Dealer SO instance ID.
@@ -92,6 +104,9 @@ public class GameSessionManager : MonoBehaviour
             PlayerStats.Instance.DecayMarketSaturation();
         }
 
+        // Tick contract deadlines + drop expired failure penalties.
+        ContractManager.Instance?.OnDayChanged(dt.day);
+
         if (allCitiesInGame == null) return;
         foreach (City city in allCitiesInGame)
         {
@@ -110,6 +125,8 @@ public class GameSessionManager : MonoBehaviour
                 {
                     InitializeDealerInventory(dealer);
                     dealerLastRestockDay[key] = dt.day;
+                    // Roll a new contract offer (35% chance) on every restock.
+                    ContractManager.Instance?.OnDealerRestocked(dealer);
                 }
             }
         }

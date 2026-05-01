@@ -369,6 +369,32 @@ Player sees these within ~one full ticker cycle of selling, so the price drop ha
   - With cap only: $1,800/unit cap → $36,000 revenue → 70% of debt in one trip.
   - With cap + saturation (avg mult ~0.79 across the batch): ~$1,422/unit avg → $28,440 → 57% of debt. Player needs at least one more trip — and saturation in Miami is now 0.6, so the next 20 crack sale tomorrow there starts at mult 0.36, forcing a different city.
 
+### Dealer Contracts
+A dealer occasionally offers a fixed-price/quantity job: *"Bring me 50 Weed in 3 days for $4,500. Half up front."* Locks the player into a route under deadline pressure, hands them an advance to invest, penalizes failure. Drives decisions on every visit — accept and reshape your plan, or decline and stay flexible.
+
+**`Contract.cs`** — runtime data class, `[Serializable]` for JsonUtility persistence. Dealer reference stored by name (resolved through `GameSessionManager.FindDealerByName` at load time since SO refs don't serialize through JSON). State enum: `Offered → Accepted → Completed/Failed`. Sister type `ContractsSnapshot` holds parallel arrays for offers + active contracts + failure penalties.
+
+**`ContractManager.cs`** — auto-spawned via `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]`, `DontDestroyOnLoad`, no Editor wiring. Responsibilities:
+  - **Offer generation:** `OnDealerRestocked` rolls a 35% chance to issue a contract. Drug picked from the dealer's TEMPLATE inventory (so Mr. Wong always offers crack contracts, TJ always offers weed). Quantity scales with risk tier — Safe 30–60, Medium 15–30, Hard 8–18. Days 2–4. Payment = `baseCost × qty × random(1.4, 2.2)`. If the dealer already has an active contract with the player, no new offer until it resolves.
+  - **Player actions:** `AcceptOffer` pays 50% advance immediately. `DeclineOffer` clears the slot until next restock. `TryDeliver` deducts the drug from inventory + pays the remainder (no saturation bump — contracts are private deals at fixed prices, that's the whole point).
+  - **Failure:** `OnDayChanged` (called from `GameSessionManager.HandleDayChanged`) marks contracts past their deadline as Failed and applies a -15% sellRatio penalty at that dealer for 10 days. Player keeps the advance.
+  - **Persistence:** `CaptureSnapshot/RestoreSnapshot` survive save/load via `RunStatsSnapshot.contracts`. `ResetForNewRun` wipes all contract state, called from `PlayerStats.ResetRunStats`.
+
+**`Dealer.ComputeBaseSellPriceF`** — applies `ContractManager.GetSellRatioPenaltyMult(this)` to `dealerSellRatio` before the rest of the chain. Failure penalty is dealer-specific; other dealers in the same city are unaffected.
+
+**Dealer panel UI** (in `DealerClicks.cs`) — procedural banner pinned to the top of the dealer info panel:
+  - **Offer state:** `JOB OFFER  Weed × 50  in 3d / $4,500 ($2,250 advance)` + `[ACCEPT] [DECLINE]`
+  - **Active state:** `DELIVER  Weed × 50  3d left / 23/50 — final $2,250` + `[DELIVER]` (disabled until the player has the full quantity)
+  - **Overdue:** banner shows `<color=#FF4444>OVERDUE</color>` until the day-rollover marks it Failed and clears the banner.
+
+DealerClicks subscribes to `PlayerStats.OnInventoryChanged` so the DELIVER button enables in real time when the player buys enough of the requested drug from this same dealer.
+
+**Design tensions the system creates:**
+  - Big contracts force trenchcoat upgrades — Tan tan can't hold 50 crack (capped at ~22 hard-tier units).
+  - Contract drug becomes a no-saturation channel — bypasses the public market saturation system, but locks the price.
+  - Cross-city contracts mean travel costs + days lost. Offer in Milwaukee for crack delivery means sourcing crack elsewhere then carrying it back through cop encounters.
+  - Failed contracts make a dealer permanently worse for 10 days — the player has to either avoid them or eat -15% sell prices.
+
 ### Design Backlog
 `balance.md` at the project root captures pending design ideas not yet implemented, drawn from a research pass over single-player game theory and engagement fundamentals. Six ideas ranked by impact-to-effort: overlapping deadlines / two clocks, juice (in progress), near-miss framing, special orders / dealer contracts, cop pattern detection (forced mixed strategy), variable-ratio scratch finds. Each entry has a one-line pitch, the source insight, and an effort estimate.
 

@@ -166,6 +166,7 @@ public partial class PlayerStats
 
         ResetCityHeat();
         ResetMarketState();
+        ContractManager.Instance?.ResetForNewRun();
         TotalSalesRevenue = 0;
         TotalDrugSpend = 0;
         TotalEquipmentSpend = 0;
@@ -228,7 +229,10 @@ public partial class PlayerStats
             cityHeatNames = new List<string>(),
             cityHeatValues = new List<float>(),
             marketSaturationKeys = new List<string>(),
-            marketSaturationValues = new List<float>()
+            marketSaturationValues = new List<float>(),
+            contracts = ContractManager.Instance != null
+                ? ContractManager.Instance.CaptureSnapshot()
+                : new ContractsSnapshot()
         };
         CaptureCityHeat(snap.cityHeatNames, snap.cityHeatValues);
         CaptureMarketSaturation(snap.marketSaturationKeys, snap.marketSaturationValues);
@@ -273,6 +277,7 @@ public partial class PlayerStats
 
         RestoreCityHeat(s.cityHeatNames, s.cityHeatValues);
         RestoreMarketSaturation(s.marketSaturationKeys, s.marketSaturationValues);
+        ContractManager.Instance?.RestoreSnapshot(s.contracts);
     }
 }
 
@@ -307,4 +312,5 @@ public class RunStatsSnapshot
     public List<float> cityHeatValues = new List<float>();
     public List<string> marketSaturationKeys = new List<string>();
     public List<float> marketSaturationValues = new List<float>();
+    public ContractsSnapshot contracts = new ContractsSnapshot();
 }

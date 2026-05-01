@@ -118,6 +118,10 @@ public class Dealer : ScriptableObject
         ItemPriceModifier dealerMod = priceModifiers.FirstOrDefault(m => m.itemType == item.Type);
         float dealerSellRatio = dealerMod != null ? dealerMod.sellPriceRatio : 0.5f;
 
+        // Contract failure penalty: this dealer slashed the sell ratio after a missed delivery.
+        if (ContractManager.Instance != null)
+            dealerSellRatio *= ContractManager.Instance.GetSellRatioPenaltyMult(this);
+
         float sellPriceF = modifiedBuy * dealerSellRatio;
 
         City sellCity = PlayerStats.Instance?.CurrentCity;
