@@ -56,7 +56,7 @@ public class InventoryItemUI : MonoBehaviour
         {
             case InventoryContext.Dealer:
                 int buyPrice = dealer.GetModifiedBuyPrice(boundItem);
-                itemPriceText.text = BuildDealerPriceText(buyPrice, boundItem.Name);
+                itemPriceText.text = BuildDealerPriceText(buyPrice, boundItem);
                 itemAmountText.text = "Stock: " + item.Amount;
                 buttonPlus.gameObject.SetActive(true);
                 buttonMinus.gameObject.SetActive(true);
@@ -90,7 +90,7 @@ public class InventoryItemUI : MonoBehaviour
         {
             case InventoryContext.Dealer:
                 int buy = dealerReference.GetModifiedBuyPrice(boundItem);
-                itemPriceText.text = BuildDealerPriceText(buy, boundItem.Name);
+                itemPriceText.text = BuildDealerPriceText(buy, boundItem);
                 break;
             case InventoryContext.Player:
                 int sell = dealerReference.GetModifiedSellPrice(boundItem);
@@ -108,24 +108,41 @@ public class InventoryItemUI : MonoBehaviour
 
     private string BuildPlayerPriceText(int sellPrice, int avgPaid)
     {
-        if (avgPaid <= 0) return $"Sell: ${sellPrice:N0}";
+        // Same quality badge convention as the dealer side — only Cut/Pure get a prefix.
+        string qualityPrefix = "";
+        if (boundItem != null && boundItem.Type == ItemType.Drug && boundItem.Quality != DrugQuality.Standard)
+        {
+            string label = boundItem.Quality == DrugQuality.Pure ? "PURE" : "CUT";
+            qualityPrefix = $"<color={DrugQualityX.BadgeHex(boundItem.Quality)}>[{label}]</color> ";
+        }
+
+        if (avgPaid <= 0) return $"{qualityPrefix}Sell: ${sellPrice:N0}";
         int profit = sellPrice - avgPaid;
         string profitStr = profit >= 0
             ? $"<color=#55FF55>+${profit:N0}</color>"
             : $"<color=#FF5555>-${Mathf.Abs(profit):N0}</color>";
-        return $"Sell: ${sellPrice:N0}  {profitStr}/unit\n<size=70%>Paid avg: ${avgPaid:N0}</size>";
+        return $"{qualityPrefix}Sell: ${sellPrice:N0}  {profitStr}/unit\n<size=70%>Paid avg: ${avgPaid:N0}</size>";
     }
 
-    private string BuildDealerPriceText(int buyPrice, string drugName)
+    private string BuildDealerPriceText(int buyPrice, ItemInstance item)
     {
+        // Quality badge for drug stacks: "[PURE]" / "[CUT]" prefix in the quality color. Standard
+        // is implicit (no badge) to keep the line short for the common case.
+        string qualityPrefix = "";
+        if (item.Type == ItemType.Drug && item.Quality != DrugQuality.Standard)
+        {
+            string label = item.Quality == DrugQuality.Pure ? "PURE" : "CUT";
+            qualityPrefix = $"<color={DrugQualityX.BadgeHex(item.Quality)}>[{label}]</color> ";
+        }
+
         if (PlayerStats.Instance != null &&
-            PlayerStats.Instance.LastSeenBuyPrice.TryGetValue(drugName, out int lastPrice) &&
+            PlayerStats.Instance.LastSeenBuyPrice.TryGetValue(DealerClicks.BuildPriceKey(item), out int lastPrice) &&
             lastPrice != buyPrice)
         {
             string dir = buyPrice < lastPrice ? "<color=#55FF55>▼</color>" : "<color=#FF5555>▲</color>";
-            return $"Buy: ${buyPrice:N0} {dir}<size=70%> was ${lastPrice:N0}</size>";
+            return $"{qualityPrefix}Buy: ${buyPrice:N0} {dir}<size=70%> was ${lastPrice:N0}</size>";
         }
-        return $"Buy: ${buyPrice:N0}";
+        return $"{qualityPrefix}Buy: ${buyPrice:N0}";
     }
 
     public void Teardown()
@@ -156,12 +173,26 @@ public class InventoryItemUI : MonoBehaviour
         if (boundItem != null)
         {
             string desc = boundItem.Description ?? "";
-            if (boundItem.Type == ItemType.Drug && boundItem.UnitsPerSlot > 0)
+            if (boundItem.Type == ItemType.Drug)
             {
-                if (!string.IsNullOrEmpty(desc)) desc += "\n";
-                desc += $"<size=85%><color=#AAAAAA>Bulk: {boundItem.UnitsPerSlot} units per slot</color></size>";
+                // Quality line: "PURE — premium product (1.6x cost / 1.55x sell / 0.7x heat)"
+                if (boundItem.Quality != DrugQuality.Standard)
+                {
+                    string qLabel = boundItem.Quality == DrugQuality.Pure ? "PURE" : "CUT";
+                    string qSummary = boundItem.Quality == DrugQuality.Pure
+                        ? "premium — pricier, denser, quieter"
+                        : "cut with filler — cheap, bulky, hot";
+                    if (!string.IsNullOrEmpty(desc)) desc += "\n";
+                    desc += $"<color={DrugQualityX.BadgeHex(boundItem.Quality)}>[{qLabel}]</color> <size=85%>{qSummary}</size>";
+                }
+                if (boundItem.UnitsPerSlot > 0)
+                {
+                    int effectivePerSlot = Mathf.RoundToInt(boundItem.UnitsPerSlot * DrugQualityX.UnitsPerSlotMult(boundItem.Quality));
+                    if (!string.IsNullOrEmpty(desc)) desc += "\n";
+                    desc += $"<size=85%><color=#AAAAAA>Bulk: {effectivePerSlot} units per slot</color></size>";
+                }
             }
-            TooltipUI.Instance.ShowTooltip(boundItem.Name, desc);
+            TooltipUI.Instance.ShowTooltip(boundItem.DisplayName, desc);
         }
     }
 

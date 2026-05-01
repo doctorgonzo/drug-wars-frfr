@@ -41,10 +41,40 @@ public class ItemInstance
     // How many units fit in one trenchcoat slot. Bulky drugs use small values.
     public int UnitsPerSlot = 30;
 
+    // Three-tier purity: Cut / Standard / Pure. Drives a multiplier stack on cost, sell, slot
+    // density, and heat per unit. A drug stack is keyed by (Name, Quality) — different qualities
+    // never merge into the same inventory entry.
+    public DrugQuality Quality = DrugQuality.Standard;
+
     // Tracks the average price per unit the player paid (for profit/loss feedback).
     public int AvgPurchasePrice;
 
     public event Action<int> OnAmountChanged;
+
+    // Display name with quality prefix ("Pure Crack" / "Crack" / "Cut Crack"). Non-drugs ignore
+    // quality and just return Name.
+    public string DisplayName => Type == ItemType.Drug
+        ? DrugQualityX.Prefix(Quality) + Name
+        : Name;
+
+    // Stack-identity check: two ItemInstances merge into the same player-inventory entry iff
+    // they share Name AND Quality. Quality always matches for non-drugs.
+    public bool MatchesStack(ItemInstance other)
+    {
+        if (other == null) return false;
+        if (Name != other.Name) return false;
+        if (Type != other.Type) return false;
+        if (Type == ItemType.Drug && Quality != other.Quality) return false;
+        return true;
+    }
+
+    public bool MatchesStack(string name, DrugQuality quality, ItemType type)
+    {
+        if (Name != name) return false;
+        if (Type != type) return false;
+        if (type == ItemType.Drug && Quality != quality) return false;
+        return true;
+    }
 
     // The constructor now correctly copies all data, including HeatValue.
     public ItemInstance(Item item)
@@ -80,6 +110,7 @@ public class ItemInstance
         BuyHeatMultiplier = other.BuyHeatMultiplier;
         RiskTier = other.RiskTier;
         UnitsPerSlot = other.UnitsPerSlot;
+        Quality = other.Quality;
         AvgPurchasePrice = other.AvgPurchasePrice;
     }
 

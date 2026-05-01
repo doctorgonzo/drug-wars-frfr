@@ -47,10 +47,19 @@ public class Dealer : ScriptableObject
 
     public int GetModifiedBuyPrice(ItemInstance item)
     {
-        // 1) Base from dealer per-type settings (your existing logic)
+        // 1) Base from dealer per-type settings (your existing logic). Quality scales the cost
+        // floor — Pure costs ~1.6x base, Cut ~0.65x — before any city/dealer modifiers.
         ItemPriceModifier dealerMod = priceModifiers.FirstOrDefault(m => m.itemType == item.Type);
         float dealerBuyMult = dealerMod != null ? dealerMod.buyPriceMultiplier : 1f;
-        float basePrice = item.Cost * dealerBuyMult;
+        float qualityMult = item.Type == ItemType.Drug ? DrugQualityX.BuyMult(item.Quality) : 1f;
+        float basePrice = item.Cost * dealerBuyMult * qualityMult;
+
+        // Reputation-tier discount on this dealer's buy price (Regular: -5%, Trusted: -10%).
+        if (item.Type == ItemType.Drug && GameSessionManager.Instance != null)
+        {
+            float repDiscount = GameSessionManager.Instance.GetRepBuyDiscount(this);
+            basePrice *= (1f - repDiscount);
+        }
 
         // 2) City layer
         City city = PlayerStats.Instance.CurrentCity;  // your project already holds this
@@ -112,6 +121,12 @@ public class Dealer : ScriptableObject
         float dealerSellRatio = dealerMod != null ? dealerMod.sellPriceRatio : 0.5f;
 
         float sellPriceF = modifiedBuy * dealerSellRatio;
+
+        // Quality sell premium: Pure fetches ~1.55x of the standard sell, Cut ~0.85x. Stacks on
+        // top of the buy-side quality cost so Pure ends up much more profitable per unit (and
+        // per slot) but demands much more starting capital.
+        if (item.Type == ItemType.Drug)
+            sellPriceF *= DrugQualityX.SellMult(item.Quality);
 
         City sellCity = PlayerStats.Instance?.CurrentCity;
 

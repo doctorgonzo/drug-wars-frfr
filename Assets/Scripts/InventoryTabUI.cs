@@ -101,7 +101,10 @@ public class InventoryTabUI : MonoBehaviour
         var tile = CreateTile(70f);
 
         AddIcon(tile.transform, item.Image, 30f);
-        AddLabel(tile.transform, item.Name, font, 10f, Color.white, FontStyles.Bold);
+        Color nameColor = item.Type == ItemType.Drug && item.Quality != DrugQuality.Standard
+            ? DrugQualityX.BadgeColor(item.Quality)
+            : Color.white;
+        AddLabel(tile.transform, item.DisplayName, font, 10f, nameColor, FontStyles.Bold);
 
         string detail = $"x{item.Amount}";
         if (item.AvgPurchasePrice > 0)

@@ -24,9 +24,10 @@ public class GameSessionManager : MonoBehaviour
 
     // Wipe per-run runtime state and rebuild dealer inventories from their templates. Used when
     // starting a fresh run so leftover stock and stale restock timers from the previous run
-    // don't carry into the new one.
+    // don't carry into the new one. Reputation is also per-run — fresh dealers, fresh trust.
     public void ResetForNewRun()
     {
+        dealerLifetimeBusiness.Clear();
         InitializeAllDealers();
     }
 
@@ -41,6 +42,59 @@ public class GameSessionManager : MonoBehaviour
     private readonly Dictionary<int, List<ItemInstance>> dealerInventories = new Dictionary<int, List<ItemInstance>>();
     // Day index of each dealer's last restock, keyed by Dealer SO instance ID.
     private readonly Dictionary<int, int> dealerLastRestockDay = new Dictionary<int, int>();
+    // Lifetime $ business with each dealer (buys + sells), keyed by Dealer SO instance ID.
+    // Drives rep tier — Stranger/Regular/Trusted — which gates buy discount, restock size, and
+    // Pure-quality drug availability. Resets on new run.
+    private readonly Dictionary<int, long> dealerLifetimeBusiness = new Dictionary<int, long>();
+
+    // Rep thresholds (lifetime $ business with the dealer).
+    private const long RepRegularThreshold = 5_000;
+    private const long RepTrustedThreshold = 25_000;
+
+    public enum DealerRepTier { Stranger = 0, Regular = 1, Trusted = 2 }
+
+    public long GetDealerBusiness(Dealer dealer)
+    {
+        if (dealer == null) return 0;
+        return dealerLifetimeBusiness.TryGetValue(dealer.GetInstanceID(), out long v) ? v : 0;
+    }
+
+    public DealerRepTier GetDealerRep(Dealer dealer)
+    {
+        long biz = GetDealerBusiness(dealer);
+        if (biz >= RepTrustedThreshold) return DealerRepTier.Trusted;
+        if (biz >= RepRegularThreshold) return DealerRepTier.Regular;
+        return DealerRepTier.Stranger;
+    }
+
+    public long GetNextRepThreshold(Dealer dealer)
+    {
+        switch (GetDealerRep(dealer))
+        {
+            case DealerRepTier.Stranger: return RepRegularThreshold;
+            case DealerRepTier.Regular: return RepTrustedThreshold;
+            default: return -1; // already maxed
+        }
+    }
+
+    // Buy-side discount fraction — Regular: 5%, Trusted: 10%. Applied inside Dealer.GetModifiedBuyPrice.
+    public float GetRepBuyDiscount(Dealer dealer)
+    {
+        switch (GetDealerRep(dealer))
+        {
+            case DealerRepTier.Regular: return 0.05f;
+            case DealerRepTier.Trusted: return 0.10f;
+            default: return 0f;
+        }
+    }
+
+    public void AddDealerBusiness(Dealer dealer, int dollars)
+    {
+        if (dealer == null || dollars <= 0) return;
+        int key = dealer.GetInstanceID();
+        dealerLifetimeBusiness.TryGetValue(key, out long prev);
+        dealerLifetimeBusiness[key] = prev + dollars;
+    }
 
     private int _pendingLoadDay = 0;
     private bool _gameTimeSubscribed = false;
@@ -134,13 +188,61 @@ public class GameSessionManager : MonoBehaviour
         var list = new List<ItemInstance>();
         if (dealer.Inventory != null)
         {
+            DealerRepTier rep = GetDealerRep(dealer);
+            // Stock multiplier from rep — Trusted dealers carry 50% deeper inventory on restock.
+            float stockMult = rep == DealerRepTier.Trusted ? 1.5f
+                            : rep == DealerRepTier.Regular ? 1.2f
+                            : 1f;
+
             foreach (var itemAsset in dealer.Inventory)
             {
-                if (itemAsset != null)
+                if (itemAsset == null) continue;
+
+                // Non-drugs: one entry, no quality variants.
+                if (!(itemAsset is Drug))
+                {
                     list.Add(new ItemInstance(itemAsset));
+                    continue;
+                }
+
+                // Drugs spawn one entry per available quality. Rep tier gates the table —
+                // Stranger never sees Pure; Trusted gets little Cut. Each entry is sized
+                // independently so shifting rep visibly reshapes a dealer's shelf.
+                foreach (var (quality, amountFraction) in GetQualityMixForRep(rep))
+                {
+                    int amt = Mathf.RoundToInt(itemAsset.Amount * amountFraction * stockMult);
+                    if (amt <= 0) continue;
+                    var instance = new ItemInstance(itemAsset);
+                    instance.Quality = quality;
+                    instance.Amount = amt;
+                    list.Add(instance);
+                }
             }
         }
         dealerInventories[key] = list;
+    }
+
+    // Quality mix per rep tier. Numbers are amount fractions of the template's base Amount.
+    private static IEnumerable<(DrugQuality, float)> GetQualityMixForRep(DealerRepTier rep)
+    {
+        switch (rep)
+        {
+            case DealerRepTier.Stranger:
+                yield return (DrugQuality.Cut, 0.5f);
+                yield return (DrugQuality.Standard, 1.0f);
+                // No Pure for strangers.
+                break;
+            case DealerRepTier.Regular:
+                yield return (DrugQuality.Cut, 0.4f);
+                yield return (DrugQuality.Standard, 1.0f);
+                yield return (DrugQuality.Pure, 0.3f);
+                break;
+            case DealerRepTier.Trusted:
+                yield return (DrugQuality.Cut, 0.15f);
+                yield return (DrugQuality.Standard, 0.8f);
+                yield return (DrugQuality.Pure, 0.9f);
+                break;
+        }
     }
 
     public List<ItemInstance> GetRuntimeInventory(Dealer dealer)
@@ -209,7 +311,8 @@ public class GameSessionManager : MonoBehaviour
                 var state = new SavedDealerState
                 {
                     dealerName = dealer.Name,
-                    lastRestockDay = dealerLastRestockDay.TryGetValue(dealerKey, out int last) ? last : 0
+                    lastRestockDay = dealerLastRestockDay.TryGetValue(dealerKey, out int last) ? last : 0,
+                    lifetimeBusiness = dealerLifetimeBusiness.TryGetValue(dealerKey, out long biz) ? biz : 0
                 };
                 foreach (var item in GetRuntimeInventory(dealer))
                     state.inventory.Add(ItemToSaved(item));
@@ -273,8 +376,9 @@ public class GameSessionManager : MonoBehaviour
             ps.inventory.Add(SavedToItem(saved, templateInventories));
         ps.NotifyInventoryChanged();
 
-        // Dealer inventories
+        // Dealer inventories — also restores lifetimeBusiness (rep tier).
         dealerInventories.Clear();
+        dealerLifetimeBusiness.Clear();
         foreach (City city in allCitiesInGame)
         {
             if (city == null || city.Dealers == null) continue;
@@ -290,6 +394,8 @@ public class GameSessionManager : MonoBehaviour
                         list.Add(SavedToItem(si, templateInventories));
                     dealerInventories[key] = list;
                     dealerLastRestockDay[key] = savedState.lastRestockDay;
+                    if (savedState.lifetimeBusiness > 0)
+                        dealerLifetimeBusiness[key] = savedState.lifetimeBusiness;
                 }
                 else
                 {
@@ -325,7 +431,8 @@ public class GameSessionManager : MonoBehaviour
             amount      = item.Amount,
             itemType    = (int)item.Type,
             heatValue   = item.HeatValue,
-            avgPurchasePrice = item.AvgPurchasePrice
+            avgPurchasePrice = item.AvgPurchasePrice,
+            qualityPlus1 = (int)item.Quality + 1
         };
     }
 
@@ -348,6 +455,11 @@ public class GameSessionManager : MonoBehaviour
             unitsPerSlot = template.UnitsPerSlot;
         }
 
+        // qualityPlus1 == 0 means the save predates the Quality field — treat as Standard.
+        DrugQuality quality = saved.qualityPlus1 > 0
+            ? (DrugQuality)(saved.qualityPlus1 - 1)
+            : DrugQuality.Standard;
+
         return new ItemInstance
         {
             Name        = saved.name,
@@ -360,6 +472,7 @@ public class GameSessionManager : MonoBehaviour
             BuyHeatMultiplier = buyHeatMultiplier,
             RiskTier    = riskTier,
             UnitsPerSlot = unitsPerSlot,
+            Quality     = quality,
             AvgPurchasePrice = saved.avgPurchasePrice
         };
     }
