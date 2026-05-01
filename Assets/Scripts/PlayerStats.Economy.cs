@@ -34,14 +34,15 @@ public partial class PlayerStats
     }
 
     // Effective units-per-slot for a drug, factoring in the current trenchcoat's per-RiskTier
-    // capacity multiplier. Cheap trenchcoats penalize harder drugs (smaller effective per-slot
-    // capacity → more slots consumed); premium trenchcoats boost them.
+    // capacity multiplier and the drug's quality (Pure is denser, Cut is bulkier). Cheap
+    // trenchcoats penalize harder drugs; premium trenchcoats boost them.
     public int GetEffectiveUnitsPerSlot(ItemInstance item)
     {
         if (item == null) return 30;
         int basePerSlot = Mathf.Max(1, item.UnitsPerSlot);
-        float mult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(item.RiskTier) : 1f;
-        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * mult));
+        float trenchMult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(item.RiskTier) : 1f;
+        float qualityMult = item.Type == ItemType.Drug ? DrugQualityX.UnitsPerSlotMult(item.Quality) : 1f;
+        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * trenchMult * qualityMult));
     }
 
     // Slots used = sum across drug stacks of ceil(amount / effectiveUnitsPerSlot).
@@ -63,27 +64,27 @@ public partial class PlayerStats
         return Mathf.Max(0, GetTotalSlots() - GetUsedSlots());
     }
 
-    // How many slots a hypothetical buy would add. Caller passes the drug template's UnitsPerSlot
-    // and RiskTier so we can apply the trenchcoat's capacity multiplier even when the player
-    // doesn't have an existing stack of this drug.
-    public int GetSlotCostForBuy(string drugName, int amountToAdd, int templateUnitsPerSlot, int riskTier)
+    // How many slots a hypothetical buy would add. Stacks are keyed by (Name, Quality), so a Cut
+    // and Pure stack of the same drug never merge.
+    public int GetSlotCostForBuy(string drugName, DrugQuality quality, int amountToAdd, int templateUnitsPerSlot, int riskTier)
     {
         if (amountToAdd <= 0) return 0;
-        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier);
+        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier, quality);
         int existingAmt = 0;
-        var existing = inventory.FirstOrDefault(i => i != null && i.Name == drugName && i.Type == ItemType.Drug);
+        var existing = inventory.FirstOrDefault(i => i != null && i.Type == ItemType.Drug && i.Name == drugName && i.Quality == quality);
         if (existing != null) existingAmt = existing.Amount;
         int slotsBefore = existingAmt > 0 ? Mathf.CeilToInt((float)existingAmt / per) : 0;
         int slotsAfter = Mathf.CeilToInt((float)(existingAmt + amountToAdd) / per);
         return Mathf.Max(0, slotsAfter - slotsBefore);
     }
 
-    // Largest amount of this drug the player can still buy without exceeding total slot capacity.
-    public int GetMaxBuyableAmount(string drugName, int templateUnitsPerSlot, int riskTier)
+    // Largest amount of this drug+quality the player can still buy without exceeding total slot
+    // capacity. Treats each (Name, Quality) pair as its own stack.
+    public int GetMaxBuyableAmount(string drugName, DrugQuality quality, int templateUnitsPerSlot, int riskTier)
     {
-        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier);
+        int per = GetEffectiveUnitsPerSlotFor(templateUnitsPerSlot, riskTier, quality);
         int existingAmt = 0;
-        var existing = inventory.FirstOrDefault(i => i != null && i.Name == drugName && i.Type == ItemType.Drug);
+        var existing = inventory.FirstOrDefault(i => i != null && i.Type == ItemType.Drug && i.Name == drugName && i.Quality == quality);
         if (existing != null) existingAmt = existing.Amount;
         int existingStackSlots = existingAmt > 0 ? Mathf.CeilToInt((float)existingAmt / per) : 0;
         int otherStacksSlots = GetUsedSlots() - existingStackSlots;
@@ -92,11 +93,12 @@ public partial class PlayerStats
         return Mathf.Max(0, maxStackUnits - existingAmt);
     }
 
-    private int GetEffectiveUnitsPerSlotFor(int templateUnitsPerSlot, int riskTier)
+    private int GetEffectiveUnitsPerSlotFor(int templateUnitsPerSlot, int riskTier, DrugQuality quality)
     {
         int basePerSlot = Mathf.Max(1, templateUnitsPerSlot);
-        float mult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(riskTier) : 1f;
-        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * mult));
+        float trenchMult = CurrentTrench != null ? CurrentTrench.GetCapacityMultiplier(riskTier) : 1f;
+        float qualityMult = DrugQualityX.UnitsPerSlotMult(quality);
+        return Mathf.Max(1, Mathf.RoundToInt(basePerSlot * trenchMult * qualityMult));
     }
 
     public int NetWorth =>

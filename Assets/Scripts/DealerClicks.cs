@@ -33,6 +33,11 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     private int GetShiftClickAmount() =>
         (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? shiftClickAmount : 1;
 
+    // LastSeenBuyPrice is keyed per-quality so the price-change arrow tracks the matching stack
+    // (Pure Crack and Cut Crack are independent price histories).
+    public static string BuildPriceKey(ItemInstance item) =>
+        item.Type == ItemType.Drug ? $"{item.Name}|{(int)item.Quality}" : item.Name;
+
     private static void SetupTooltipTrigger(GameObject itemGO, InventoryItemUI itemUI)
     {
         var trigger = itemGO.GetComponentInChildren<ItemTooltipTrigger>();
@@ -137,14 +142,14 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             SetupTooltipTrigger(newInvItemPrefab, itemUI);
 
             dealerItemUIMap[item] = itemUI;
-            bool playerHasItem = PlayerStats.Instance.inventory.Any(playerItem => playerItem.Name == item.Name && playerItem.Amount > 0);
+            bool playerHasItem = PlayerStats.Instance.inventory.Any(playerItem => playerItem.MatchesStack(item) && playerItem.Amount > 0);
             itemUI.SetMinusButtonInteractable(playerHasItem);
             var capturedItem = item;
             itemUI.OnPlusClicked.AddListener((_) => OnPlusClicked(capturedItem, itemUI));
             itemUI.OnMinusClicked.AddListener((_) => OnMinusClicked(capturedItem, itemUI));
 
             if (item.Type == ItemType.Drug)
-                PlayerStats.Instance.LastSeenBuyPrice[item.Name] = dealer.GetModifiedBuyPrice(item);
+                PlayerStats.Instance.LastSeenBuyPrice[BuildPriceKey(item)] = dealer.GetModifiedBuyPrice(item);
         }
     }
 
@@ -252,7 +257,7 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             totalProfit += (sellPrice - playerItem.AvgPurchasePrice) * playerItem.Amount;
             PlayerStats.Instance.RecordDrugSell(playerItem.Name, playerItem.Amount, lineValue);
 
-            ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.Name == playerItem.Name);
+            ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.MatchesStack(playerItem));
             if (dealerItem == null)
             {
                 dealerItem = new ItemInstance(playerItem, amountOverride: 0);
@@ -262,7 +267,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             if (heatManager != null)
             {
                 float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm);
+                float qHeat = DrugQualityX.HeatPerUnitMult(playerItem.Quality);
+                int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * playerItem.Amount * _hm * qHeat);
                 heatManager.AddHeat(sellHeat);
                 if (PlayerStats.Instance?.CurrentCity != null)
                     PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
@@ -274,6 +280,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         PlayerStats.Instance.inventory.RemoveAll(i => i.Amount <= 0);
         PlayerStats.Instance.PlayerWallet += totalValue;
+        if (GameSessionManager.Instance != null)
+            GameSessionManager.Instance.AddDealerBusiness(dealer, totalValue);
         PlayerStats.Instance.NotifyInventoryChanged();
         cityUIHandler.UpdateWalletDisplay();
 
@@ -299,7 +307,7 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         amountToSell = Mathf.Min(amountToSell, playerItem.Amount);
         if (amountToSell <= 0) return;
 
-        ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.Name == playerItem.Name);
+        ItemInstance dealerItem = dealer.RuntimeInventory.FirstOrDefault(i => i.MatchesStack(playerItem));
         if (dealerItem == null)
         {
             dealerItem = new ItemInstance(playerItem, amountOverride: 0);
@@ -318,6 +326,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         PlayerStats.Instance.PlayerWallet += totalValue;
         if (playerItem.Type == ItemType.Drug)
             PlayerStats.Instance.RecordDrugSell(playerItem.Name, amountToSell, totalValue);
+        if (GameSessionManager.Instance != null)
+            GameSessionManager.Instance.AddDealerBusiness(dealer, totalValue);
         cityUIHandler.UpdateWalletDisplay();
         playerItem.ChangeAmount(-amountToSell);
 
@@ -337,7 +347,8 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (playerItem.Type == ItemType.Drug && heatManager != null)
         {
             float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-            int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * amountToSell * _hm);
+            float qHeat = DrugQualityX.HeatPerUnitMult(playerItem.Quality);
+            int sellHeat = Mathf.RoundToInt(playerItem.HeatValue * amountToSell * _hm * qHeat);
             heatManager.AddHeat(sellHeat);
             if (PlayerStats.Instance?.CurrentCity != null)
                 PlayerStats.Instance.BumpCityHeat(PlayerStats.Instance.CurrentCity.Name, sellHeat);
@@ -367,7 +378,7 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (item.Type == ItemType.Drug)
         {
             int unitsPerSlot = Mathf.Max(1, item.UnitsPerSlot);
-            int maxBuyable = PlayerStats.Instance.GetMaxBuyableAmount(item.Name, unitsPerSlot, item.RiskTier);
+            int maxBuyable = PlayerStats.Instance.GetMaxBuyableAmount(item.Name, item.Quality, unitsPerSlot, item.RiskTier);
             if (maxBuyable <= 0)
             {
                 ShowFeedback($"Out of room! Trenchcoat full.");
@@ -394,14 +405,19 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         cityUIHandler.UpdateWalletDisplay();
         item.ChangeAmount(-amountToBuy);
 
+        // Reputation gain — both buys and sells count as "business done."
+        if (GameSessionManager.Instance != null)
+            GameSessionManager.Instance.AddDealerBusiness(dealer, totalCost);
+
         if (item.Type == ItemType.Drug && heatManager != null)
         {
             float _hm = CityEventManager.GetHeatMult(PlayerStats.Instance?.CurrentCity?.Name ?? "");
-            int buyHeat = Mathf.Max(1, Mathf.RoundToInt(item.HeatValue * item.BuyHeatMultiplier * amountToBuy * _hm));
+            float qHeat = DrugQualityX.HeatPerUnitMult(item.Quality);
+            int buyHeat = Mathf.Max(1, Mathf.RoundToInt(item.HeatValue * item.BuyHeatMultiplier * amountToBuy * _hm * qHeat));
             heatManager.AddHeat(buyHeat);
         }
 
-        ItemInstance existing = PlayerStats.Instance.inventory.FirstOrDefault(i => i.Name == item.Name);
+        ItemInstance existing = PlayerStats.Instance.inventory.FirstOrDefault(i => i.MatchesStack(item));
         if (existing != null)
         {
             int oldTotal = existing.Amount * existing.AvgPurchasePrice;
@@ -422,7 +438,7 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     private void OnMinusClicked(ItemInstance item, InventoryItemUI itemUI)
     {
-        ItemInstance playerItem = PlayerStats.Instance.inventory.FirstOrDefault(i => i.Name == item.Name);
+        ItemInstance playerItem = PlayerStats.Instance.inventory.FirstOrDefault(i => i.MatchesStack(item));
         if (playerItem != null)
         {
             foreach (Transform child in playerInventoryContent)
@@ -468,7 +484,27 @@ public class DealerClicks : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (dealer != null)
         {
-            TooltipUI.Instance.ShowTooltip(dealer.Name, dealer.Description);
+            string desc = dealer.Description ?? "";
+            if (GameSessionManager.Instance != null)
+            {
+                var tier = GameSessionManager.Instance.GetDealerRep(dealer);
+                long biz = GameSessionManager.Instance.GetDealerBusiness(dealer);
+                long next = GameSessionManager.Instance.GetNextRepThreshold(dealer);
+                string tierColor = tier == GameSessionManager.DealerRepTier.Trusted ? "#FFD93B"
+                                 : tier == GameSessionManager.DealerRepTier.Regular ? "#88CC88"
+                                 : "#A6A6A6";
+                string perkLine = tier == GameSessionManager.DealerRepTier.Trusted
+                    ? "10% off, deeper stock, Pure available"
+                    : tier == GameSessionManager.DealerRepTier.Regular
+                    ? "5% off, deeper stock, some Pure stock"
+                    : "no perks yet";
+                string progressLine = next > 0
+                    ? $"<size=85%>Business: ${biz:N0} / ${next:N0} for next tier</size>"
+                    : $"<size=85%>Business: ${biz:N0} (max tier)</size>";
+                if (!string.IsNullOrEmpty(desc)) desc += "\n";
+                desc += $"<color={tierColor}>● {tier.ToString().ToUpper()}</color> <size=85%>— {perkLine}</size>\n{progressLine}";
+            }
+            TooltipUI.Instance.ShowTooltip(dealer.Name, desc);
         }
     }
 

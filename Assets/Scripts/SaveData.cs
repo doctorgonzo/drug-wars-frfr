@@ -43,6 +43,10 @@ public class SavedItemInstance
     public int itemType; // cast of ItemType enum
     public int heatValue;
     public int avgPurchasePrice;
+    // Quality stored as (DrugQuality + 1) so 0 means "field absent in this save" — JsonUtility
+    // defaults missing ints to 0, and we want old saves to load as Standard (the previous
+    // single-quality assumption), not Cut. Read code maps 0 → Standard.
+    public int qualityPlus1;
 }
 
 [Serializable]
@@ -50,5 +54,6 @@ public class SavedDealerState
 {
     public string dealerName;
     public int lastRestockDay;
+    public long lifetimeBusiness; // total $ business with this dealer (drives rep tier)
     public List<SavedItemInstance> inventory = new List<SavedItemInstance>();
 }

@@ -965,7 +965,7 @@ public class CopEncounterUIManager : MonoBehaviour
         foreach (var item in PlayerStats.Instance.inventory)
         {
             if (item.Type == ItemType.Drug && item.Amount > 0)
-                drugs.Add($"{item.Name} x{item.Amount}");
+                drugs.Add($"{item.DisplayName} x{item.Amount}");
         }
         return drugs.Count > 0 ? string.Join(", ", drugs) : null;
     }
